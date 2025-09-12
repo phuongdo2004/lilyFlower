@@ -1,0 +1,55 @@
+extends ../../layouts/default.pug
+include ../../mixins/box-header.pug
+include ../../mixins/alert.pug
+block main 
+  .page__heading
+    h1
+      span Giỏ hàng
+  table.list_products
+    thead
+      - var reversedProducts = cartDetail.products.slice().reverse()
+      if( reversedProducts.length>0)
+        tr
+          th
+            p STT
+          th
+            p Chọn
+          th
+            p Ảnh
+          th
+            p Tên sản phẩmphẩm
+          th
+            p Đơn giá
+          th
+            p Số lượng
+          th
+            p Tổng tiền
+          th
+            p Thao tác
+        tbody
+          each product, index in reversedProducts
+            tr
+              td
+                p #{index+1}
+              td
+                input(type='checkbox'  value  = product.totalPrice  productId = product.productId checked = (product.choosen==true) check-item) 
+              td
+                img(src=product.productInfor.thumbnail, alt style = 'width: 200px' )
+              td
+                p #{product.productInfor.title}
+              td
+                p #{product.productInfor.priceNew}đ
+              td
+                input(type='number', value=product.quantity, min='1', style='width: 50px;'   ,  name = "quantity" , productId =product.productId  )
+              td
+                p #{product.totalPrice}
+              td
+                a.btn_cart(href =  `/cart/delete/${product.productInfor.id}`) Xóa
+      else  
+        .page__heading
+          h1
+            span Không có sản phẩm nào @_@
+  .order
+    h2 Tổng đơn hàng: #{cartDetail.totalPrice}đ
+    a(href = "/checkout/")
+      h2 Đặt hàng

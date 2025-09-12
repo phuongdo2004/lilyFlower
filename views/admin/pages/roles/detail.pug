@@ -1,0 +1,24 @@
+
+extends ../../layouts/default.pug
+block main 
+  .main__conntainer
+    .detail
+      .detail__container
+      .detail__infor
+        .detail__infor__1
+          h3 CHI TIẾT NHÓM QUYỀN
+        .detail__infor__2
+          .detail__infor__2__category
+            p Tên nhóm quyền
+            p #{item.title}
+          .detail__infor__2__category
+            p Được phépphép 
+            ul
+              each ele in item.permissions 
+                li
+                  p ele
+
+        .detail__infor__1
+          h3 Mô tả
+        .detail__infor__description
+          h5 !{item.description}

@@ -1,0 +1,79 @@
+extends ../layouts/default.pug
+include ../mixins/alert.pug
+block main 
+  .main__conntainer
+    .categoryContainer
+      .categoryContainer__Item
+        .account
+          span #{totalUsers}
+          |               Khách hàng
+        .logoItem
+          i.fa-solid.fa-user(style='color: #df2f93')
+      .categoryContainer__Item
+        .account
+          span #{totalProducts}
+          |               Sản phẩm
+        .logoItem
+          i.fa-solid.fa-box-open(style='color: #df2f93')
+      .categoryContainer__Item
+        .account
+          span #{totalOrders}
+          |               Đơn hàng 
+        .logoItem
+          i.fa-solid.fa-gift(style='color: #df2f93')
+      .categoryContainer__Item
+        .account
+          span #{totalComments}
+          |               Bình luận
+        .logoItem
+          i.fa-solid.fa-comments(style='color: #df2f93')
+    .recentContainer
+      .recentOrderContainer
+        .recentHeader
+          h2 Những đơn hàng gần đây
+          a(href=`/${prefixAdmin}/orders` class ="viewAllBtn")  Tất cả
+        table.recentTable
+          thead
+            tr
+              th Mã đơn hàng
+              th Giá
+              th Ngày đặt
+              th Thanh toán
+              th Trạng thái
+          tbody
+            // Example Row
+            each order in ordersLatest 
+              tr(onclick = `window.location.href = "orders/detail/${order.id}"`)
+                td #{order._id}
+                td #{order.totalPrice.toLocaleString('vi-VN')} vnđ
+                - var date = new Date(order.createdAt)
+                td #{date.getDate().toString().padStart(2, '0')}/#{(date.getMonth()+1).toString().padStart(2, '0')}/#{date.getFullYear()}
+                td #{order.payment}
+                td
+                  if order.status === 'Chờ xác nhận'
+                    span.statusBadge.pending Chờ xác nhận
+                  else if order.status === 'Đang xử lý'
+                    span.statusBadge.inProgress Đang xử lý
+                  else if order.status === 'Đã hủy'
+                    span.statusBadge.cancelled Đã hủy
+                  else if order.status === 'Đang vận chuyển'
+                    span.statusBadge.delivering Đang vận chuyển
+                  else if order.status === 'Trả lại'
+                    span.statusBadge.return Trả lại
+                  else if order.status === 'Đã giao'
+                    span.statusBadge.delivered Đã giao
+                  else
+                    span.statusBadge #{order.status}
+            // Add more rows as needed
+      .recentOrderCustomersContainer
+        .recentHeader
+          h2 Những khách hàng gần đây
+        .customerList
+          // Example Customer
+          each client in listClientRecent
+             a(href=`/${prefixAdmin}/chats/detail/${client.IdRoomChat}`) 
+              .customerItem
+                img.customerAvatar(src=client.avatar alt='Customer Avatar')
+                .customerInfo
+                  .customerName #{client.fullName}
+                  .customerLocation #{client.email}

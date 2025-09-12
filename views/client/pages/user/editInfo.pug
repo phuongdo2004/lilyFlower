@@ -1,0 +1,46 @@
+extends ../../layouts/default.pug
+include ../../mixins/box-header.pug
+include ../../mixins/alert.pug
+
+block main 
+  +alert(3000)
+  .containerInfor
+    div(class="containerInfor__user")
+      .info
+        .fullName
+          img(src=user.avatar, alt)
+          .con
+            .name #{user.fullName}
+            a(href=`/user/edit/${user.id}`) 
+              i.fa-solid.fa-pen
+              | Sửa Hồ Sơ
+      .container
+        .account
+          i.fa-solid.fa-user
+          a(href=`/user/edit/${user.id}`) Tài Khoản Của Tôi
+        .buy
+          i.fa-solid.fa-file-invoice
+          a(href="/user/order") Đơn Mua
+    //- +alert(3000)
+    div(class="infor__containner")
+      div(class="infor__container__header")
+        h2 Hồ sơ của tôi
+        span Quản lý thông tin hồ sơ để bảo mật tài khoản
+      div(class="infor__container__body")
+        form(action=`/user/edit/${user.id}` method = "POST"  enctype='multipart/form-data') 
+          div(class="infor__container__body__i")
+            div(class="formUser__infor")
+              .userName
+                label(for="fullName") Tên đăng nhập
+                input(type="text" name = "fullName" value = user.fullName)
+              .userEmail
+                label(for="email") Email
+                input(type="text" name = "email" value = user.email)
+              .userPhone
+                label(for="phone") Số điện thoại
+                input(type="text" name = "phone" value = user.phone)
+              button(type = "submit") Lưu
+          div(class="infor__container__body__avatar")
+            .container
+              img#preview.image-preview(src=user.avatar alt='' )
+              input#avatar.form-control(type='file' name = "avatar"   accept='image/*' upload-image-input='' style = "width: 170px;height: 30px;")  

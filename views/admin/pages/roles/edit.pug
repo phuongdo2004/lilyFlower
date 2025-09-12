@@ -1,0 +1,20 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+
+block main 
+  .main__conntainer
+    .header__Main
+      h1 Chỉnh sửa nhóm quyền
+    +alert(3000)
+    form(action=`/${prefixAdmin}/roles/edit/${item.id}` 
+        method='POST' )
+      .form-group
+        label(for='title') Tiêu đề
+        input.form-control(type='text' id = "title" required='' name = "title" value = item.title)
+      .form-group
+        label(for='description') Mô tả
+        input.form-control(type='text' id = "description" required='' name = "description" value =item.description)
+
+      .form-group
+        button.btn-add(type='submit')
+          | Chỉnh sửa

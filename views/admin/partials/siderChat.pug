@@ -1,0 +1,16 @@
+siderChat
+  .container__siderChat
+    .sider__logo
+      h2 Đoạn Chat
+    ul
+        li
+          form(action=""  my-id = "hello"  )  
+            input(type='text' placeholder='Tìm kiếm ...')
+        if( users.length>0)
+          each user in users 
+            li()
+              a(href=`/${prefixAdmin}/chats/detail/${user.roomChat}`) 
+                img(src=user.avatar, alt="")
+                .info
+                  span #{user.fullName}
+                  span Hello i am phuong

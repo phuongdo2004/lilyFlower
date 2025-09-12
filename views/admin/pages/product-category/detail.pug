@@ -1,0 +1,31 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+block main 
+  .detail
+    .detail__container
+      .detail__container__img
+        img(src=item.thumbnail alt='')
+      .detail__container__info
+        .detail__container__info__content
+          .detail__container__info__title
+            h3 #{item.title}
+    .detail__infor
+      .detail__infor__1
+        h3 CHI TIẾT DANH MỤC 
+      .detail__infor__2
+        .detail__infor__2__category
+          p Danh mục cha 
+          p #{item.parent}
+        .detail__infor__2__category
+          p Vị trí 
+          p #{item.position}
+        .detail__infor__2__category
+          p Trạng thái
+          if( item.status == "active")
+            p Hoạy động
+          else 
+            p Không hoạt động
+      .detail__infor__1
+        h3 Mô tả danh mục
+      .detail__infor__description
+        p !{item.description}

@@ -1,0 +1,18 @@
+extends ../../layouts/default.pug
+include ../../mixins/box-header-search.pug
+block main 
+  //  Product section start
+  section.product
+    +box-header-search ("Kết quả tìm kiếm: " + keyword)
+    .product_items
+      each item in products
+        .product__items__item
+          span -#{item.discountPercentage}%
+          a.link(href=`/products/detail/${item.slug}`) 
+            .product__items__item__image(data-id=`${item.id}`)
+              img(src= item.thumbnail, alt) 
+          .product_info
+            .product__name #{item.title}
+            .product__price
+              .product__price_new $#{item.priceNew}
+              .product__price__old $#{item.price}

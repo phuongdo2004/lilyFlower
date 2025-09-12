@@ -1,0 +1,71 @@
+Phân tích lỗi
+
+Bạn vẫn gặp lỗi ERR_HTTP_HEADERS_SENT, và log lỗi cung cấp thêm thông tin chi tiết. Vấn đề chính là, như thông báo lỗi cho biết, bạn không thể gửi HTTP headers (như res.cookie và res.redirect) sau khi phần thân của phản hồi đã bắt đầu được gửi đi.
+
+Giải thích chi tiết về HTTP, req, res và lỗi ERR_HTTP_HEADERS_SENT
+
+Để hiểu rõ hơn về lỗi ERR_HTTP_HEADERS_SENT, chúng ta cần tìm hiểu về các khái niệm cơ bản sau:
+
+HTTP (Hypertext Transfer Protocol):
+
+Đây là giao thức giao tiếp cơ bản của World Wide Web.  Nó định nghĩa cách dữ liệu được truyền giữa máy khách (thường là trình duyệt web) và máy chủ web.
+
+HTTP hoạt động dựa trên mô hình "yêu cầu-phản hồi".  Máy khách gửi yêu cầu đến máy chủ, và máy chủ gửi lại phản hồi.
+
+Yêu cầu (Request):
+
+Là một thông điệp từ máy khách đến máy chủ.
+
+Trong Node.js, đối tượng req (thường là một thể hiện của lớp http.IncomingMessage) đại diện cho yêu cầu HTTP đến.  Nó chứa các thông tin như:
+
+Phương thức HTTP: GET, POST, PUT, DELETE, v.v. (ví dụ: req.method)
+
+URL: Đường dẫn của tài nguyên được yêu cầu (ví dụ: req.url)
+
+Headers: Các thông tin bổ sung về yêu cầu (ví dụ: req.headers)
+
+Body: Dữ liệu được gửi kèm theo yêu cầu (ví dụ: dữ liệu biểu mẫu trong yêu cầu POST)
+
+Phản hồi (Response):
+
+Là một thông điệp từ máy chủ đến máy khách để trả lời yêu cầu.
+
+Trong Node.js, đối tượng res (thường là một thể hiện của lớp http.ServerResponse) đại diện cho phản hồi HTTP mà máy chủ sẽ gửi đi.  Nó cung cấp các phương thức để:
+
+Thiết lập mã trạng thái: Cho biết kết quả của yêu cầu (ví dụ: 200 OK, 404 Not Found, 500 Internal Server Error) (ví dụ: res.statusCode = 200)
+
+Thiết lập headers: Gửi thông tin bổ sung về phản hồi (ví dụ: loại nội dung, cookie) (ví dụ: res.setHeader('Content-Type', 'text/html'), res.cookie('tên_cookie', 'giá_trị'))
+
+Gửi body: Gửi nội dung của phản hồi (ví dụ: HTML, JSON) (ví dụ: res.end('<h1>Xin chào!</h1>'), res.json({ data: [...] }))
+
+Chuyển hướng: Yêu cầu trình duyệt chuyển đến một URL khác (res.redirect('/trang_khac'))
+
+Headers:
+
+Là các cặp tên-giá trị, chứa thông tin bổ sung về yêu cầu hoặc phản hồi.
+
+Ví dụ:
+
+Content-Type:  Cho biết loại dữ liệu trong body (ví dụ: text/html, application/json)
+
+Set-Cookie:  Hướng dẫn trình duyệt lưu trữ cookie
+
+Location:  Được sử dụng bởi res.redirect() để chỉ định URL mới
+
+Body:
+
+Là phần chứa nội dung thực tế của thông điệp (ví dụ: trang HTML, dữ liệu JSON, hình ảnh).
+
+Lỗi ERR_HTTP_HEADERS_SENT
+
+Lỗi này xảy ra khi bạn cố gắng thiết lập một header cho phản hồi sau khi phần body của phản hồi đã bắt đầu được gửi đi.
+
+Trong Node.js (và Express.js, một framework phổ biến dựa trên Node.js), quá trình gửi phản hồi thường diễn ra như sau:
+
+Bạn thiết lập các headers bằng res.setHeader() hoặc các phương thức tiện lợi như res.cookie().
+
+Bạn bắt đầu gửi phần body bằng res.write() hoặc res.end().  res.redirect() cũng bao gồm việc gửi một phần body nhỏ.
+
+Khi phần body đã bắt đầu được gửi, phản hồi được coi là đã "commit" (hoặc "sent").  Bạn không thể thay đổi các headers sau thời điểm này.
+
+Lỗi ERR_HTTP_HEADERS_SENT có nghĩa là bạn đã vi phạm quy tắc này.  Bạn đã cố gắng gọi một phương thức như res.cookie() hoặc res.setHeader() sau khi phản hồi đã bắt đầu được gửi đi (thường là do bạn đã gọi res.end(), res.send() hoặc res.redirect() trước đó).

@@ -1,0 +1,37 @@
+extends ../../layouts/default.pug
+include ../../mixins/select-tree.pug
+block main 
+  .main__conntainer
+    .header__Main
+      h1 Danh mục sản phẩm
+  form(action='' method='POST' enctype='multipart/form-data')
+    .form-group
+      label(for='title') Tiêu đề
+      input#title.form-control(type='text' required='' name = "title")
+    .form-group
+      label(for='parent_id') Danh mục cha
+      select#parent_id.form-control(name='parent_id')
+        option(value='') Chọn danh mục
+        if(categories)
+          +select-tree(categories)
+    .form-group
+      label(for='') Mô tả
+      textarea#desc.form-control(name='description' type='text' rows='5' textarea-mce='')
+    .form-group(upload-image='')
+      label(for='thumbnail') Ảnh
+      input#thumbnail.form-control(type='file' name='thumbnail' accept='image/*' upload-image-input='')
+      img#preview.image-preview(src='' alt='' upload-image-input='')
+    .form-group
+      label(for='position') Vị trí
+      input#position.form-control(type='number' name='position' placeholder='Tự động tăng' min='1')
+    .check__container
+      .form-group-check
+        input#statusActive.form-check-input(type='radio' name='status' value='active' checked)
+        label.form-check-label(for='statusActive') Hoạt động
+      .form-group-check
+        input#statusInActive.form-check-input(type='radio' name='status' value='inactive' )
+        label.form-check-label(for='statusInActive') Dừng hoạt động
+    .form-group
+      button.btn-add(type='submit')
+        | Tạo mới
+

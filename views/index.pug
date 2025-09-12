@@ -1,0 +1,291 @@
+meta(charset='UTF-8')
+meta(name='viewport', content='width=device-width,initial-scale=1')
+title Document
+//  <link rel="stylesheet" href="./index.html"> 
+link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css', integrity='sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==', crossorigin='anonymous', referrerpolicy='no-referrer')
+link(rel='stylesheet', href='css/main.css')
+header.header
+  .header__title
+    .header__title__text
+      h1 Flower
+      .header__title__text--dot
+  .header__list
+    ul
+      li
+        a(href) Home
+      li
+        a(href) About
+      li
+        a(href) Product
+      li
+        a(href) Review
+      li
+        a(href) Contact
+  //
+     <div class="header__list__search">
+          <input type="text" name = "search" placeholder="Tìm kiếm...">
+          <button class  = "btn__search"><i class="fa-solid fa-magnifying-glass"></i></button>
+    
+        </div> 
+  .header__icon
+    //
+       
+            <a href="">
+              <i class="fa-solid fa-heart"></i>
+            </a> 
+            <a href="">
+              <i class="fa-solid fa-cart-shopping"></i>
+            </a>
+            <a href="">
+              <i class="fa-solid fa-user"></i>
+            </a> 
+    a(href) Login
+    a(href) Logout
+//  home section start 
+section.home
+  .home__text
+    h1 Fresh Flowers
+    h2
+      | Natural & Beautiful Flowers
+
+    p.
+      Những đóa hoa luôn là sự lựa chọn hoàn hảo cho các dịp lễ Tết, tỏ tình, 8/3, ngày cưới,… Nhu cầu mua hoa của con người cũng rất đa dạng: để ngắm, để trang trí, để tặng, thậm chí là để nấu ăn.
+      
+    a.btn(href) learn more
+//  home section end 
+//  about  section start 
+section.about
+  h1.heading
+    span About
+    |  Us
+  .about__container
+    .about__container__video
+      video(src='video/about.mp4', loop, autoplay, muted)
+      h3 best flower sellers
+    .about__container__content
+      h3 Why choose us?
+      p.
+        Shop hoa của chúng tôi tự hào mang đến cho bạn những đóa hoa tươi nhất, được tuyển chọn kỹ lưỡng từ những nhà vườn uy tín. Với sự đa dạng về loại hoa, mẫu mã và thiết kế sáng tạo, chúng tôi cam kết đáp ứng mọi nhu cầu của khách hàng, từ những dịp đặc biệt như lễ cưới, sinh nhật, đến các ngày lễ lớn.
+        
+      p.
+        Không chỉ cung cấp sản phẩm chất lượng cao, chúng tôi còn chú trọng đến dịch vụ chăm sóc khách hàng tận tâm, giao hoa đúng giờ và đảm bảo sự hài lòng tối đa. Lựa chọn shop hoa của chúng tôi, bạn không chỉ nhận được những bó hoa đẹp, mà còn mang về niềm vui và ý nghĩa sâu sắc
+        
+      a.btn(href) learn more
+//  about  section end 
+//  icon secton start 
+section.icon__conta
+  .icons
+    img(src='image/fast-delivery.png', alt)
+    span.info
+      h3 Mễn phí ship
+      span Tất cả các loại mặt hàng
+  .icons
+    img(src='image/salary.png', alt)
+    span.info
+      h3 10 ngày trả hàng
+      span Nhận tiền lại
+  .icons
+    img(src='image/gift-box (1).png', alt)
+    span.info
+      h3 Quà tặng
+      span Cho tất cả các đơn hàng
+  .icons
+    img(src='image/pay.png', alt)
+    span.info
+      h3 Thanh toán an toàn
+      span Được cam kết bở Paypal
+//  icon section end 
+//  Product section start
+section.product
+  h1.heading
+    | Latest 
+    span Products
+  .product_items
+    .product__items__item
+      span -10%
+      .product__items__item__image
+        img(src='https://happydayflorist.com/wp-content/uploads/2023/04/3b2f1abfc2d61d8844c7.jpg', alt)
+        .add__toCart
+          a.fa-solid.fa-heart(href)
+          a.product__item__text(href) add To Cart
+          a.fa-solid.fa-share(href)
+      .product_info
+        .product__name Flower Pot
+        .product__price
+          .product__price_new $12.44
+          .product__price__old $18.5
+    .product__items__item
+      span -10%
+      .product__items__item__image
+        img(src='https://i.pinimg.com/736x/18/93/90/189390b3b72546ca833e03932364ae52.jpg', alt)
+        .add__toCart
+          a.fa-solid.fa-heart(href)
+          a.product__item__text(href) add To Cart
+          a.fa-solid.fa-share(href)
+      .product_info
+        .product__name Flower Pot
+        .product__price
+          .product__price_new $12.44
+          .product__price__old $18.5
+    .product__items__item
+      span -10%
+      .product__items__item__image
+        img(src='https://tse1.mm.bing.net/th?id=OIP.E7TrbwPT4E7b7Fm3rtjx0QHaJ4&pid=Api&P=0&h=180', alt)
+        .add__toCart
+          a.fa-solid.fa-heart(href)
+          a.product__item__text(href) add To Cart
+          a.fa-solid.fa-share(href)
+      .product_info
+        .product__name Flower Pot
+        .product__price
+          .product__price_new $12.44
+          .product__price__old $18.5
+    .product__items__item
+      span -10%
+      .product__items__item__image
+        img(src='https://salt.tikicdn.com/cache/w1200/ts/product/94/7d/65/20055218ecbdb53933d6287d9d4db525.jpg', alt)
+        .add__toCart
+          a.fa-solid.fa-heart(href)
+          a.product__item__text(href) add To Cart
+          a.fa-solid.fa-share(href)
+      .product_info
+        .product__name Flower Pot
+        .product__price
+          .product__price_new $12.44
+          .product__price__old $18.5
+    .product__items__item
+      span -10%
+      .product__items__item__image
+        img(src='https://tse3.mm.bing.net/th?id=OIP.hePdiAOdV3EUlhwT575ZTgHaHa&pid=Api&P=0&h=180', alt)
+        .add__toCart
+          a.fa-solid.fa-heart(href)
+          a.product__item__text(href) add To Cart
+          a.fa-solid.fa-share(href)
+      .product_info
+        .product__name Flower Pot
+        .product__price
+          .product__price_new $12.44
+          .product__price__old $18.5
+    .product__items__item
+      span -10%
+      .product__items__item__image
+        img(src='https://tse2.mm.bing.net/th?id=OIP.qFN7IKVSybFo-cKWSyzQbAHaJQ&pid=Api&P=0&h=180', alt)
+        .add__toCart
+          a.fa-solid.fa-heart(href)
+          a.product__item__text(href) add To Cart
+          a.fa-solid.fa-share(href)
+      .product_info
+        .product__name Flower Pot
+        .product__price
+          .product__price_new $12.44
+          .product__price__old $18.5
+    .product__items__item
+      span -10%
+      .product__items__item__image
+        img(src='https://2sao.vietnamnetjsc.vn/images/2023/03/13/20/52/tulip-2.jpg', alt)
+        .add__toCart
+          a.fa-solid.fa-heart(href)
+          a.product__item__text(href) add To Cart
+          a.fa-solid.fa-share(href)
+      .product_info
+        .product__name Flower Pot
+        .product__price
+          .product__price_new $12.44
+          .product__price__old $18.5
+    .product__items__item
+      span -10%
+      .product__items__item__image
+        img(src='https://tse1.mm.bing.net/th?id=OIP.Ah-JLLK11J3q5HoMjFpHIgHaHa&pid=Api&P=0&h=180', alt)
+        .add__toCart
+          a.fa-solid.fa-heart(href)
+          a.product__item__text(href) add To Cart
+          a.fa-solid.fa-share(href)
+      .product_info
+        .product__name Flower Pot
+        .product__price
+          .product__price_new $12.44
+          .product__price__old $18.5
+    .product__items__item
+      span -10%
+      .product__items__item__image
+        img(src='https://down-vn.img.susercontent.com/file/vn-11134207-7qukw-linwdwimlm30d0', alt)
+        .add__toCart
+          a.fa-solid.fa-heart(href)
+          a.product__item__text(href) add To Cart
+          a.fa-solid.fa-share(href)
+      .product_info
+        .product__name Flower Pot
+        .product__price
+          .product__price_new $12.44
+          .product__price__old $18.5
+//  Product section end 
+//  setion Custoomer Reviiew 
+.customer__review
+  .heading
+    h1
+      | Customer's
+      span  Review
+  .customer__review__container
+    .customer__review__box
+      .customer__review__box__star
+        i.fa-solid.fa-star
+        i.fa-solid.fa-star
+        i.fa-solid.fa-star
+        i.fa-solid.fa-star
+        i.fa-solid.fa-star
+      p.
+        Không chỉ cung cấp sản phẩm chất lượng cao, chúng tôi còn chú trọng đến dịch vụ chăm sóc khách hàng tận tâm, giao hoa đúng giờ và đảm bảo sự hài lòng tối đachúng tôi còn chú trọng đến dịch vụ chăm sóc khách hàng tận tâm,
+        
+      .customer__review__box__user
+        img.avatar(src='https://i.pinimg.com/originals/be/b2/88/beb28889996baacfe88cbcd461cd04b3.jpg', alt)
+        .customer__review__box__user__name
+          h3 John Smith
+          p Happy Customer
+        img(src='image/inverted-commas (1).png', alt)
+    .customer__review__box
+      .customer__review__box__star
+        i.fa-solid.fa-star
+        i.fa-solid.fa-star
+        i.fa-solid.fa-star
+        i.fa-solid.fa-star
+        i.fa-solid.fa-star
+      p.
+        chúng tôi còn chú trọng đến dịch vụ chăm sóc khách hàng tận tâm,
+        
+      .customer__review__box__user
+        img.avatar(src='https://i.pinimg.com/originals/1d/06/a2/1d06a2d4e063628dc3251c40a032742b.jpg', alt)
+        .customer__review__box__user__name
+          h3 John Smith
+          p Happy Customer
+        img(src='image/inverted-commas (1).png', alt)
+    .customer__review__box
+      .customer__review__box__star
+        i.fa-solid.fa-star
+        i.fa-solid.fa-star
+        i.fa-solid.fa-star
+        i.fa-solid.fa-star
+        i.fa-solid.fa-star
+      p.
+        Không chỉ cung cấp sản phẩm chất lượng cao, chúng tôi còn chú trọng đến dịch vụ chăm sóc khách hàng tận tâm, giao hoa đúng giờ và đảm bảo sự hài lòng tối đa
+        
+      .customer__review__box__user
+        img.avatar(src='https://i0.wp.com/wallpaperaccess.com/full/6174960.png', alt)
+        .customer__review__box__user__name
+          h3 John Smith
+          p Happy Customer
+        img(src='image/inverted-commas (1).png', alt)
+.contact
+  .heading
+    h1
+      span Contact 
+      | Us
+
+  .contact__box
+    form(action)
+      input(type='text', name='name', placeholder='name')
+      input(type='text', name='email', placeholder='email')
+      input(type='text', name='phone', placeholder='phone')
+      textarea(name='message', placeholder='message')
+      button.btn Send Message
+    .contact__box__image
+      img(src='image/contact.jpg', alt)

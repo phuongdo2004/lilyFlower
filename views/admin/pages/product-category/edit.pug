@@ -1,0 +1,43 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+include ../../mixins/select-tree.pug
+block main 
+  .main__conntainer
+    .header__Main
+      h1 Chỉnh sửa danh mục
+    +alert(3000)
+    //- +alert-success(3000)
+  form(action=`/${prefixAdmin}/product-category/edit/${item.id}?_method=PATCH` method='POST' enctype='multipart/form-data')
+    .form-group
+      label(for='title') Tiêu đề
+      input#title.form-control(type='text' required='' name = "title" value = item.title)
+
+    .form-group
+      label(for='parent_id') Danh mục cha
+      select#parent_id.form-control(name='parent_id' value = item.PaCategory)
+        option(value='') Chọn danh mục
+        if(categories)
+          +select-tree(categories , 1 , item.parent_id)
+    .form-group
+      label(for='') Mô tả
+      textarea.form-control( id="my-expressjs-tinymce-app" name='description' type='text' rows='5' textarea-mce ) #{item.description}
+
+    .form-group(upload-image='')
+      label(for='thumbnail') Ảnh
+      input#thumbnail.form-control(type='file' name='thumbnail' accept='image/*' upload-image-input='' value = item.thumbnail )
+      img#preview.image-preview(src=item.thumbnail alt='' upload-image-input='')
+    .form-group
+      label(for='position') Vị trí
+      input#position.form-control(type='number' name='position' placeholder='Tự động tăng' min='1' value = item.position)
+    .check__container
+      .form-group-check
+        input#statusActive.form-check-input(type='radio' name='status' value='active' checked = (item.status == "active")) 
+        label.form-check-label(for='statusActive') Hoạt động
+      .form-group-check
+        input#statusInActive.form-check-input(type='radio' name='status' value='inactive' checked = (item.status == "inactive") )
+        label.form-check-label(for='statusInActive') Dừng hoạt động
+    .form-group
+      button.btn-add(type='submit')
+        | Cập nhật
+
+

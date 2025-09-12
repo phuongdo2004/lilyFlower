@@ -1,0 +1,30 @@
+extends ../../layouts/default.pug
+include ../../mixins/box-header.pug
+include ../../mixins/alert.pug
+block main 
+
+  //- - if (messages.info)
+  //-   .message.info
+  //-     span= messages.info
+  //  Product section 
+  
+  section.product
+    .success
+      i.fa-solid.fa-check
+      .success__alert
+        | Rất cám ơn vì bạn đã đặt hàng của chúng tôi. Chúng tôi sẽ cố gắng giao hàng trong thời gian sớm nhất
+      a(href='/') Chi tiết đơn hàng 
+
+    //- div hello
+    .product_items
+      each item in products
+        .product__items__item
+          span -#{item.discountPercentage}%
+          a.link(href=`/products/detail/${item.slug}`) 
+            .product__items__item__image(data-id=`${item.id}`)
+              img(src=item.thumbnail, alt) 
+          .product_info
+            .product__name #{item.title}
+            .product__price
+              .product__price_new $#{item.priceNew}
+              .product__price__old $#{item.price}

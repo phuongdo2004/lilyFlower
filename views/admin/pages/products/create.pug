@@ -1,0 +1,55 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+include ../../mixins/select-tree.pug
+block main 
+  .main__conntainer
+    .header__Main
+      h1 Danh sách sản phẩm
+    +alert(3000)
+  form(action='' method='POST' enctype='multipart/form-data')
+    .form-group
+      label(for='title') Tiêu đề
+      input#title.form-control(type='text' required='' name = "title")
+    .check__container
+      .form-group-check
+        input#featured.form-check-input(type='radio' name='featured' value='1' checked)
+        label.form-check-label(for='featured') Nổi bật
+      .form-group-check
+        input#featured.form-check-input(type='radio' name='featured' value='00' )
+        label.form-check-label(for='featured') Không nổi bật 
+    .form-group
+      label(for='parent_id') Danh mục cha
+      select#parent_id.form-control(name='product_category_id')
+        option(value='') Chọn danh mục
+        if(categories)
+          +select-tree(categories)
+    .form-group
+      label(for='') Mô tả
+      textarea.form-control( id="my-expressjs-tinymce-app" name='description' type='text' rows='5' textarea-mce)
+    .form-group
+      label(for='price') Giá
+      input#title.form-control(type='number' required='' name = "price")
+    .form-group
+      label(for='discountPercentage') % Giảm giá
+      input#title.form-control(type='number' required='' name = "discountPercentage")
+    .form-group
+      label(for='stock') Số lượng
+      input#title.form-control(type='number' required='' name = "stock")  
+    .form-group(upload-image='')
+      label(for='thumbnail') Ảnh
+      input#thumbnail.form-control(type='file' name='thumbnail' accept='image/*' upload-image-input='')
+      img#preview.image-preview(src='' alt='' upload-image-input='')
+    .form-group
+      label(for='position') Vị trí
+      input#position.form-control(type='number' name='position' placeholder='Tự động tăng' min='1')
+    .check__container
+      .form-group-check
+        input#statusActive.form-check-input(type='radio' name='status' value='active' checked)
+        label.form-check-label(for='statusActive') Hoạt động
+      .form-group-check
+        input#statusInActive.form-check-input(type='radio' name='status' value='inactive' )
+        label.form-check-label(for='statusInActive') Dừng hoạt động
+    .form-group
+      button.btn-add(type='submit')
+        | Tạo mới
+

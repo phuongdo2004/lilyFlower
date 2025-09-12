@@ -1,0 +1,40 @@
+
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+block main
+  .main__conntainer 
+    .header__Main
+      h1 Chỉnh sửa tài khoản
+    +alert(3000)
+    form(action=`/${prefixAdmin}/accounts/edit/${item.id}` 
+        method='POST' enctype="multipart/form-data")
+      .form-group
+        label(for='fullName') Họ tên
+        input.form-control(type='text' id = "fullName" required='' name = "fullName" value = item.fullName)
+      .form-group
+        label(for='email') Email
+        input.form-control(type='text' id = "email" required='' name = "email" value = item.email)
+      .form-group
+        label(for='phone') Số điện thoại
+        input.form-control(type='text' id = "phone" required='' name  = "phone" value = item.phone)
+      .form-group(upload-image='')
+        label(for='avatar') Ảnh
+        input.form-control(type='file' name='avatar' id ="avatar" accept='image/*' upload-image-input='')
+        img#preview.image-preview(src=item.avatar alt='' upload-image-input='')
+      .form-group
+        label(for='role_id') Phân quyền
+        select#role_id.form-control(name='role_id' )
+          if(roles.length>0)
+            each role in roles 
+              option(value=role.id selected  = (item.role_id ==role.id)?true :false) #{role.title}
+
+      .check__container
+        .form-group-check
+          input#statusActive.form-check-input(type='radio' name='status' value='active' checked)
+          label.form-check-label(for='statusActive') Hoạt động
+        .form-group-check
+          input#statusInActive.form-check-input(type='radio' name='status' value='inactive' )
+          label.form-check-label(for='statusInActive') Dừng hoạt động
+      .form-group
+        button.btn-add(type='submit')
+          | Chỉnh sửa

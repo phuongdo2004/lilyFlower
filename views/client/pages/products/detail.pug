@@ -1,0 +1,51 @@
+extends ../../layouts/default.pug
+include ../../mixins/box-header.pug
+include ../../mixins/alert.pug
+
+block main 
+  .page__heading
+    h1
+      span Chi tiết sản phẩm
+  +alert(3000)
+  .detail
+    .detail__container
+      .detail__container__img
+        img(src=item.thumbnail, alt)
+
+      form(id="productFormDetail" action="" method="POST" class = "detail__container__info" idProduct =item.id)
+        .detail__container__info__content
+          .detail__container__info__title
+            h3 #{item.title}
+          .detail__container__info__price
+            .newPrice. 
+              #{item.priceNew}đ
+            .oldPrice.
+              #{item.price}đ
+            .disCount.
+
+              #{item.discountPercentage}%
+
+          .detail__container__info__number
+            span Số lượng
+            input(type='number',name = "quantity"  ,value='1', style='max-width:100px')
+            span #{item.stock} sản phẩm có sẵn
+          .detail__container__info__buy
+            button.cart#addToCart(type='submit', value='add')
+              i.fa-solid.fa-cart-shopping
+              | Thêm vào giỏ hàng
+            button.buy#buyNow(type='submit', value='buy')
+              | Mua ngay
+    .detail__infor
+      .detail__infor__1
+        h3 CHI TIẾT SẢN PHẨM
+      .detail__infor__2
+        .detail__infor__2__category
+          p Danh mục
+          p #{item.category}
+        .detail__infor__2__stock
+          p Kho
+          p  #{item.stock} 
+      .detail__infor__1
+        h3 MÔ TẢ SẢN PHẨM
+      .detail__infor__description
+        p !{item.description}

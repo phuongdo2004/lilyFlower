@@ -1,0 +1,41 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+block main 
+  .detail
+      .detail__container
+        .detail__container__img
+          img(src=item.thumbnail alt='')
+        .detail__container__info
+          .detail__container__info__content
+            .detail__container__info__title
+              h3 #{item.title}
+            .detail__container__info__price
+              .newPrice
+                | đ #{item.priceNew}
+              .oldPrice
+                | đ #{item.price}
+              .disCount
+                | -#{item.discountPercentage}
+            .detail__container__info__number
+              if ( item.status == "active")
+                .statusDetail 
+                  span Trạng thái
+                  if(item.status == "active")
+                    span(class = "statusButtonDetailActive") Hoạt động
+                  else
+                    span(class = "statusButtonDetailInactive") Dừng hoạt động
+              span Vị trí 21
+      .detail__infor
+        .detail__infor__1
+          h3 CHI TIẾT SẢN PHẨM
+        .detail__infor__2
+          .detail__infor__2__category
+            p Danh m&#x1EE5;c
+            p #{item.categorry}
+          .detail__infor__2__stock
+            p Kho
+            p #{item.stock}
+        .detail__infor__1
+          h3 M&Ocirc; T&#x1EA2; S&#x1EA2;N PH&#x1EA8;M
+        .detail__infor__description
+          p #{item.descreption}

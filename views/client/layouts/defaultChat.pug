@@ -1,0 +1,36 @@
+doctype html
+html
+  head
+    title #{pageTitle}
+    //- link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css")
+    //- link( href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet")
+    link(rel="stylesheet", href="/css/main.css")
+    link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.11.6/viewer.min.css")
+    //- link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.11.7/viewer.common.js")
+    link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/file-upload-with-preview/6.1.2/style.css")
+    link( rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+          integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"
+        )
+
+  body
+    include ../partials/header.pug
+
+    block main
+
+
+
+
+    //- script(src="https://cdn.tailwindcss.com") 
+    script( type="module" src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js") 
+    //- script(src="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.11.7/viewer.common.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.11.6/viewer.min.js") 
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/file-upload-with-preview/6.1.2/index.iife.js")
+    script(src="https://cdn.socket.io/4.7.2/socket.io.min.js")
+    script(src="/socket.io/socket.io.js")
+    script(src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js") 
+    script( src="/js/script.js")
+    script( type = "module" src="/js/chat.js")
+    //- script( type = "module" src="/admin/js/chat.js")
+    script( type="module" src="/js/cart.js") 
+

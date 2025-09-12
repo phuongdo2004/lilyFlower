@@ -1,0 +1,38 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+block main 
+  .main__conntainer
+    .header__Main
+      h1 Danh sách tài khoản admin
+    +alert(3000)
+    .listProducts
+      .header
+        | Danh sách
+        a(href=`/${prefixAdmin}/accounts/create` class = "create")
+          | + Thêm mới
+      .list__container
+        .list__containerAdmin__header
+          span STT
+          span Avatar
+          span Họ tên
+          span Phân quyền
+          span Email
+          span Trạng thái
+          span Hành động
+        .list__containerAdmin__body
+            if (accounts.length>0)
+              each item , index in accounts
+                span #{index+1}
+                img(src=item.avatar alt='' style='height: 60px; width: auto')
+                span #{item.fullName} 
+                span #{item.role}
+                span #{item.email}
+                if (item.status =="active")
+                  button(link =`/${prefixAdmin}/accounts/change-status/inactive/${item.id}` button-change-status class = "btn active") Hoạt động 
+                else 
+                  button(link =`/${prefixAdmin}/accounts/change-status/active/${item.id}`  button-change-status class = "btn inactive") Dừng hoạt động 
+ 
+                .active__admin
+                  a(href=`/${prefixAdmin}/accounts/detail/${item.id}`)  Chi tiết
+                  a(href= `/${prefixAdmin}/accounts/edit/${item.id}`)  Sửa
+                  button( buttonDeleted link = `/${prefixAdmin}/accounts/deleted/${item.id}`) Xóa

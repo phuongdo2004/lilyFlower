@@ -1,0 +1,38 @@
+extends ../../layouts/default.pug
+block main 
+  .main__conntainer
+    .header__Main
+      h1 Ph&acirc;n quy&#x1EC1;n
+  .listProducts
+    .header
+      | Danh s&aacute;ch
+      button(
+        buttonPermission
+        type="submit"
+        class="create"
+        button-submit=`/${prefixAdmin}/roles/permissions`
+      ) Cập nhật
+    .list__container
+      table.table.table-hover.table-sm(table-permissions='')
+        thead
+          tr
+            th Tính năng
+
+            each item in listRole
+              th.text-center(role-id=item.id) #{item.title}
+        tbody
+          each item in listLable
+            tr
+              td(colspan='12')
+                b #{item.title}
+            each role in item.role
+              tr
+                td #{role.title}  
+                each per in listRole
+                  td(class="text-center")
+                    input(
+                      type = "checkbox"
+                      checked  = (per.permissions.includes(role.data)?true : false)
+                      data-id = per.id 
+                      data-name=role.data 
+                    )

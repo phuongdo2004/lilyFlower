@@ -1,0 +1,171 @@
+encounterinng : Đang gặp phải
+relative: tương đối
+absolute: tuyệt đối
+contructed: xậy dựng
+Pending: chua giai quyet
+Return: Tra lai
+Progress L dang xu li 
+Delivered : Da van chuyen
+
+tr
+              td Window Coolers
+              td $110
+              td $1200
+              td Due
+              td
+                span.statusBadge.pending Pending
+            tr
+              td Speakers
+              td $620
+              td $1200
+              td Paid
+              td
+                span.statusBadge.return Return
+            tr
+              td Hp Laptop
+              td $110
+              td $1200
+              td Due
+              td
+                span.statusBadge.inProgress in Progress
+            tr
+              td Apple Watch
+              td $1200
+              td $1200
+              td Paid
+              td
+                span.statusBadge.delivered Delivered
+            tr
+              td Wall Fan
+              td $110
+              td Paid
+              td
+                span.statusBadge.pending Pending
+            tr
+              td Adidas Shoes
+              td $620
+              td Paid
+              td
+                span.statusBadge.return Return
+            tr
+              td Denim Shirts
+              td $110
+              td Due
+              td
+                span.statusBadge.inProgress in Progress
+            tr
+              td Casual Shoes
+              td $575
+              td Paid
+              td
+                span.statusBadge.pending Pending\
+
+
+
+const RoomChat = require("../../model/rooms-chats.model");
+const User = require("../../model/user.model");
+const Account = require("../../model/accouns.model");
+const Chat = require("../../model/chats.model");
+const streamUploadHelper = require("../../helpers/streamUpload.helper");
+module.exports.chatSocket = async (req, res, roomChatId) => {
+  // truy van ra ng con lai trong rôm chat 
+  
+  _io.once("connection", async (socket) => {
+
+    console.log("chuan bi gop phong chat client ", roomChatId);
+    socket.join(roomChatId);
+    console.log("ket noi chat.socket thanh cong client");
+    // CLIENT__SEND_TYPING 
+    socket.on("CLIENT_SEND_TYPING", async (data) => {
+     console.log("ooo");
+
+      if (req.cookies.tokenUser) {
+        const user = await User.findOne({
+          tokenUser: req.cookies.tokenUser,
+          deleted: false
+        }).select("fullName , avatar  ,id");
+       console.log(roomChatId);
+        socket.to(roomChatId).emit("SERVER_SEND_TYPING", {
+          data: data.data,
+          userId: user.id,
+          fullName: user.fullName,
+        });
+
+      }
+
+
+
+
+
+
+    });
+
+
+
+    // CLIENT__SEND_TYPING
+
+
+    socket.on("CLIENT_SEND_MESSGAE", async (data) => {
+      let dataReturn;
+      // console.log("chay vao");
+      const ArrayImages = [];
+
+      for (const image of data.images) {
+        const img = await streamUploadHelper(image);
+        ArrayImages.push(img.url);
+      }
+      // console.log("array image", ArrayImages);
+
+
+      // if( data.tokenSale){
+      //   const sale = await Account.findOne({
+      //     token: data.tokenSale ,
+      //     deleted :false
+      //   }).select("fullName , avatar , id , role_id");
+
+      //    dataReturn   = {
+      //     fullName: sale.fullName , 
+      //     avatar: sale.avatar , 
+      //     content: data.message , 
+      //     saleId : sale.role_id ,
+      //     ArrayImages: ArrayImages,
+      //   }
+      //   saveChat(sale.role_id , roomChatId , data)
+
+      // }
+      if (data.tokenUser) {
+        const user = await User.findOne({
+          tokenUser: data.tokenUser,
+          deleted: false
+        }).select("fullName , avatar  ,id");
+
+        dataReturn = {
+          fullName: user.fullName,
+          avatar: user.avatar,
+          content: data.message,
+          userId: user.id,
+          ArrayImages: ArrayImages,
+        }
+        saveChat(user.id, roomChatId, data)
+      }
+      // luu vao database
+      function saveChat(userId, roomChatId, data) {
+        const chat = new Chat({
+          userId: userId,
+          roomChatId: roomChatId,
+          content: data.message,
+          images: ArrayImages,
+        });
+        return chat.save();
+      }
+
+      // trar lai Client 1 socket 
+      _io.to(roomChatId).emit("SERVER__RETURN__MESSAGE", dataReturn);
+
+
+    })
+
+  })
+
+
+}

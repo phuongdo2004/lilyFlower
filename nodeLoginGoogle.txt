@@ -1,0 +1,15 @@
+Bạn phải truyền hàm (function), không phải gọi hàm (function call).
+Nếu AuthController.Auth là một middleware/controller chuẩn, hãy truyền như sau
+
+router.get('/callback',
+    passport.authenticate('google', { failureRedirect: '/products/failure' }),
+    AuthController.Auth // KHÔNG có (req, res)
+);
+Nếu bạn cần truyền thêm tham số, hãy dùng function wrapper:
+router.get('/callback',
+    passport.authenticate('google', { failureRedirect: '/products/failure' }),
+    (req, res) => AuthController.Auth(req, res)
+);
+
+
+--------------------------------------------------------

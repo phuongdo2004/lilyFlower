@@ -1,0 +1,29 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+block main 
+  .main__conntainer
+    .header__Main
+      h1 Nh&oacute;m quy&#x1EC1;n
+    +alert(3000)
+    .listProducts
+      .header
+        | Danh sách
+        a.create(href="/admin/roles/create")
+          | + Thêm mới
+      .list__container
+        .list__containerRule__header
+          span STT
+          span Nhóm quyền
+          span Mô tả ngắn 
+          span Hành động
+        if (roles.length>0)
+          each item,index in roles
+            .list__containerRule__body
+              span #{index+1}
+              span #{item.title}
+              span #{item.description}
+              .active__admin
+                a(href=`/${prefixAdmin}/roles/detail/${item.id}`)  Chi tiết
+                a(href= `/${prefixAdmin}/roles/edit/${item.id}`)  Sửa
+                button(link = `/${prefixAdmin}/roles/deleted/${item.id}` buttonDeleted) Xóa
+        

@@ -1,0 +1,23 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+block main
+  .main__conntainer 
+    .header__Main
+      h1 Chi ti&#x1EBF;t t&agrave;i kho&#x1EA3;n
+    .accountContainer
+      .accountContainer__header
+        h3 Th&ocirc;ng tin t&agrave;i kho&#x1EA3;n
+      .accountContainer__body
+        img(src=item.avatar alt='')
+        .name
+          span Họ tên:
+          h5 #{item.fullName}
+        .email
+          span Email: 
+          h5 #{item.email}
+        .phone
+          span Số điện thoại: 
+          h5 #{item.phone}
+        .permission
+          span Phân quyền: 
+          h5 #{item.role} 

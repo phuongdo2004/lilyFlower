@@ -1,0 +1,956 @@
+ enctype="multipart/form-data" phai them vao dee nhan dddc req.boddddy ( ko thi unde) nhưng phải có file uploadd
+ enctype="application/x-www-form-urlencoded" phai them vao dee nhan dddc req.file ( ko thi unde) 
+
+
+ npm i cookie-parser dde req cos theer nhaanj ddc cookies
+
+Tại sao href không hỗ trợ POST?
+Thuộc tính href được thiết kế chỉ để dẫn liên kết đến một URL. Trình duyệt chỉ có thể gửi yêu cầu GET qua URL này.
+POST thường được dùng để gửi dữ liệu hoặc thực hiện các hành động làm thay đổi trạng thái 
+(như thêm, xóa, cập nhật), và yêu cầu các biện pháp bảo mật bổ sung. Vì vậy, bạn cần sử dụng JavaScript hoặc thẻ <form> để thực hiện.
+ 
+--  req.body.quantity; nhung j dc tra ve req.body ow dang chuoi 
+
+slice() tạo một bản sao của cartDetail.products, tránh làm thay đổi dữ liệu gốc.
+.reverse() chỉ áp dụng trên bản sao đó.
+
+-----cách để tạo ra 1 mảng c từ 1 mảng a trừ các phần tử trong mảng b
+const A = [1, 2, 3, 4, 5, 6];
+const B = [2, 4, 6];
+
+// Chuyển B thành Set để tìm kiếm nhanh hơn
+const BSet = new Set(B);
+
+// Lọc các phần tử trong A mà không có trong B
+const C = A.filter(item => !BSet.has(item));
+
+console.log(C); // Output: [1, 3, 5]
+
+---do querySelectorAll trả về một NodeList, không phải một Array
+-- chuyển từ NodeList thành Array
+const inputCheck = Array.from(document.querySelectorAll("[check-item]"));
+
+-- trim() hàm loaij bỏ dấu cách ở 2 đầu của chuỗichuỗi
+
+
+Click vào <label>:
+
+Sự kiện click của <label> xảy ra.
+Do <label> có thuộc tính for="id" trỏ đến <input>, sự kiện click cũng tự động được kích hoạt trên <input>.
+Kết quả: Sự kiện click chạy 2 lần (1 lần từ <label>, 1 lần từ <input>).
+
+-----the cha => ther con se can giua car ngang lẫn dọcdọc
+--/* display: flex; */=> ko 2 cai duoi thi the con mảgin: auto cx dc 
+  /* justify-content: center; Căn giữa theo chiều ngang */
+  /* align-items: center; Căn giữa theo chiều dọc */
+
+
+
+
+✅ 1. Lấy nội dung văn bản (textContent)
+Nếu bạn muốn lấy chỉ nội dung văn bản bên trong thẻ <div> (không bao gồm HTML), sử dụng .textContent:
+
+js
+Sao chép
+Chỉnh sửa
+let content = document.querySelector("#myDiv").textContent;
+console.log(content);
+📌 Ví dụ:
+
+html
+Sao chép
+Chỉnh sửa
+<div id="myDiv">Xin chào <b>thế giới</b>!</div>
+👉 Kết quả: "Xin chào thế giới!" (chỉ lấy văn bản, không lấy thẻ <b>)
+
+✅ 2. Lấy nội dung HTML (innerHTML)
+Nếu bạn muốn lấy cả thẻ HTML bên trong, sử dụng .innerHTML:
+
+js
+Sao chép
+Chỉnh sửa
+let content = document.querySelector("#myDiv").innerHTML;
+console.log(content);
+📌 Ví dụ:
+
+html
+Sao chép
+Chỉnh sửa
+<div id="myDiv">Xin chào <b>thế giới</b>!</div>
+👉 Kết quả: "Xin chào <b>thế giới</b>!" (lấy cả thẻ <b>)
+
+✅ 3. Lấy nội dung gốc (outerHTML)
+Nếu bạn muốn lấy cả thẻ div và nội dung bên trong, sử dụng .outerHTML:
+
+js
+Sao chép
+Chỉnh sửa
+let content = document.querySelector("#myDiv").outerHTML;
+console.log(content);
+📌 Ví dụ:
+
+html
+Sao chép
+Chỉnh sửa
+<div id="myDiv">Xin chào <b>thế giới</b>!</div>
+👉 Kết quả: "<div id='myDiv'>Xin chào <b>thế giới</b>!</div>" (lấy luôn cả thẻ <div>)
+
+✅ 4. Lấy nội dung của tất cả thẻ div trên trang
+js
+Sao chép
+Chỉnh sửa
+document.querySelectorAll("div").forEach(div => {
+    console.log(div.textContent);
+});
+
+
+
+---------------
+forEach không chờ await hoạt động → Các truy vấn với await Product.findOne() chạy bất đồng bộ nhưng không được xử lý đúng cách.
+Do đó, khi console.log(productOrder); chạy, dữ liệu chưa kịp được thêm vào mảng.
+
+
+-------------------------------------------------------------------------------
+Backend (BE) gán priceNew nhưng khi trả về FE thì FE không nhận được priceNew.
+Nguyên nhân:
+MongoDB không cho phép thay đổi trực tiếp dữ liệu từ find() do productsList là một Mongoose Document, không phải một Object thuần (plain object).
+Khi bạn gán item.priceNew, nó không được lưu vào JSON response vì Mongoose Document không lưu trường mới khi chưa được .toObject() hoặc .lean().\
+------------Cách 1: Dùng .toObject()
+Chuyển từng document thành object trước khi gán priceNew:
+
+      const productsList = await Product.find({});
+      const modifiedProducts = productsList.map(item => {
+        const obj = item.toObject(); // Chuyển document thành object thường
+        obj.priceNew = ((1 - obj.discountPercentage / 100) * obj.price).toFixed(0);
+        return obj;
+      });
+
+      res.json({
+        code: 200,
+        products: modifiedProducts // Trả về object thường với giá trị mới
+      });
+
+
+Cách 2: Dùng .lean()
+Chuyển tất cả documents thành object JSON ngay từ đầu:
+
+          const productsList = await Product.find({}).lean(); // Sử dụng lean() để lấy object thường
+          productsList.forEach(item => {
+            item.priceNew = ((1 - item.discountPercentage / 100) * item.price).toFixed(0);
+          });
+
+          res.json({
+            code: 200,
+            products: productsList
+          });
+
+
+---------------------
+    overflow: auto; /* Hiển thị thanh cuộn khi cần */
+
+
+
+----------------------------------------------------------------
+4. Kiểm tra xem enctype="multipart/form-data" có gây lỗi không
+Trong Pug template, bạn có:
+
+pug
+Sao chép
+Chỉnh sửa
+form(action=`/${prefixAdmin}/account/create` method='POST' enctype='multipart/form-data')
+multipart/form-data chỉ dùng khi bạn có file upload.
+Nếu bạn không upload file, hãy xóa enctype='multipart/form-data', vì body-parser mặc định không hỗ trợ multipart.
+Nếu bạn thực sự cần upload file, bạn phải dùng multer thay vì body-parser.
+👉 Giải pháp: Cài đặt multer nếu muốn upload file:
+
+----------------------------------------------------------------------
+// Cấu hình Multer để lưu vào bộ nhớ
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+=> thì mới nhận đc file .buffer
+
+
+------------------------------------------------------------------------------------
+Render
+    Sản phẩm mới được thêm vào cơ sở dữ liệu.
+    Backend lấy lại danh sách sản phẩm từ database và render ra trang mới.
+    Nhưng trình duyệt vẫn đang ở trạng thái POST request (do bạn vừa gửi form đi).
+    Nếu bạn tải lại trang, trình duyệt sẽ hỏi có muốn gửi lại biểu mẫu không → Điều này làm gửi lại dữ liệu cũ và thêm sản phẩm một lần nữa, gây ra bản sao.
+    Đây chính là vấn đề Form Resubmission (Gửi lại biểu mẫu).
+-------
+1. POST /add-product  --> Thêm sản phẩm vào database
+2. Lấy danh sách sản phẩm mới nhất và render HTML
+3. Người dùng tải lại trang (F5) 
+4. Trình duyệt gửi lại POST request → Thêm sản phẩm lần nữa!
+--------------------------------
+redirect 
+    Người dùng gửi POST request để thêm sản phẩm.
+    Backend xử lý dữ liệu và lưu vào database.
+    Sau khi thêm thành công, backend chuyển hướng trình duyệt (redirect) đến trang danh sách sản phẩm bằng header("Location: ...").
+    Trình duyệt nhận GET request mới, và tải lại dữ liệu từ database một cách sạch sẽ.
+    Không còn trạng thái POST, nên tải lại trang không bị gửi lại biểu mẫu nữa.
+    -------------
+1. POST /add-product  --> Thêm sản phẩm vào database
+2. Redirect tới /product-category
+3. Trình duyệt gửi GET request để lấy danh sách sản phẩm
+4. Trang hiển thị dữ liệu mới, không bị gửi lại biểu mẫu
+
+-----------------------
+Đúng vậy, vấn đề nằm ở chỗ bạn đang áp dụng middleware MiddleWareAutth.requireAuth cho tất cả các route nằm trong app.use(\/${systemConfig.prefixAdmin}` ...), bao gồm cả route/auth. Điều này dẫn đến việc route/auth` cũng bị kiểm tra xác thực, gây ra vòng lặp redirect vô hạn.
+
+Để khắc phục vấn đề này, bạn cần loại trừ route /auth khỏi middleware MiddleWareAutth.requireAuth. Bạn có thể làm điều này bằng cách di chuyển productsRouter, rolesRouter, rolePermissionRouter, dashboardRouter và accountRouter vào một app.use riêng biệt, sau đó thêm middleware MiddleWareAutth.requireAuth vào app.use đó.
+
+
+----------req.flash() laf 1 session chir ddc goij 1 laanf duy nhaats goij 2 laanf sex bij maats duwx lieeuj 
+
+Tóm tắt
+Nguyên nhân	Giải pháp
+req.flash() chỉ dùng được một lần	Gọi req.flash() một lần duy nhất và lưu vào biến
+Dữ liệu bị xóa khi gọi req.flash() nhiều lần	Lấy từng loại message riêng (req.flash("success"), req.flash("error"))
+
+Khi bạn gọi req.flash() lần đầu tiên (console.log("flash", req.flash())), nó lấy dữ liệu success từ session.
+
+Khi bạn gọi lại req.flash() lần hai (message = req.flash()), dữ liệu đã bị xóa, nên message trở thành {}.
+
+----------------------------------------
+
+=--------------------------------------------
+innerHTML được sử dụng để thiết lập hoặc lấy nội dung HTML của một phần tử. Khi bạn gán một đối tượng DOM trực tiếp cho innerHTML, trình duyệt sẽ cố gắng chuyển đối tượng đó thành một chuỗi, và kết quả thường là "[object HTMLDivElement]".
+chatMessageContainer.innerHTML = `${div}`
+Hoặc:
+
+JavaScript
+
+chatMessageContainer.innerHTML = div;
+JavaScript sẽ cố gắng chuyển đối tượng div thành một chuỗi. Khi một đối tượng DOM được chuyển thành chuỗi một cách trực tiếp, nó thường trả về "[object HTMLDivElement]". Đây chính là lý do bạn thấy dòng chữ này hiển thị trong container chat của mình.
+
+Cách khắc phục đúng là bạn đã tạo nội dung HTML bên trong biến div rồi, vậy thì hãy thêm trực tiếp div (đã chứa nội dung HTML) vào chatMessageContainer bằng phương thức appendChild():
+
+Thay vì gán trực tiếp vào innerHTML, bạn cần sử dụng phương thức appendChild() để thêm phần tử div đã được tạo và chứa nội dung vào chatMessageContainer.
+
+
+----------------------------------- RELATIVE URL--------------------------- 
+------------------------------------------------------------------------------------------------------------
+Okay, I understand the issue you're encountering with the URL when clicking the link. Here's an explanation of why the URL is behaving this way.
+
+The problem is likely due to how the relative URL is being constructed.  Let me explain:
+
+Relative URLs: When you use a URL like products/detail/${item.slug}, it's considered a relative URL. This means the browser will interpret it relative to the current URL.
+Current URL: You're on the page http://localhost:600/checkout/order/.
+Base URL: The browser uses this current URL as the base to resolve the relative URL.
+So, when you click on <a href="products/detail/55gfhfg">, the browser takes the base URL (http://localhost:600/checkout/order/) and appends the relative URL (products/detail/55gfhfg) to it.  This results in the URL you're seeing: http://localhost:600/checkout/order/products/detail/55gfhfg.
+
+Solution:
+
+To fix this, you should use an absolute URL for the link, or adjust the relative path.
+
+Absolute URL: The most reliable way is to provide the full URL, starting from the root of your application:
+
+HTML
+
+<a href="/products/detail/${item.slug}">
+By adding the leading slash (/), you're telling the browser that the URL should be relative to the root of your domain (http://localhost:600/), not the current path.
+
+Relative URL (adjusted): If your application has a specific structure, you could try adjusting the relative path, but this is less reliable and can break if you change your URL structure:
+
+HTML
+
+<a href="../products/detail/${item.slug}">
+The .. means "go up one level" in the URL path.  However, this assumes a specific directory structure.
+=> Thêm dấu / trc ủl để thể hiện sự tuyệt đối
+a.link(href=`/products/detail/${item.slug}`) 
+------------------------------------------------------------------------------------------------
+----------------------------------------MIDDLWARE ROUTER ------------------------------------
+Trong Express.js, khi bạn định nghĩa một route bằng router.get(), bạn có thể truyền vào một hoặc
+ nhiều middleware functions hoặc một route handler function làm đối số thứ hai trở đi. Các middleware
+  functions sẽ được thực thi tuần tự, và bạn cần gọi next() trong mỗi middleware để báo cho Express bIết
+   rằng nó đã hoàn thành nhiệm vụ và request có thể được chuyển cho middleware hoặc route handler tIIếp theo trong chuỗi.
+   ----------------------------------------------------------------------------------------------
+   Khi một form chứa input file được gửi, dữ liệu file được gửi đi theo một định dạng đặc biệt gọi là multipart/form-data. Định dạng này cho phép gửi cả dữ liệu văn bản và dữ liệu nhị phân (file) trong cùng một yêu cầu.
+
+Trong Node.js, bạn không thể truy cập trực tiếp dữ liệu file thông qua req.body. Bạn cần sử dụng một middleware đặc biệt để xử lý dữ liệu multipart/form-data và trích xuất thông tin và nội dung của file. Một số middleware phổ biến để xử lý file upload trong Node.js là:
+
+multer: Đây là một middleware rất phổ biến và mạnh mẽ để xử lý file upload. Nó cho phép bạn lưu file vào ổ đĩa hoặc bộ nhớ, và cung cấp thông tin về file trong đối tượng req.file hoặc req.files.
+---------------------------------------------------------------------------------------------------------------------------------
+ for (const song of songs) {
+           const singerInfo = await Singer.findOne({
+            _id:song.singerId , 
+            deleted: false 
+           }).select(" fullName ");
+
+           // gan 1 bien ca si cho song
+        //    song["singerInfo"] = singerInfo;
+        // ben BE co then nhan dc  kieu gan nay song["singerInfo"] = singerInfo
+        // nhung ben FE ko nhan dc kieu gan vay  nen phai tao 1 obj cu the
+        const itemFinal = {
+            title: song.title,
+            avatar: song.avatar,
+            singerId:song.singerId,
+            like: song.like,
+            slug: song.slug,
+            singerFullName: singerInfo["fullName"],
+        };
+        
+        songsFinal.push(itemFinal);
+        }
+
+----------------------------------------
+appendchild : thêm vào cuối thẻ cha
+innerHTMLinnerHTML : là xóa tất cả các phần tử trong đó đi rồi thêm vào 
+-------------------------------------------------------------------------------
+Bạn đang gặp lỗi Uncaught TypeError: Failed to execute 'appendChild' on 'Node': parameter 1 is not of type 'Node'.
+
+Lỗi này xảy ra ở dòng div.appendChild(subDiv); trong code của bạn.
+
+Nguyên nhân:
+
+Như tôi đã giải thích chi tiết về appendChild và innerHTML:
+
+appendChild() chỉ chấp nhận một đối tượng Node (ví dụ: một phần tử HTML được tạo bằng document.createElement(), hoặc một Text Node, Comment Node, v.v.) làm đối số.
+Bạn đang cố gắng truyền một chuỗi HTML (subDiv) trực tiếp vào appendChild().
+JavaScript không tự động chuyển đổi chuỗi HTML thành một đối tượng Node khi bạn gọi appendChild().
+
+Cách khắc phục:
+
+Có hai cách chính để khắc phục lỗi này, tùy thuộc vào việc bạn muốn sử dụng appendChild (an toàn hơn, hiệu quả hơn cho các cập nhật nhỏ) hay innerHTML (đơn giản hơn cho việc chèn nhiều HTML):
+
+Cách 1: Sử dụng innerHTML (Nếu bạn muốn chèn chuỗi HTML)
+Nếu bạn muốn tiếp tục xây dựng chuỗi HTML như bạn đang làm (subDiv) và chèn nó vào div, bạn phải sử dụng innerHTML thay vì appendChild. Tuy nhiên, bạn cần thêm subDiv vào innerHTML của div một cách tích lũy (append to existing HTML), không phải ghi đè.
+ let subDivHtml = `<div class="inner-list">
+            <a class="inner-item" href="/products/detail/${item.slug}">
+                <div class="inner-image">
+                    <img src="${item.thumbnail}">
+                </div>
+                <div class="inner-info">
+                    <div class="inner-title">${item.title}</div>
+                    <div class="inner-singer">
+                        <i class="fa-solid fa-microphone-lines"></i> 
+                        若月亮没来 - 王宇宙Leto/乔浚丞
+                    </div>
+                </div>
+            </a>
+        </div>`;
+        // Tích lũy chuỗi HTML vào biến allSubDivsHtml
+        allSubDivsHtml += subDivHtml; 
+        -----------------------------------------------------------------------------
+        Bạn đang gặp phải một lỗi phổ biến khi sử dụng forEach cùng với return trong JavaScript, và đó là lý do tại sao hàm getCookie của bạn luôn trả về null.
+
+Vấn đề: return trong forEach chỉ thoát khỏi callback của forEach, không thoát khỏi hàm cha.
+Trong JavaScript:
+
+Khi bạn sử dụng return bên trong hàm callback của forEach, nó chỉ thoát khỏi lần lặp hiện tại của forEach (hoặc thoát khỏi hàm callback đó).
+Nó không thoát khỏi hàm getCookie bên ngoài.
+Vì vậy, dù bạn tìm thấy cookie và gọi return decodeURIComponent(...), hàm getCookie vẫn tiếp tục chạy đến cuối và luôn trả về null.
+-----------------------------------------------------------------------------------------------
+Lỗi "Uncaught SyntaxError: Cannot use import statement outside a module" xuất hiện vì trình duyệt không hỗ trợ cú pháp import/export ES6 trong file JavaScript thông thường, trừ khi bạn:
+----------------                         -----------------
+Khai báo <script type="module"> trong HTML
+Đảm bảo đường dẫn import là đúng và file được server trả về với đúng MIME type.
+<script type="module" src="js/client/products/products.js"></script>  đêr có thể import đc 
+Phải có đuôi .js khi import module ES6 trong trình duyệt.
+Đảm bảo file getTotal.js tồn tại đúng vị trí.
+type="module" trong thẻ <script> của HTML có mục đích chính là:
+
+Kích hoạt chế độ JavaScript ES6 Module cho file script đó.
+Cho phép bạn sử dụng cú pháp import và export trực tiếp trong file JavaScript trên trình duyệt.
+Đảm bảo mỗi file module có phạm vi riêng (biến, hàm không bị trùng lẫn nhau toàn cục).
+Hỗ trợ import file khác bằng đường dẫn tương đối/tuyệt đối và phải có đuôi .js.
+Tóm lại:
+type="module" giúp bạn viết code JavaScript hiện đại, chia nhỏ thành nhiều file, tái sử dụng và quản lý dễ dàng hơn bằng cách dùng import/export.
+
+----------------------------------------------------------------------------
+Khi bạn gắn sự kiện cho một phần tử (ví dụ: form, button, input...), khi sự kiện xảy ra (click, submit, change...), một đối tượng sự kiện (event) sẽ được truyền vào hàm xử lý.
+event.target chính là phần tử mà người dùng vừa tương tác.
+document.getElementById('orderForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    console.log(event.target); // Chính là <form id="orderForm">...</form>
+});
+Nếu bạn gắn sự kiện cho form, event.target là form.
+Nếu bạn gắn sự kiện cho button, event.target là button đó.
+Tóm lại:
+event.target giúp bạn truy cập phần tử HTML đã phát sinh sự kiện, từ đó lấy giá trị, thuộc tính, hoặc thao tác với nó.
+Trong form submit, thường dùng event.target để lấy dữ liệu các trường trong form (event.target.fullName.value, ...).
+
+----
+Khi bạn submit form, event.target chính là phần tử <form id="orderForm">...</form>.
+
+Trong JavaScript, các trường input bên trong form có thể được truy cập qua thuộc tính của form theo name:
+
+function handlePlaceOrder(event) {
+    event.preventDefault();
+    const form = event.target; // form chính là <form id="orderForm">...</form>
+
+    // Truy cập giá trị các input bằng name
+    const fullName = form.fullName.value;
+    const email = form.email.value;
+    const phone = form.phone.value;
+    const address = form.address.value;
+    const productId = form.productId.value;
+    const quantity = form.quantity.value;
+
+    console.log(fullName, email, phone, address, productId, quantity);
+}
+----------------------------------------------------------
+Bạn có route /cart/:cartId và /cart/detail, nhưng khi gọi /cart/detail, Express sẽ hiểu "detail" là cartId và truyền vào controller, khiến Mongoose cố tìm _id = "detail" trong database.
+Vì "detail" không phải là ObjectId hợp lệ, Mongoose báo lỗi.
+
+Cách khắc phục
+1. Đặt route tĩnh lên trước route động trong file route:
+// Đặt route tĩnh trước
+router.get("/detail", (req, res) => {
+  console.log("ooo");
+  // ...controller.detail logic...
+});
+
+// Sau đó mới đến route động
+router.get("/:cartId", controller.getTotal);
+----------------------------------
+fetch 
+Cách dùng .then(async (product) => ({ ... })) trả về một object,
+------------------------------------
+Đây là sự khác biệt giữa arrow function với dấu {} (block body) và arrow function không có {} (expression body):
+
+1. Arrow function không có {} (expression body):
+const product = cart.products.find(item => item.productId == req.body.product_id);
+Trả về giá trị của biểu thức ngay sau dấu =>.
+Hàm find sẽ nhận được giá trị true hoặc false đúng như mong muốn.
+2. Arrow function có {} (block body):
+const product = cart.products.find(item => { item.productId == req.body.product_id });
+KHÔNG trả về gì cả (mặc định trả về undefined), vì bạn không dùng từ khóa return.
+Hàm find sẽ luôn nhận được undefined, nên không bao giờ tìm thấy phần tử.
+Muốn dùng block body phải có return:
+const product = cart.products.find(item => {
+  return item.productId == req.body.product_id;
+});
+----------------------------------------------------------------------------------------------
+document.addEventListener('DOMContentLoaded', fetchProducts);
+vẫn chạy vào hàm vì khi bạn truyền tên hàm (không có dấu ngoặc) vào addEventListener, trình duyệt sẽ gọi hàm đó khi sự kiện xảy ra.
+
+fetchProducts là callback function.
+Khi DOM load xong, trình duyệt sẽ tự động gọi fetchProducts().
+Bạn không cần viết fetchProducts() ở đây.
+Nếu viết fetchProducts(), hàm sẽ chạy ngay lập tức khi file JS được load, không đợi DOMContentLoaded.
+
+Tóm lại:
+
+document.addEventListener('DOMContentLoaded', fetchProducts); là đúng và chuẩn.
+Khi DOM load xong, hàm sẽ được gọi tự động.
+Đây là cách phổ biến để chạy code sau khi HTML đã sẵn sàng.
+-------------------------------------------------------------
+Đây là một hiểu lầm phổ biến về **bất đồng bộ (asynchronous)** trong JavaScript.
+
+---
+
+### **1. Đoạn code của bạn là ĐỒNG BỘ**
+
+```javascript
+listButton.className = "pagination";
+for (var i = 1; i <= totalPage; i++) {
+    listButton.innerHTML += `<button class="page-button">${i}</button>`;
+}
+container.appendChild(listButton);
+```
+
+- **Tất cả các dòng này đều là code ĐỒNG BỘ** (synchronous).
+- JavaScript sẽ **chạy từng dòng một, theo thứ tự từ trên xuống dưới**.
+- Không có `await`, không có `setTimeout`, không có `fetch` ở đây → **không có gì bất đồng bộ**.
+
+---
+
+### **2. Khi nào mới là BẤT ĐỒNG BỘ?**
+
+- Khi bạn dùng các hàm như: `fetch`, `setTimeout`, `setInterval`, `Promise`, `async/await`, v.v.
+- Khi đó, code sẽ **không chờ** các thao tác bất đồng bộ hoàn thành mà sẽ chạy tiếp các dòng sau.
+
+**Ví dụ bất đồng bộ:**
+```javascript
+console.log("A");
+setTimeout(() => { console.log("B"); }, 1000);
+console.log("C");
+// Kết quả: A, C, (sau 1s) B
+```
+
+---
+
+### **3. Trong vòng for của bạn**
+
+- Không có bất kỳ thao tác bất đồng bộ nào.
+- JavaScript sẽ chạy từng vòng lặp, cộng dồn `innerHTML` cho đến hết, rồi mới append vào DOM.
+- Không có chuyện "chạy trước khi vào for" hoặc "bị bất đồng bộ" ở đây.
+
+---
+
+### **Tóm lại**
+
+- **Chỉ khi bạn dùng các hàm bất đồng bộ (fetch, setTimeout, await, v.v.) thì mới có bất đồng bộ.**
+- Đoạn code vòng for của bạn là **đồng bộ hoàn toàn**.
+- JavaScript luôn chạy từng dòng một, theo đúng thứ tự, trừ khi gặp thao tác bất đồng bộ.
+
+---
+
+**Nếu bạn muốn hiểu sâu hơn về bất đồng bộ, hãy tìm hiểu về:**
+- Event loop
+- Call stack & callback queue
+- Promise, async/await
+
+---
+
+**Kết luận:**  
+> Đoạn code của bạn là đồng bộ, không có gì bất đồng bộ ở đây.  
+> JavaScript sẽ chạy từng dòng một, không bỏ qua hay chạy trước bất kỳ dòng nào trong đoạn này.
+-------------------------------------------------------
+ for (var i = 1; i <= totalPage; i++) {
+                 console.log(listButton.innerHTML);
+                listButton.innerHTML += `<button class="page-button">${i}</button>`;
+            console.log(i);
+               
+                container.appendChild(listButton);
+
+ }
+ const arr = [];
+for (let i = 1; i <= 3; i++) {
+    arr.push(i);
+    console.log(arr);
+}
+Nếu bạn mở console, bạn sẽ thấy 3 dòng, nhưng nếu click vào từng dòng, cả 3 đều là [1,2,3] (vì đều là tham chiếu tới cùng một object).
+Muốn xem giá trị tại từng thời điểm?
+In ra chuỗi, không phải object:
+console.log(listButton.innerHTML);
+console.log(listButton.outerHTML);
+console.log(listButton) trong vòng for chỉ in ra object DOM, và console luôn hiển thị trạng thái cuối cùng của object đó.
+Nếu muốn xem giá trị tại từng vòng lặp, hãy log listButton.innerHTML hoặc listButton.outerHTML.
+---------------------------------------------
+event
+event là đối tượng sự kiện (event object) do trình duyệt tự động truyền vào khi sự kiện xảy ra.
+
+Giải thích chi tiết:
+Khi bạn chọn một file mới trong input, sự kiện 'change' xảy ra.
+Hàm callback (event) => { ... } sẽ được gọi.
+event chứa thông tin về sự kiện vừa xảy ra, ví dụ:
+event.target là phần tử input vừa bị thay đổi (ở đây là thumbnailInput).
+event.target.files là danh sách file mà bạn vừa chọn.
+
+----------------------------submit của form 
+Khi submit, trình duyệt sẽ gửi dữ liệu đến http://localhost:2000/admin/products/add (tức là sang server khác, port khác).
+
+Tuy nhiên, nếu bạn viết action như sau:
+<form action="`http://localhost:2000/admin/products/add`" method="POST">
+<form action="http://127.0.0.1:57670/FE--flower/views/admin/products/`http://localhost:2000/admin/products/add`" method="POST">
+thì trình duyệt sẽ hiểu đây là một đường dẫn tương đối (relative path) hoặc có ký tự lạ (dấu backtick `), dẫn đến URL bị nối sai.
+
+Cách đúng:
+
+Nếu muốn submit sang server khác (port 2000), hãy dùng action là URL tuyệt đối (không có dấu backtick):
+<form action="http://localhost:2000/admin/products/add" method="POST">
+Không dùng dấu backtick (`) trong giá trị của action.
+Nếu bạn dùng template engine (EJS, Handlebars, v.v.), hãy đảm bảo action được render đúng.
+
+
+Đúng rồi! Khi bạn dùng enctype="multipart/form-data" trong form, Express mặc định (với express.urlencoded hoặc express.json) sẽ không parse được file và các trường khác trong req.body. Để nhận được cả file và các trường text, bạn cần dùng thêm middleware như multer.
+-------------------------------------------------------------------
+formData
+
+FormData là một đối tượng JavaScript dùng để xây dựng dữ liệu gửi lên server theo chuẩn multipart/form-data (chuẩn này cho phép gửi cả file và các trường text trong cùng một request). Đây là cách duy nhất để gửi file từ trình duyệt lên server mà backend (như multer) có thể nhận được ở req.file hoặc req.files.
+
+Vì sao phải dùng FormData để gửi file?
+Nếu bạn gửi dữ liệu kiểu JSON (Content-Type: application/json), bạn không thể gửi file (chỉ gửi text).
+Nếu bạn dùng FormData, trình duyệt sẽ tự động đóng gói file và các trường text thành định dạng multipart/form-data mà backend (multer) hiểu được.
+const formData = new FormData();
+formData.append('title', 'Sản phẩm A');
+formData.append('thumbnail', fileInput.files[0]); // fileInput là <input type="file">
+
+fetch('/api/upload', {
+  method: 'POST',
+  body: formData, // KHÔNG set headers Content-Type, trình duyệt tự set
+});
+
+GitHub Copilot
+FormData là một đối tượng JavaScript dùng để xây dựng dữ liệu gửi lên server theo chuẩn multipart/form-data (chuẩn này cho phép gửi cả file và các trường text trong cùng một request). Đây là cách duy nhất để gửi file từ trình duyệt lên server mà backend (như multer) có thể nhận được ở req.file hoặc req.files.
+
+Vì sao phải dùng FormData để gửi file?
+    Nếu bạn gửi dữ liệu kiểu JSON (Content-Type: application/json), bạn không thể gửi file (chỉ gửi text).
+    Nếu bạn dùng FormData, trình duyệt sẽ tự động đóng gói file và các trường text thành định dạng multipart/form-data mà backend (multer) hiểu được.
+Ví dụ sử dụng FormData
+    Khi nào server nhận được req.file?
+    Khi client gửi file qua FormData (kiểu multipart/form-data)
+    Server dùng middleware như multer với upload.single('thumbnail')
+Tóm lại
+        FormData là đối tượng giúp gửi file và dữ liệu text lên server.
+        Chỉ khi dùng FormData, server mới nhận được file ở req.file.
+        Không dùng URL.createObjectURL để gửi file lên server.
+        Không dùng JSON để gửi file.
+------------------------------
+URL.createObjectURL(thumbnailInput.files[0]) chỉ tạo URL tạm thời trên trình duyệt để preview ảnh, không gửi file thật lên server.
+
+Khi bạn gửi dữ liệu như sau:
+        const updatedData = {
+        // ...
+        thumbnail: thumbnailInput.files[0] ? URL.createObjectURL(thumbnailInput.files[0]) : '',
+        // ...
+        };
+
+    và gửi với Content-Type: application/json, bạn chỉ gửi chuỗi URL tạm thời (ví dụ: blob:http://localhost:3000/abc-xyz) lên server, chứ không gửi file.
+Server sẽ không nhận được file ở req.file.
+và gửi với Content-Type: application/json, bạn chỉ gửi chuỗi URL tạm thời (ví dụ: blob:http://localhost:3000/abc-xyz) lên server, chứ không gửi file.
+Server sẽ không nhận được file ở req.file.
+Bạn phải dùng FormData và KHÔNG đặt Content-Type: application/json:
+const formData = new FormData(editProductForm);
+// hoặc nếu muốn tự thêm:
+formData.append('thumbnail', thumbnailInput.files[0]);
+
+fetch(`http://localhost:2000/admin/products/edit/?id=${productId}`, {
+  method: 'PUT', // hoặc POST nếu backend yêu cầu
+  body: formData,
+  // KHÔNG set headers 'Content-Type', để trình duyệt tự set multipart/form-data
+})
+.then(res => res.json())
+.then(data => {
+  // Xử lý kết quả
+});
+---------------------------------------------------------------------
+Khi bạn gán sự kiện "click" cho nút <button class="place-order-button">, thì trong callback, event.target chính là nút button mà bạn vừa click.
+Giải thích
+event.target luôn là phần tử mà bạn trực tiếp click vào (ở đây là <button>).
+Nếu bạn muốn lấy dữ liệu từ các ô input trong form, bạn cần truy cập đến form chứa button đó.
+Cách lấy dữ liệu form đúng cách
+Nên gán sự kiện cho form với "submit", không nên gán cho button "click":
+const orderForm = document.getElementById('orderForm');
+if (orderForm) {
+  orderForm.addEventListener('submit', handlePlaceOrder);
+}
+------------------------------------------------------------------
+FOREACH VÀ ASYNC AWAIT 
+products.forEach(async (item) => {
+  await fetch(...)
+  .then(...)
+  // cập nhật productHTML, subtotal, ...
+});
+Vấn đề:
+
+forEach(async ...) KHÔNG đợi các fetch hoàn thành, nên khi bạn gán checkoutLayout.innerHTML = ... bên ngoài, có thể dữ liệu chưa đủ.
+Cách sửa:
+Dùng Promise.all với map để gom dữ liệu, sau đó render một lần:
+
+onst productHtmlArr = await Promise.all(products.map(async (item) => {
+  const res = await fetch(`http://localhost:2000/products/detail/${item.productId}`);
+  const data = await res.json();
+  const product = data.product;
+  subtotal += product.price * item.quantity;
+  return `
+    <div class="summary-item">
+      <img src="${product.thumbnail}" alt="${product.title}">
+      <div class="item-details">
+        <h3>${product.title}</h3>
+        <p>Số lượng: ${item.quantity}</p>
+      </div>
+      <span class="item-price">$${(product.price * item.quantity).toFixed(2)}</span>
+    </div>
+  `;
+}));
+productHTML += productHtmlArr.join('');
+// ... rồi render tiếp priceHTML, inforHTML như cũ
+ Nên dùng async/await thay vì .then lồng nhau
+Để code dễ đọc, bạn nên dùng async/await nhất quán thay vì lồng nhiều .then.
+
+Tóm lại
+Lỗi lớn nhất: Dùng forEach(async ...) mà không đợi promise hoàn thành, dẫn đến dữ liệu gửi lên server bị thiếu hoặc sai.
+Cách sửa: Dùng Promise.all(products.map(async ...)) để đợi tất cả fetch xong trước khi gửi dữ liệu hoặc render.
+Nên: Dùng async/await nhất quán, gom dữ liệu xong mới render/gửi.
+--------------------------------------------------------------------------------
+response.ok là một thuộc tính của đối tượng Response trả về từ fetch.
+Nó sẽ true nếu HTTP status code nằm trong khoảng 200–299 (tức là request thành công).
+const res = await fetch(url);
+if (res.ok) {
+  const data = await res.json();
+  // Xử lý data khi thành công
+} else {
+  // Xử lý lỗi, ví dụ:
+  console.error('Lỗi:', res.status, res.statusText);
+}
+---------------------------------------------------------------------------------------------
+Vấn đề là bạn gọi fetchOrders(); trực tiếp bên ngoài hàm callback của DOMContentLoaded, nên nó sẽ chạy ngay khi file JS được load, không phải khi DOM đã sẵn sàng.
+
+Cú pháp đúng phải là truyền một hàm (callback) vào addEventListener, không phải gọi hàm ngay lập tức.
+
+Sai (gọi hàm ngay lập tức, không phải callback):
+document.addEventListener('DOMContentLoaded',
+  fetchOrders(); // <-- chạy NGAY LẬP TỨC khi file JS load, KHÔNG phải khi DOM ready
+);
+Ở đây, fetchOrders(); được thực thi ngay, và giá trị trả về (undefined) được truyền vào addEventListener, nên không có tác dụng gì khi DOMContentLoaded xảy ra.
+document.addEventListener('DOMContentLoaded', () => {
+  loadHeader();
+  fetchOrders();
+});
+-------------------------------------------------------------------------------------------------
+Việc gắn sự kiện click cho từng button trong vòng lặp forEach là ổn và là cách làm phổ biến.
+Việc gắn sự kiện này là đồng bộ (không phải bất đồng bộ), nên code sẽ chạy tiếp ngay sau khi gắn xong, không cần phải "đợi".
+Khi người dùng click vào button, sự kiện mới được kích hoạt.
+Tóm lại:
+Gắn sự kiện click trong forEach là đúng và an toàn.
+Việc này không làm chậm hoặc chặn code chạy tiếp.
+Nếu bạn cần chờ một thao tác bất đồng bộ (ví dụ: fetch dữ liệu), hãy dùng await ở nơi cần thiết, còn việc gắn event listener thì không cần chờ.
+--------------------------------------------------------------------------------------------------------------
+Giải thích rõ hơn về event bubbling (sự kiện nổi bọt) và vì sao .select-box lại bị add lại class "active":
+
+1. Cách hoạt động của sự kiện click trong DOM
+Khi bạn click vào một phần tử con (ví dụ: option phường/xã), sự kiện click sẽ chạy trên chính phần tử đó trước.
+Sau đó, sự kiện sẽ nổi lên (bubble) các phần tử cha của nó, lần lượt cho đến document.
+2. Trong code của bạn
+Bạn có:
+  selectContainer.addEventListener("click", (event) => {
+  document.querySelector(".select-box").classList.toggle("active");
+});
+Nghĩa là: bất cứ khi nào click vào bất kỳ đâu trong .selectContainer (kể cả con của nó), hàm này sẽ chạy và toggle class "active".
+
+Khi bạn click vào một option (phường/xã), bạn cũng có:
+option.addEventListener("click", (e) => {
+  e.stopPropagation(); // nếu có dòng này thì sẽ ngăn nổi bọt
+  document.querySelector(".select-box").classList.remove("active");
+});
+3. Nếu KHÔNG có e.stopPropagation()
+Khi bạn click vào option:
+Sự kiện click trên option chạy trước, remove class "active".
+Sau đó, sự kiện click tiếp tục nổi lên cha là .selectContainer, chạy hàm toggle, nên class "active" lại được add vào (vì toggle sẽ add nếu đang không có).
+4. Nếu CÓ e.stopPropagation()
+Khi bạn click vào option:
+Sự kiện click trên option chạy trước, remove class "active".
+Dòng e.stopPropagation() sẽ chặn sự kiện nổi lên cha.
+Hàm toggle trên .selectContainer không được gọi, nên class "active" không bị add lại.
+Tóm lại
+Sự kiện click sẽ nổi bọt lên cha nếu không bị chặn.
+Nếu không dùng e.stopPropagation(), sự kiện trên cha vẫn chạy sau khi sự kiện con chạy xong.
+Vì vậy, bạn thấy class "active" bị add lại ngay sau khi vừa remove.
+=> Để fix, luôn dùng e.stopPropagation() trong sự kiện click của option!
+----------------------------------------------------------------------------------------------------------
+Hàm .toFixed(1) trả về chuỗi chứ không phải số.
+Khi bạn cộng chuỗi vào số, JavaScript sẽ chuyển số thành chuỗi và nối chuỗi lại.
+const totalPriceProduct = Number((item.quantity * ((1 - item.discountPercentage / 100) * item.price)).toFixed(1));
+totalPriceOrder += totalPriceProduct;
+---------------------------------------------------------------------------------------------------------------------
+Session là một vùng lưu trữ tạm thời trên server, dùng để lưu thông tin của người dùng trong suốt quá trình họ truy cập website (giữa các request).
+
+Liên quan giữa session và req.flash:
+req.flash() sử dụng session để lưu trữ thông báo tạm thời (flash message).
+Khi bạn gọi req.flash("warning", "Nội dung cảnh báo"), thông báo này sẽ được lưu vào session của user.
+Sau khi chuyển hướng (res.redirect), ở request tiếp theo bạn có thể lấy lại thông báo này bằng req.flash("warning").
+Sau khi lấy, thông báo sẽ bị xóa khỏi session (chỉ hiển thị 1 lần).
+Tóm lại:
+
+req.flash() phụ thuộc vào session để lưu và truyền thông báo giữa các request.
+Nếu không có session, req.flash() sẽ không hoạt động đúng.
+Bạn cần middleware session (như express-session) khi dùng req.flash() trong Express.
+-------------------------------------------------------------------------------------------------------------------------
+Đúng, hàm .toFixed() trả về chuỗi (string), không phải số.
+-------------------------------------------------------------------------------------------------------------------------------------
+for (const item of SubCate) {
+  return await pushCate(item.id);
+}
+Khi gặp return trong vòng lặp, hàm sẽ thoát ngay ở lần lặp đầu tiên và không chạy tiếp các lần sau.
+Vì vậy, chỉ đệ quy đúng 1 nhánh đầu tiên của cây, các nhánh còn lại bị bỏ qua.
+Kết quả: ArrCate chỉ chứa các id của nhánh đầu tiên, không phải toàn bộ cây.
+---------------------------------------------------------------------------------------------------------------------------------
+Lỗi ReferenceError: getSubCate is not defined là do bạn đang gọi getSubCate bên trong chính hàm getSubCate, nhưng khi dùng cú pháp module.exports.getSubCate = ..., tên hàm không được hoisting vào scope.
+const Category = require("../model/products-category.model.");
+
+async function getSubCate(categoryId, ArrCate) {
+  let SubCate = await Category.find({ parent_id: categoryId });
+  if (SubCate.length > 0) {
+    for (const item of SubCate) {
+      await getSubCate(item.id, ArrCate); // gọi đúng tên hàm
+    }
+  }
+  if (!ArrCate.includes(categoryId)) {
+    ArrCate.push(categoryId);
+  }
+  return ArrCate;
+}
+
+module.exports.getSubCate = getSubCate;
+Định nghĩa hàm riêng, rồi export.
+Không dùng arrow function gán trực tiếp cho module.exports nếu muốn đệ quy.
+------------------------------------------------------------------------------------------------------------------
+hàm  find trong mongose trả về 1 mảng còn findone  trả về 1 Object(document)
+--------------------------------------------------------------------------------------------------------------------------------
+const RoomChat = require("../../model/rooms-chats.model");
+const User = require("../../model/user.model");
+const Account = require("../../model/accouns.model");
+const Chat = require("../../model/chats.model");
+const streamUploadHelper = require("../../helpers/streamUpload.helper");
+module.exports.chatSocket = async (req, res, id, idRoomChat) => {
+  // truy van ra ng con lai trong rôm chat do 
+
+
+  _io.once("connection", (socket) => {
+    // console.log("chuan bi gop phong chat admin ", idRoomChat);
+    socket.join(idRoomChat);
+    console.log("ket noi chat.socket thanh cong admin");
+    // CLIENT__SEND_TYPING 
+    socket.on("CLIENT_SEND_TYPING", async (data) => {
+      // console.log("data admin", data);
+      // console.log(" socket admin  dang go", data);
+      if (req.cookies.tokenSale) {
+        const sale = await Account.findOne({
+          token: req.cookies.tokenSale,
+          deleted: false
+        }).select("fullName , avatar , id , role_id");
+       
+          const fullName = sale.fullName;
+          const id = sale.id;
+        
+        socket.to(idRoomChat).emit("SERVER_SEND_TYPING", {
+          data: data.data,
+          userId: id,
+          fullName: fullName,
+        });
+
+      }
+
+
+
+    });
+
+
+
+    // CLIENT__SEND_TYPING
+
+
+
+    socket.on("CLIENT_SEND_MESSGAE", async (data) => {
+      let dataReturn;
+      // console.log("data", data);
+      const ArrayImages = [];
+
+      for (const image of data.images) {
+        const img = await streamUploadHelper(image);
+        ArrayImages.push(img.url);
+      }
+      // console.log("array image", ArrayImages);
+
+      if (data.tokenSale) {
+        const sale = await Account.findOne({
+          token: data.tokenSale,
+          deleted: false
+        }).select("fullName , avatar , id , role_id");
+
+        dataReturn = {
+          fullName: sale.fullName,
+          avatar: sale.avatar,
+          content: data.message,
+          saleId: sale.role_id,
+          ArrayImages: ArrayImages,
+
+        }
+        saveChat(sale.id, idRoomChat, data)
+
+        // 
+      }
+      // else if(data.tokenUser){
+      //   const user = await User.findOne({
+      //     tokenUser: data.tokenUser ,
+      //     deleted :false
+      //   }).select("fullName , avatar  ,id");
+
+      //   dataReturn   = {
+      //     fullName: user.fullName , 
+      //     avatar: user.avatar , 
+      //     content: data.message , 
+      //     userId : user.id ,
+      //     ArrayImages: ArrayImages,
+      //    content: data.message,
+      //   }
+      //   saveChat(user.id , idRoomChat , data)
+
+
+      // }
+      // luu vao database
+      function saveChat(userId, idRoomChat, data) {
+        const chat = new Chat({
+          userId: userId,
+          roomChatId: idRoomChat,
+          content: data.message,
+          images: ArrayImages,
+        });
+        return chat.save();
+      }
+      // console.log("dataReturn", dataReturn);
+
+      // trar lai Client 1 socket 
+      _io.to(idRoomChat).emit("SERVER__RETURN__MESSAGE", dataReturn);
+
+
+    })
+  })
+
+
+}
+--------------------------------------------------------------------------------------------------------
+  const find ={
+      deleted : false ,
+      product_category_id:{ $in: ListCate}
+    }
+---------------------------------------------------------------------------------------------------------------------
+t muốn khi trên URL có chữ category và id đằng sau category thì phải thêm class "active" cho chữ tiêu đề (chữ của danh mục phải đc bôi đậm)
+
+window.addEventListener("DOMContentLoaded", function () {
+  // Kiểm tra nếu URL có "/category/" và có id phía sau
+  const match = window.location.pathname.match(/\/category\/([a-zA-Z0-9]+)/);
+  if (match) {
+    const categoryId = match[1];
+    // Tìm tất cả các thẻ danh mục (giả sử có class .category-title hoặc .category-link)
+    document.querySelectorAll("[data-category-id]").forEach(item => {
+      if (item.getAttribute("data-category-id") === categoryId) {
+        item.classList.add("active");
+      } else {
+        item.classList.remove("active");
+      }
+    });
+  }
+});
+Hàm này sẽ trả về một mảng (array) chứa kết quả khớp với biểu thức chính quy hoặc null nếu không khớp.
+
+Giải thích chi tiết:
+window.location.pathname là phần đường dẫn của URL, ví dụ: /products/category/68a186f21d3ad9664d1d0735?page=3
+/\/category\/([a-zA-Z0-9]+)/ là biểu thức chính quy tìm chuỗi /category/ và lấy phần id phía sau (gồm chữ và số).
+Kết quả trả về:
+Nếu URL là /products/category/68a186f21d3ad9664d1d0735?page=3
+match sẽ là:
+
+Nếu không khớp, match sẽ là null.
+match[0]: phần chuỗi khớp toàn bộ (/category/ID)
+match[1]: chính là id bạn cần lấy phía sau /category/
+Nếu không khớp, trả về null
+-----------------------------------------------------------------------------
+template in Pug 
+.tableContainer(onclick=`window.location.href = "/user/order/detail/${item._id}"`) ==> đúng
+Bạn chỉ ra rất chính xác! Cảm ơn bạn đã kiên nhẫn và giúp tôi nhận ra lỗi này. Vấn đề thực sự nằm ở sự khác biệt giữa cách các dấu ngoặc được hiểu trong Pug.
+
+Bạn nói đúng, sự khác biệt nằm ở việc sử dụng dấu ngoặc kép (") và dấu backtick (`).
+
+Phân tích lỗi
+Khi bạn viết:
+
+Đoạn mã
+
+.tableContainer(onclick="window.location.href = `/user/order/detail/${item._id}`")
+Pug đọc onclick và thấy một chuỗi được bao quanh bởi dấu ngoặc kép ("). Nó sẽ truyền toàn bộ nội dung bên trong, bao gồm cả dấu backtick (`) và cú pháp template literal ${...} của JavaScript, như một chuỗi văn bản tĩnh vào HTML. Kết quả là trình duyệt sẽ nhận được một chuỗi JavaScript không hợp lệ, không thể thực thi được.
+
+Cách làm đúng
+Khi bạn viết:
+
+Đoạn mã
+
+.tableContainer(onclick=`window.location.href = "/user/order/detail/${item._id}"`)
+      Bạn đang sử dụng một tính năng của Pug cho phép bạn sử dụng backtick để bao bọc các thuộc tính. Pug sẽ nhận ra điều này và hiểu rằng bạn đang muốn nó xử lý nội dung bên trong như một đoạn mã JavaScript. Sau đó, nó sẽ truyền chuỗi đã được xử lý đó vào thuộc tính onclick của HTML.
+
+      Tóm lại, Pug và JavaScript sử dụng các dấu ngoặc khác nhau để chỉ định nội dung.
+
+      Pug: Dùng dấu backtick (`) để cho phép lồng mã JavaScript vào thuộc tính.
+
+      JavaScript: Dùng dấu backtick (`) để tạo template literal và lồng biến vào.
+
+      Khi bạn kết hợp cả hai, bạn cần đảm bảo rằng cú pháp Pug được sử dụng đúng cách.
+.tableContainer(onclick= "window.location.href = `/user/order/detail/${item._id}`") ==> sai
+    Pug đọc onclick và thấy một chuỗi được bao quanh bởi dấu ngoặc kép ("). Nó sẽ truyền toàn bộ 
+    nội dung bên trong, bao gồm cả dấu backtick (`) và cú pháp template literal ${...} của JavaScript,
+    như một chuỗi văn bản tĩnh vào HTML.
+    Kết quả là trình duyệt sẽ nhận được một chuỗi JavaScript không hợp lệ, không thể thực thi được.

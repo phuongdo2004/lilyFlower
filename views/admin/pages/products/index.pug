@@ -1,0 +1,84 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+include ../../mixins/pagination.pug
+block main 
+
+  .main__conntainer
+    .header__Main
+
+
+      h1 #{message.success}
+    +alert(3000)
+    div 
+    //- +alert-success(3000)
+    .filterAndSearch
+      .header
+        h3 B&#x1ED9; l&#x1ECD;c v&agrave; t&igrave;m ki&#x1EBF;m 
+      .btn
+        button( button-status = "") Tất cả
+        button( button-status = "active") Hoạt động
+        button( button-status = "inactive") Dừng hoạt động
+    .filterAndSearch
+      .header
+        h3 Hành động
+      .active
+        select(name='custom-select' id='' box-action=`/${prefixAdmin}/products/change-multi`)
+          option(value='') Chọn hành động...
+          option(value='active') Hoạt động
+          option(value='inactive') Dừng hoạt động
+          option(value='delete') Xóa
+        button(name ="statusBtn") Áp dụng
+  .filterAndSearch
+    .header
+      h3 Sắp xếp
+    .arrange
+      select(name='sort' id='' box-action=`/${prefixAdmin}/products/arrange`)
+        option(value='position-desc') Vị trí giảm dần
+        option(value='position-asc') Vị trí tăng dần
+        option(value='price-desc') Giá giảm dần
+        option(value='price-asc') Giá tăng dần
+        option(value='title-asc') Tiêu đề A-Z
+        option(value='title-desc') Tiêu đề Z-A
+      button(sort-clear) Clear
+  .listProducts
+    .header
+      | Danh sách
+      a(href=`/${prefixAdmin}/products/add`).create
+        | + Thêm mới
+    .list__container
+      .list__container__header
+        input(type='checkbox'  checkAll)
+        span STT
+        span Hình ảnh
+        span Tiêu đề
+        span Giá
+        span Vị trí
+        span Trạng thái
+        span Tạo bởi
+        span Cập nhật
+        span Hành động
+      if (products.length>0)
+        each item , index in products
+          .list__container__body
+            input( name = "checkItem" type='checkbox' id = item.id)
+            span #{index+1}
+            img(src=item.thumbnail alt='' style='height: 60px; width: auto')
+            span #{item.title} 
+            span #{item.price}$
+            input( changeStatusPosition  type='number' style='width: 80px' value = item.position name = "position" link = `/${prefixAdmin}/products/changePosition/${item.id}`)
+            if (item.status =="active")
+              button( class = "btn active" button-change-status  link=`/${prefixAdmin}/products/change-status/inactive/${item.id}` ) Hoạt động 
+            else 
+              button( class = "btn inactive" button-change-status link=`/${prefixAdmin}/products/change-status/active/${item.id}` ) Dừng hoạt động 
+            .createBy
+              span #{item.createdAtFormat}
+              span  #{item.createdBy}
+            .update
+              span #{item.updatedAtFormat}
+              span   #{item.updatedBy}
+            .active__admin
+              a(href=`/${prefixAdmin}/products/detail/${item.id}`)  Chi tiết
+              a(href= `/${prefixAdmin}/products/edit/${item.id}`)  Sửa
+              button(link = `/${prefixAdmin}/products/delete/${item.id}`) Xóa
+      +pagination(pagination)
+    

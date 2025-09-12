@@ -1,0 +1,36 @@
+header.header
+  .header__title
+    .header__title__text
+      h1 Flower
+      .header__title__text--dot
+  .header__list__search
+    .box-search
+      form(action='/search', method='GET')
+        input(
+          type='text'
+          name='keyword'
+          placeholder='Tìm kiếm...' 
+          value = keyword
+        )
+        button( type = "submit" class = "btn__search" )
+          i.fa-solid.fa-magnifying-glass
+  .header__icon
+    a(href = "/home") Home
+    .product__sugest
+      a(href = "/products") Product
+      .product__sugest___container.
+    if(user && cartTotal)
+      a(href = `/chat/`) Chat
+
+      a(href = "/cart")
+        i.fa-solid.fa-cart-shopping
+          span.cart__header  #{cartTotal}
+      //- a(href = "/cart")
+      //-   i.fas.fa-comment
+      
+      a(href = "/user/order")
+        i.fa-solid.fa-user
+
+      a(href = "/user/logout") Logout
+    else
+      a(href = "/user/logout") Logout

@@ -1,0 +1,47 @@
+extends ../../layouts/default.pug
+include ../../mixins/box-header.pug
+include ../../mixins/alert.pug
+include ../../mixins/pagination.pug
+block main 
+
+  //- - if (messages.info)
+  //-   .message.info
+  //-     span= messages.info
+  //  Product section 
+  section.product
+    h1.heading
+      | Danh sách 
+      span sản phẩm
+    //- div #{message} 
+    .category 
+      ul.category__list
+        each item in ParentCategory
+          li.category__item
+            a.category__link(href=`/products/category/${item._id}`) #{item.title}
+            .dropdown-inner
+              ul.dropdown__list
+                each subItem in item.subCategories
+                  li.dropdown__item
+                    a.dropdown__link(href=`/products/category/${subItem._id}`) #{subItem.title}
+    +alert(3000)
+    //- div hello
+    h2(style = "color: #e84393") _ #{ titleCate} _
+    if(products.length>0)
+      .product_items
+        if ( products.length>0)
+          each item in products
+            .product__items__item
+              span -#{item.discountPercentage}%
+              a.link(href=`/products/detail/${item.slug}`) 
+                .product__items__item__image(data-id=`${item.id}`)
+                  img(src=item.thumbnail, alt) 
+
+              .product_info
+                .product__name #{item.title}
+                .product__price
+                  .product__price_new $#{item.priceNew.toLocaleString('vi-VN')}
+                  .product__price__old $#{item.price.toLocaleString('vi-VN')}
+    else 
+
+    +pagination(pagination)
+  

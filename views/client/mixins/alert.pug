@@ -1,0 +1,76 @@
+mixin alert(time)
+  - if (message)
+    -if(message.success)
+      div(id="toast" time=time)
+        .toast.toast--success.active
+          .toast__icon
+            i.fa-solid.fa-circle-check
+          .toast__body
+            .toast__title
+              h3 Success
+            .toast__msg #{message.success}
+
+
+    -if(message.infor && message.infor)
+      div(id="toast" time=time)
+        .toast.toast--info.active
+          .toast__icon
+            i.fa-solid.fa-circle-info
+          .toast__body
+            .toast__title
+              h3 Info
+            .toast__msg #{message.infor}
+          //- .toast__close
+            i.fa-solid.fa-xmark
+    -if(message.error)
+      // error
+      div(id="toast" time=time)
+        .toast.toast--error.active
+          .toast__icon
+            i.fa-solid.fa-circle-exclamation
+          .toast__body
+            .toast__title
+              h3 Error
+            .toast__msg #{message.error}
+          //- .toast__close
+            i.fa-solid.fa-xmark
+
+    -if(message.warning)
+      // Warning
+      div(id="toast" time=time)
+        .toast.toast--warning.active
+          .toast__icon
+            i.fa-solid.fa-circle-exclamation
+          .toast__body
+            .toast__title
+              h3 Warning
+            .toast__msg #{message.warning}
+          //- .toast__close
+          //-   i.fa-solid.fa-xmark
+
+    //- mixin alert-order_success(time)
+    //- -if(message.success_order)
+    //-   // Succes success_order
+    //-   div( id = "toast"  time = time )
+    //-     .toast.toast--success.active
+    //-       .toast__icon
+    //-         i.fa-solid.fa-circle-check
+    //-       .toast__body
+    //-         .toast__title
+    //-           h3 Success
+    //-         .toast__msg #{message.success_order} 
+    //-       //- .toast__close
+          //-   i.fa-solid.fa-xmark
+
+
+    -if(message.success_order && message.success_order.length > 0)
+      div(id="toast" time=time)
+        .toast.toast--success.active
+          .toast__icon
+            i.fa-solid.fa-circle-check
+          .toast__body
+            .toast__title
+              h3 Success
+            .toast__msg #{message.success_order[0]}
+              // Lấy phần tử đầu tiên
+

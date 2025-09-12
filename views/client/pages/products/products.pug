@@ -1,0 +1,38 @@
+extends ../../layouts/default.pug
+include ../../mixins/box-header.pug
+include ../../mixins/alert.pug
+include ../../mixins/pagination.pug
+block main 
+  section.product
+    h1.heading
+      | Danh sách 
+      span sản phẩm
+    .category 
+      ul.category__list
+        each item in ParentCategory
+          li.category__item
+            a.category__link(href=`/products/category/${item._id}`) #{item.title}
+              - if(item.subCategories.length>0)
+                .dropdown-inner
+                  ul.dropdown__list
+                    each subItem in item.subCategories
+                      li.dropdown__item
+                        a.dropdown__link(href=`/products/category/${subItem._id}`) #{subItem.title}
+    +alert(3000)
+    //- div hello
+    .product_items
+      if ( products.length>0)
+        each item in products
+          .product__items__item
+            span -#{item.discountPercentage}%
+            a.link(href=`/products/detail/${item.slug}`) 
+              .product__items__item__image(data-id=`${item.id}`)
+                img(src=item.thumbnail, alt) 
+            .product_info
+              .product__name #{item.title}
+              .product__price
+                .product__price_new #{item.priceNew.toLocaleString('vi-VN')} Vnd
+                .product__price__old #{item.price.toLocaleString('vi-VN')} Vnd
+    +pagination(pagination)
+
+  //- include ../../partials/footer.pug

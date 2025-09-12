@@ -1,0 +1,81 @@
+
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+block main 
+  .main__conntainer
+    +alert(3000)
+
+  .container
+    h1 Chi Ti&#x1EBF;t &Dstrok;&#x1A1;n H&agrave;ng
+    // Order Details Section
+    section
+      h2 Thông tin đơn hàng
+      .detail-item
+        strong Mã đơn hàng: 
+        span#orderId #{order._id}
+      .detail-item
+        strong Khách hàng
+        span#customerName #{order.userInfo.fullName}
+      .detail-item
+        strong Số điện thoại
+        span#customerPhone #{order.userInfo.phone}
+      .detail-item
+        strong Địa chỉ giao hàng:
+        span#shippingAddress #{order.userInfo.address}
+      .detail-item
+        strong Ngày đặt hàng:
+        - var date = new Date(order.createdAt)
+        span#orderDate #{date.getDate().toString().padStart(2, '0')}/#{(date.getMonth()+1).toString().padStart(2, '0')}/#{date.getFullYear()}
+      .detail-item
+        strong Thông tin:
+        span#orderTotal #{Number(totalPriceOrder).toLocaleString('vi-VN')} VND;
+      .detail-item
+        strong Trạng thái hiện tại:
+        span#currentStatus(style='font-weight: 600; color: #28a745;') #{order.status}
+    // Order Items Section
+    section(style='margin-top: 40px;')
+      h2 Sản phẩm đã đặt
+      table.order-items-table
+        thead
+          tr
+            th STT
+            th Mã đơn hàng
+            th Hình ảnh
+            th Số lượng 
+            th Đơn giá 
+            th Thành tiền
+        tbody#orderItemsBody
+          each item, index in products
+            tr
+              td #{index +1}
+              td #{item.id}
+              td 
+                img( style =" width : 100px" src = item.productInfo.thumbnail)
+              td #{item.quantity}
+              td  #{item.newPrice.toLocaleString('vi-VN')} vnđ
+              td #{item.totalPriceProduct.toLocaleString('vi-VN')} vnđ
+    // Status Update Section
+    section(style='margin-top: 40px;')
+      h2 Cập nhật trạng thái
+      .form-group
+        label(for='statusSelect') Chọn trạng thái mới:
+        select#statusSelect
+          option(value='Chờ xác nhận'  selected = order.status =="Chờ xác nhận") Chờ xác nhận
+          option(value='Đang xử lý' selected = order.status =="Đang xử lý" ) Đang xử lí
+          option(value='Đang vận chuyển' selected = order.status =="Đang vận chuyển" ) Đang vận chuyển
+          option(value='Đã hủy' selected = order.status =="Đã hủy" ) Đã hủy
+          option(value='Trả lại' selected = order.status =="Trả lại") Trả lại
+          option(value='Đã giao' selected = order.status =="Đã giao" ) Đã giao
+      .button-group
+        button.btn.btn-primary(updateStatusOrder link = `/${prefixAdmin}/orders/changeStatus/${order._id}`) Cập nhật trạng thái
+    // Action Buttons Section
+    section(style='margin-top: 40px;')
+      h2 Thao tác khác
+      .button-group
+        button.btn.btn-danger( buttonDeleteOrder link = `/${prefixAdmin}/orders/deleted/${order._id}` ) Xóa đơn hàng
+  // Custom Modal for Messages and Confirmations
+  #customModal.modal-overlay
+    .modal-content
+      #modalHeader.modal-header Thông báo
+      #modalBody.modal-body N&#x1ED9;i dung th&ocirc;ng b&aacute;o.
+      #modalFooter.modal-footer

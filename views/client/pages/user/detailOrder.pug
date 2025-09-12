@@ -1,0 +1,52 @@
+extends ../../layouts/default.pug
+include ../../mixins/box-header.pug
+include ../../mixins/alert.pug
+
+block main 
+  .containerInfor
+    div(class="containerInfor__user")
+      .info
+        .fullName
+          img(src=user.avatar, alt)
+          .con
+            .name #{user.fullName}
+            a(href=`/user/edit/${user.id}`) 
+              i.fa-solid.fa-pen
+              | Sửa Hồ Sơ
+      .container
+        .account
+          i.fa-solid.fa-user
+          a(href=href=`/user/edit/${user.id}`) Tài Khoản Của Tôi
+        .buy
+          i.fa-solid.fa-file-invoice
+          a(href="/user/order") Đơn Mua
+    div(class="containerInfor__order")
+      .containerDetailOrder
+        // Header
+        .inforOrder__header
+          .inforOrder__header__border 
+          h2 Địa chỉ nhận hàng
+        // Address and Timeline Section
+        .containerDetailOrder__infor
+          // Address
+          .flex
+            h4 Địa chỉ nhận hàng
+            span (+84) #{order.userInfo.phone}
+          p #{order.userInfo.address}
+        // Product Card 1
+        for item in order.products
+          .product-card(onclick = `window.location.href = "/products/detail/${item.inforProduct.slug}"`)
+            img.product-image(src= item.inforProduct.thumbnail alt='ảnh sản phẩm')
+            .flex-grow
+              p #{item.inforProduct.title}
+              p  x#{item.quantity}
+            .text-right
+              span.price-old #{item.price.toLocaleString('vi-VN')}&#x20AB;
+              span.price-new #{item.newPrice.toLocaleString('vi-VN')}&#x20AB;
+
+        hr.my-6.border-t.border-gray-300
+        // Order Summary
+        .inforOrder__order__price
+          p Tổng tiền hàng
+          p #{order.totalPrice.toLocaleString('vi-VN')}&#x20AB;
+
