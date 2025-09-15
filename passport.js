@@ -1,8 +1,10 @@
+require('dotenv').config();
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth2').Strategy;
 const User = require("./model/user.model");
 const Cart  = require("./model/cart.model");
 const generateHelper = require("./helpers/generate.helper");
+
 const RoomChat = require('./model/rooms-chats.model');
 const chatController = require("./controllers/chat.controller");
 const Role = require("./model/role.model");
@@ -14,9 +16,9 @@ passport.serializeUser((user , done) => {
 passport.deserializeUser(function(user, done) {
     done(null, user);
 });
-
+console.log(process.env.MONGO_URL);
 passport.use(new GoogleStrategy({
-    clientID: process.env.clientID, // Your Credentials here.
+    clientID:process.env.clientID, // Your Credentials here.
     clientSecret:process.env.clientSecret, // Your Credentials here.
     callbackURL: process.env.callbackURL,
     passReqToCallback:true

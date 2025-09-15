@@ -74,7 +74,7 @@ app.use(express.json());
 
 
 app.use(session({
-  secret: "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",  // Thay bằng secret key của bạn
+  secret: process.env.clientSecret,  // Thay bằng secret key của bạn
   resave: false,
   saveUninitialized: true,
   cookie: { maxAge: 60000 }  // Cookie lưu trong 1 phút
