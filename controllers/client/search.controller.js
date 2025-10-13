@@ -3,13 +3,12 @@ const unicode = require("unidecode");
 
 module.exports.index = async (req, res) => {
     try {
-          const keyword = req.query.keyword;
+        const keyword = req.query.keyword;
 
         if (keyword) {
             console.log(keyword);
             let keywordSlug = keyword.trim();
             const keywordUnidecode = unicode(keyword.trim().replace(/\s/g, "-").replace(/-+/g, "-")); // => "hoabi"
-            // const regexKeywordUnidecode = new RegExp(keywordUnidecode, "i"); // "hoabi"
 
             //thay the cac dau " " bang "-"
             keywordSlug = keywordSlug.replace(/\s/g, "-");
@@ -22,10 +21,10 @@ module.exports.index = async (req, res) => {
             const regexKeywordSlug = new RegExp(keywordSlug, "i");
             const products = await Products.find({
                 $or: [{
-                        title: regexKeyword
-                    }, {
-                        slug: regexKeywordSlug
-                    },
+                    title: regexKeyword
+                }, {
+                    slug: regexKeywordSlug
+                },
                     // { title_unidecode: regexKeywordUnidecode }, // <-- THÊM CÁI NÀY
                     // { searchable_text: regexKeywordUnidecode }
                 ],
@@ -74,7 +73,7 @@ module.exports.indexSuggest = async (req, res) => {
 
             // 1. Tiền xử lý từ khóa tìm kiếm
             const normalizedKeyword = keyword.toLowerCase().trim();
-            
+
             // Tạo regex cho từ khóa gốc
             const regexKeyword = new RegExp(normalizedKeyword, "i");
 
@@ -97,9 +96,6 @@ module.exports.indexSuggest = async (req, res) => {
                 deleted: false,
                 status: "active",
             }).select("title thumbnail slug price discountPercentage description"); // Chỉ lấy các trường cần thiết
-
-            console.log("Kết quả tìm kiếm:", products.length, "sản phẩm");
-
             // 3. Sử dụng .map() để xử lý dữ liệu gọn gàng hơn
             const ListProduct = products.map(item => {
                 const priceNew = ((1 - item.discountPercentage / 100) * item.price).toFixed(0);
@@ -112,7 +108,7 @@ module.exports.indexSuggest = async (req, res) => {
                     description: item.description,
                 };
             });
-            
+
             res.json({
                 code: 200,
                 pro: ListProduct

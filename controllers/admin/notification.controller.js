@@ -1,6 +1,5 @@
 module.exports.index = async( req , res)=>{
 try {
-    console.log("okee");
   res.render("admin/pages/notifications/index.pug");
   
 } catch (error) {

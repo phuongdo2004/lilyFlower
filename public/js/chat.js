@@ -56,8 +56,6 @@ if (window.location.pathname.includes("chat")) {
     const userId = formChat.getAttribute("my-id");
     if (input) {
       input.addEventListener("keyup", () => {
-        console.log("keyup");
-
         socket.emit("CLIENT_SEND_TYPING", {
           data: "show"
         });
@@ -97,8 +95,6 @@ if (window.location.pathname.includes("chat")) {
 
       }
     } else {
-      // console.log(existTyping);
-      // console.log("phai xoa phia client ");
       if (existTyping) {
         typinContainer.removeChild(existTyping);
       }
@@ -162,9 +158,6 @@ if (window.location.pathname.includes("chat")) {
           })
 
         }
-        // console.log(event.target.content.value);
-
-
       })
 
 
@@ -184,7 +177,6 @@ if (window.location.pathname.includes("chat")) {
             </div>`;
 
         } else {
-          console.log("data", data)
           if (data.userId == ClientId) {
             div.className = "messagechat sent";
           }
@@ -206,7 +198,7 @@ if (window.location.pathname.includes("chat")) {
         div.innerHTML = `${receivedHtmlContent}
 ${htmlContent}
 ${htmlImages}`;
-chatMessageContainer.appendChild(div);
+        chatMessageContainer.appendChild(div);
         if (input) {
           input.value = "";
         }

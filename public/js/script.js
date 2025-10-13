@@ -447,8 +447,8 @@ if (btnAddress) {
 
 //  thay doiii diia ch end 
 //  checkout/payment start 
-
-const buttonPayment = document.querySelector(".orderCheckout").querySelector("button");
+if(document.querySelector(".orderCheckout")){
+  const buttonPayment = document.querySelector(".orderCheckout").querySelector("button");
 const container = document.querySelector(".address__container__body");
 if (container) {
   const fullName = container.querySelector(".infor__name").textContent.trim();
@@ -480,6 +480,8 @@ if( buttonPayment.addEventListener("click" , ()=>{
 })
 
 }));
+}
+
 }
 
 
@@ -587,19 +589,16 @@ timeoutId = setTimeout(() => {
                 form.removeChild(currentSuggestBox); // Xóa gợi ý khi có lỗi
             }
         });
-}, 300); // Debounce 300ms
+}, 300);
 });
 
         // Lắng nghe sự kiện blur (rời khỏi) ô input để ẩn gợi ý
 inputSearch.addEventListener("blur", () => {
-    // console.log("oooi"); // Có thể bỏ dòng này
-
     // Sử dụng setTimeout để tạo độ trễ nhỏ
     // Điều này cho phép sự kiện click trên các liên kết bên trong
     // ô gợi ý được xử lý trước khi hộp gợi ý bị ẩn.
     setTimeout(() => {
         const suggestBox = form.querySelector(".inner-suggest.show");
-        // console.log(suggestBox); // Có thể bỏ dòng này
         if (suggestBox) {
             // Thay vì removeChild, chúng ta chỉ xóa class "show" để ẩn bằng CSS
             suggestBox.classList.remove("show"); 

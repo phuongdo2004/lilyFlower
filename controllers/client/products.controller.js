@@ -93,23 +93,23 @@ module.exports.category = async (req, res) => {
   try {
     const categoryId = req.params.CategoryId;
     const titleCate = await Category.findOne({
-      _id: categoryId, 
+      _id: categoryId,
       deleted: false
     }).select("title -_id");
     var ListCate = [];
     ListCate = await getSub.getSubCate(categoryId, []);
     var ArrProduct = [];
-    const find ={
-      deleted : false ,
-      product_category_id:{ $in: ListCate}
+    const find = {
+      deleted: false,
+      product_category_id: { $in: ListCate }
     }
-    const pagination = await paginationHelper(req, find , "products")
+    const pagination = await paginationHelper(req, find, "products")
     ArrProduct = await Products
       .find(find)
       .limit(pagination.limitItem)
       .skip(pagination.skip)
-    
-      for (const item of ArrProduct) {
+
+    for (const item of ArrProduct) {
       item.priceNew = Number(((1 - item.discountPercentage / 100) * item.price).toFixed(0));
     }
 
@@ -134,7 +134,7 @@ module.exports.category = async (req, res) => {
       message: req.flash(),
       pagination: pagination,
       ParentCategory: ParentCategory,
-      titleCate:  titleCate.title
+      titleCate: titleCate.title
 
     });
   } catch (error) {

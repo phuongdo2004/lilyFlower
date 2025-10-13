@@ -13,218 +13,194 @@ module.exports.index = async (req, res, next) => {
     // cartSocket(req , res , cart);
     cart.totalPrice = 0;
 
-    if(cart.products.length > 0) {
+    if (cart.products.length > 0) {
       // ko dung forEach de tinh toan no se ko an vs totalPrice (==0day)=> phai dung for
       for (const product of cart.products) {
-  
+
         const productInfo = await Product.findOne({
-          _id:product.productId,
+          _id: product.productId,
         }).select("thumbnail discountPercentage  price title slug ");
-    
-        productInfo.priceNew = Number(((1-productInfo.discountPercentage/100)*productInfo.price).toFixed(0));
+
+        productInfo.priceNew = Number(((1 - productInfo.discountPercentage / 100) * productInfo.price).toFixed(0));
         product.productInfor = productInfo;
-        product.totalPrice =Number((productInfo.priceNew  * product.quantity).toFixed(0))
+        product.totalPrice = Number((productInfo.priceNew * product.quantity).toFixed(0))
       }
     }
     message = req.flash();
-  
-  
+
+
     res.render("client/pages/cart/index", {
       pageTitle: "Giỏ hàng",
-      cartDetail: cart , 
+      cartDetail: cart,
       // message: message.length > 0 ? message[0] :"hello",  // Đảm bảo không bị undefined
-   
-  
-    });  
+
+
+    });
   } catch (error) {
     res.send("Lỗi khi lấy giỏ hàng: " + error.message);
   }
-  
-    
+
+
 }
 
 module.exports.addPost = async (req, res) => {
-try {
-  const quantity = parseInt(req.body.quantity);
-  const productId = req.params.productId;
-  const cartId = req.cookies.cartIdFlower
-  const exitCart = await Cart.findOne({
-    _id: cartId
-  })
-  if (exitCart) {
-  const existProductInCart = exitCart.products.find(
-    item => item.productId == productId
-  );
-  if (!existProductInCart) {
-    await Cart.updateOne({
-      _id: cartId,
-    }, {
-      $push: {
-        products: {
-          productId: productId,
-          quantity: quantity,
-        }
-      }
+  try {
+    const quantity = parseInt(req.body.quantity);
+    const productId = req.params.productId;
+    const cartId = req.cookies.cartIdFlower
+    const exitCart = await Cart.findOne({
+      _id: cartId
     })
-  } else {
-    await Cart.updateOne({
-      _id: cartId,
-      'products.productId': productId,
+    if (exitCart) {
+      const existProductInCart = exitCart.products.find(
+        item => item.productId == productId
+      );
+      if (!existProductInCart) {
+        await Cart.updateOne({
+          _id: cartId,
+        }, {
+          $push: {
+            products: {
+              productId: productId,
+              quantity: quantity,
+            }
+          }
+        })
+      } else {
+        await Cart.updateOne({
+          _id: cartId,
+          'products.productId': productId,
 
-    }, {
-      $set: {
-        "products.$.quantity": quantity + existProductInCart.quantity
+        }, {
+          $set: {
+            "products.$.quantity": quantity + existProductInCart.quantity
+          }
+        })
       }
-    })
+      req.flash("success", "Đã thêm vào giỏ hàng")
+      res.redirect("back");
+    }
+
+
+  } catch (error) {
+    console.log("Error in addPost: ", error);
+    res.status(500).send("Internal Server Error");
+
   }
-req.flash("success" , "Đã thêm vào giỏ hàng" )
-  res.redirect("back");
-}
 
-  
-} catch (error) {
-  console.log("Error in addPost: ", error);
-  res.status(500).send("Internal Server Error");  
-  
-}
-  
 }
 module.exports.addPost2 = async (req, res) => {
-try {
-   const quantity = parseInt(req.body.quantity);
-  const productId = req.params.productId;
-  const cartId = req.cookies.cartIdFlower
+  try {
+    const quantity = parseInt(req.body.quantity);
+    const productId = req.params.productId;
+    const cartId = req.cookies.cartIdFlower
 
 
-  const exitCart = await Cart.findOne({
-    _id: cartId
-  }).select("products")
-  if (exitCart) {
+    const exitCart = await Cart.findOne({
+      _id: cartId
+    }).select("products")
+    if (exitCart) {
 
-  const existProductInCart = exitCart.products.find(
-    item => item.productId == productId
-  );
-  if (!existProductInCart) {
+      const existProductInCart = exitCart.products.find(
+        item => item.productId == productId
+      );
+      if (!existProductInCart) {
+        await Cart.updateOne({
+          _id: cartId,
+
+        }, {
+          $push: {
+            products: {
+              productId: productId,
+              quantity: quantity,
+              choosen: true
+            }
+          }
+        })
+      } else {
+        await Cart.updateOne({
+          _id: cartId,
+          'products.productId': productId,
+
+        }, {
+          $set: {
+            choosen: true,
+            "products.$.quantity": quantity + existProductInCart.quantity
+          }
+        })
+      }
+    }
+    const cart = await Cart.findOne({
+      _id: cartId
+    });
+    cart.totalPrice = 0;
+    if (cart.products.length > 0) {
+      // ko dung forEach de tinh toan no se ko an vs totalPrice (==0day)=> phai dung for
+      for (const product of cart.products) {
+        const productInfo = await Product.findOne({
+          _id: product.productId,
+        }).select("thumbnail discountPercentage  price title lug ");
+        productInfo.priceNew = (1 - productInfo.discountPercentage / 100) * productInfo.price;
+        product.productInfor = productInfo;
+        product.totalPrice = productInfo.priceNew * product.quantity;
+        cart.totalPrice += product.totalPrice;
+      }
+    }
+   res.redirect('/cart');
+  } catch (error) {
+    console.log("Error in addPost2: ", error);
+    res.status(500).send("Internal Server Error");
+  }
+}
+// delete product in cart 
+module.exports.delete = async (req, res) => {
+  try {
+    const productId = req.params.productId;
+    const cartId = req.cookies.cartIdFlower;
+
     await Cart.updateOne({
-      _id: cartId,
 
+      _id: cartId,
     }, {
-      $push: {
+      $pull: {
         products: {
-          productId: productId,
-          quantity: quantity,
-          choosen : true
+          productId: productId
         }
       }
     })
-  } else {
-    await Cart.updateOne({
-      _id: cartId,
-      'products.productId': productId,
 
-    }, {
-      $set: {
-        choosen : true ,
-        "products.$.quantity": quantity + existProductInCart.quantity
-      }
-    })
-
+    res.redirect("back");
+  } catch (error) {
+    console.log("Error in delete: ", error);
+    res.status(500).send("Internal Server Error");
 
   }
 
-
-}
-
-  
-const cart = await Cart.findOne({
-  _id: cartId
-});
-
-
-cart.totalPrice = 0;
-
-if(cart.products.length > 0) {
-  // ko dung forEach de tinh toan no se ko an vs totalPrice (==0day)=> phai dung for
-  for (const product of cart.products) {
-    const productInfo = await Product.findOne({
-      _id:product.productId,
-    }).select("thumbnail discountPercentage  price title lug ");
-    productInfo.priceNew = (1-productInfo.discountPercentage/100)*productInfo.price;
-
-    product.productInfor = productInfo;
-
-    product.totalPrice =productInfo.priceNew  * product.quantity;
-        cart.totalPrice+= product.totalPrice;
-  }
-}
-
-
-res.redirect('/cart');
-} catch (error) {
-  console.log("Error in addPost2: ", error);
-  res.status(500).send("Internal Server Error");
-}
- 
-
-}
-
-
-
-// delete product in cart 
-module.exports.delete = async (req, res) => {
-try {
-  const productId = req.params.productId;
-  const cartId = req.cookies.cartIdFlower;
-
-  await Cart.updateOne({
-  
-    _id: cartId,
-  }, {
-    $pull: {
-      products: {
-        productId: productId
-      }
-    }
-  })
-  
-  res.redirect("back");
-} catch (error) {
-  console.log("Error in delete: ", error);
-  res.status(500).send("Internal Server Error");
-  
-}
- 
 }
 
 // end delete product in cart
 
 // update quantity start
-module.exports.updateQuantity  = async(req ,  res)=>{
-try {
-  const productId = req.params.productId;
-const quantity= req.params.quantity;
-const cartId = req.cookies.cartIdFlower ; 
+module.exports.updateQuantity = async (req, res) => {
+  try {
+    const productId = req.params.productId;
+    const quantity = req.params.quantity;
+    const cartId = req.cookies.cartIdFlower;
 
-await Cart.updateOne({
-  _id: cartId,
-  'products.productId': productId,
+    await Cart.updateOne({
+      _id: cartId,
+      'products.productId': productId,
 
-}, {
-  $set: {
-    "products.$.quantity": quantity ,
+    }, {
+      $set: {
+        "products.$.quantity": quantity,
+      }
+    })
+  } catch (error) {
+    console.log("Error in updateQuantity: ", error);
+    res.status(500).send("Internal Server Error");
+
   }
-})
-} catch (error) {
-  console.log("Error in updateQuantity: ", error);
-  res.status(500).send("Internal Server Error");
-  
+  res.redirect("back");
 }
-res.redirect("back");
-
-
-
-} 
-
-
-
 // update quantity  end

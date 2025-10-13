@@ -12,8 +12,9 @@ block main
         each chat in chats
           if(user.id ==chat.userId)
             .messagechat.sent
-              .message-content
-                | #{chat.content}
+              if(chat.content)
+                .message-content
+                  | #{chat.content}
               .message-images
                 each image in chat.images
                   img(src=image alt="Image" class="message-image")   

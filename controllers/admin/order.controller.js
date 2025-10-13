@@ -3,17 +3,14 @@ const Products = require("../../model/products.model");
 const paginaion = require("../../helpers/pagination.helper");
 
 module.exports.index = async (req, res) => {
-const find = {
+  const find = {
 
-}
-const paginationOrder = await paginaion(req , find ,"orders" );
-
-console.log( "pagi", paginationOrder);
-
+  }
+  const paginationOrder = await paginaion(req, find, "orders");
   const orders = await Order
-  .find(find)
-  .skip(paginationOrder.skip)
-  .limit(paginationOrder.limitItem);
+    .find(find)
+    .skip(paginationOrder.skip)
+    .limit(paginationOrder.limitItem);
 
   // Lay anh cua san pham dau tien trong don hang
   for (const element of orders) {
@@ -35,7 +32,7 @@ console.log( "pagi", paginationOrder);
   }
   res.render("admin/pages/orders/index.pug", {
     orders: orders,
-    pagination : paginationOrder,
+    pagination: paginationOrder,
 
   });
 
@@ -82,12 +79,9 @@ module.exports.changeStatus = async (req, res) => {
     code: 200,
     message: "Cập nhật đơn hàng thành công!"
   })
-  console.log("cap nhatj thanh cong");
-
 }
 module.exports.deletedOrder = async (req, res) => {
   const orderId = req.params.orderId;
-  console.log("orderId", orderId);
   await Order.deleteOne({
     _id: orderId
   })

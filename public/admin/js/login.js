@@ -5,14 +5,14 @@ function hideToast() {
     toast.classList.add("hide");
     setTimeout(() => {
       toast.classList.remove("active", "hide"); // Xóa cả hai class sau hiệu ứng
-    }, 500); // Thời gian khớp với transition (0.5s)
+    }, 500);
   }
 }
 
 // Thêm sự kiện đóng toast
 setTimeout(() => {
   hideToast();
-}, 3000); // Tự động ẩn sau 3 giây
+}, 3000); 
 
 
 //  TOast Message end

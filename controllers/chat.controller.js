@@ -2,7 +2,6 @@ const Chat = require("../model/chats.model.js");
 const RoomChat = require("../model/rooms-chats.model.js");
 
 module.exports.createRoomChat = async( req , res ,userId , userName  )=>{
-console.log("chay vao sai");
 const Sale = res.locals.sale;
 const idSale = Sale.id;
 

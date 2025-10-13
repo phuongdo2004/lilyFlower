@@ -12,48 +12,6 @@ const forgotPassword = require("../../model/forgot-password.model");
 const sendEmailHelper = require("../../helpers/sendMail.helper");
 const MailMessage = require("nodemailer/lib/mailer/mail-message");
 
-// [POST] /user/signin
-
-// module.exports.signin = async (req, res) => {
-//   try {
-//     const existUser = await User.findOne({
-//       fullName: req.body.fullName,
-//       email: req.body.email,
-//       deleted: false,
-//     });
-//     if (existUser) {
-//       console.log(existUser);
-//       console.log("ton tai");
-//       // return res.redirect("/home");
-//     } else {
-//       const cart = new Cart();
-//       await cart.save();
-//       console.log("c", cart);
-
-//       // Thiết lập tất cả các cookie trước khi chuyển hướng
-//       res.cookie("cartIdFlower", cart.id);
-//       const userData = {
-//         fullName: req.body.fullName,
-//         email: req.body.email,
-//         password: md5(req.body.password),
-//         tokenUser: generateHelper.generateRandomString(30),
-//         cart_id: req.cookies.cartIdFlower,
-//       };
-//       if (!req.body.avatar) {
-//         userData.avatar =
-//           "https://static.vecteezy.com/system/resources/previews/009/292/244/original/default-avatar-icon-of-social-media-user-vector.jpg";
-//       }
-//       // 
-//       // 
-//       // tài khoản thành công!");
-//       res.redirect("/products");
-//       console.log("Success");
-//     }
-//   } catch (error) {
-//     console.log(error);
-//     res.status(500).send("Internal Server Error");
-//   }
-// };
 module.exports.signin = async (req, res) => {
   try {
     const existUser = await User.findOne({
@@ -155,25 +113,24 @@ function formatDate(date) {
 }
 module.exports.ListOrder = async (req, res) => {
   try {
-  
-   var listOrder = [];
+
+    var listOrder = [];
     // lay ra danh sach don hang cua ng dung 
     const tokenUser = req.cookies.tokenUser;
     const userId = await User.findOne({
-      deleted: false , 
-      tokenUser: tokenUser  ,
+      deleted: false,
+      tokenUser: tokenUser,
     })
     const orders = await Order.find({
-      'userInfo.userId': userId.id ,   
+      'userInfo.userId': userId.id,
     });
     for (const order of orders) {
       let orderObj = order.toObject();
-      orderObj.price =0;
+      orderObj.price = 0;
       const firstOrder = order.products[0];
-      console.log("first" ,firstOrder);
       const firstOdrderImage = await Product.findOne({
-        _id: firstOrder.productId , 
-        deleted: false ,
+        _id: firstOrder.productId,
+        deleted: false,
       });
       orderObj.firstOdrderImage = firstOdrderImage.thumbnail;
 
@@ -183,10 +140,10 @@ module.exports.ListOrder = async (req, res) => {
         }).select(" price discountPercentage");
         const priceNew = ((1 - info.discountPercentage / 100) * info.price).toFixed(0);
         info.priceNew = priceNew;
-        orderObj.price += Number(priceNew * element.quantity);        
-      orderObj.createdAtFormatted = formatDate(order.createdAt);
-    } 
-      listOrder.push(orderObj);  
+        orderObj.price += Number(priceNew * element.quantity);
+        orderObj.createdAtFormatted = formatDate(order.createdAt);
+      }
+      listOrder.push(orderObj);
 
     }
     const user1 = await user.findOne({
@@ -206,29 +163,27 @@ module.exports.ListOrder = async (req, res) => {
 
 }
 module.exports.ListOrder2 = async (req, res) => {
-  console.log("chay vao index");
-  
   try {
-   var listOrder = [];
+    var listOrder = [];
     // lay ra danh sach don hang cua ng dung 
     const tokenUser = req.cookies.tokenUser;
     const userId = await User.findOne({
-      deleted: false , 
-      tokenUser: tokenUser  ,
+      deleted: false,
+      tokenUser: tokenUser,
     })
     const orders = await Order.find({
-      'userInfo.userId': userId.id , 
+      'userInfo.userId': userId.id,
 
     });
 
 
     for (const order of orders) {
       let orderObj = order.toObject();
-      orderObj.price =0;
+      orderObj.price = 0;
       const firstOrder = order.products[0];
       const firstOdrderImage = await Product.findOne({
-        _id: firstOrder.productId , 
-        deleted: false ,
+        _id: firstOrder.productId,
+        deleted: false,
       });
       orderObj.firstOdrderImage = firstOdrderImage.thumbnail;
 
@@ -238,14 +193,14 @@ module.exports.ListOrder2 = async (req, res) => {
         }).select(" price discountPercentage");
         const priceNew = ((1 - info.discountPercentage / 100) * info.price).toFixed(0);
         info.priceNew = priceNew;
-        orderObj.price += Number(priceNew * element.quantity);        
-      orderObj.createdAtFormatted = formatDate(order.createdAt);
-    } 
-      listOrder.push(orderObj);  
+        orderObj.price += Number(priceNew * element.quantity);
+        orderObj.createdAtFormatted = formatDate(order.createdAt);
+      }
+      listOrder.push(orderObj);
 
     }
     res.json({
-      orders: listOrder ,
+      orders: listOrder,
     })
 
   } catch (error) {
@@ -257,28 +212,28 @@ module.exports.ListOrder2 = async (req, res) => {
 
 }
 
-module.exports.listOrderComplete = async(req, res)=>{
+module.exports.listOrderComplete = async (req, res) => {
   try {
     var listOrder = [];
     // lay ra danh sach don hang cua ng dung 
     const tokenUser = req.cookies.tokenUser;
     const userId = await User.findOne({
-      deleted: false , 
-      tokenUser: tokenUser  ,
+      deleted: false,
+      tokenUser: tokenUser,
     }).select("_id")
     const orders = await Order.find({
-      'userInfo.userId': userId.id , 
-      status:"Đã giao"
+      'userInfo.userId': userId.id,
+      status: "Đã giao"
     });
 
 
     for (const order of orders) {
       let orderObj = order.toObject();
-      orderObj.price =0;
+      orderObj.price = 0;
       const firstOrder = order.products[0];
       const firstOdrderImage = await Product.findOne({
-        _id: firstOrder.productId , 
-        deleted: false ,
+        _id: firstOrder.productId,
+        deleted: false,
       });
       orderObj.firstOdrderImage = firstOdrderImage.thumbnail;
 
@@ -288,18 +243,18 @@ module.exports.listOrderComplete = async(req, res)=>{
         }).select(" price discountPercentage");
         const priceNew = ((1 - info.discountPercentage / 100) * info.price).toFixed(0);
         info.priceNew = priceNew;
-        orderObj.price += Number(priceNew * element.quantity);        
-      orderObj.createdAtFormatted = formatDate(order.createdAt);
-    } 
-      listOrder.push(orderObj);  
+        orderObj.price += Number(priceNew * element.quantity);
+        orderObj.createdAtFormatted = formatDate(order.createdAt);
+      }
+      listOrder.push(orderObj);
 
     }
     const user1 = await user.findOne({
       tokenUser: tokenUser,
     });
     res.json({
-      orders: listOrder , 
-     
+      orders: listOrder,
+
     });
   } catch (error) {
     console.log("Lỗi khi lấy danh sách đơn hàng: ", error);
@@ -308,28 +263,28 @@ module.exports.listOrderComplete = async(req, res)=>{
   }
 }
 // listOrderCancel
-module.exports.listOrderCancel = async(req, res)=>{
+module.exports.listOrderCancel = async (req, res) => {
   try {
     var listOrderCanel = [];
     // lay ra danh sach don hang cua ng dung 
     const tokenUser = req.cookies.tokenUser;
     const userId = await User.findOne({
-      deleted: false , 
-      tokenUser: tokenUser  ,
+      deleted: false,
+      tokenUser: tokenUser,
     })
     const orders = await Order.find({
-      'userInfo.userId': userId.id , 
-      status:"Đã hủy"
+      'userInfo.userId': userId.id,
+      status: "Đã hủy"
     });
 
 
     for (const order of orders) {
       let orderObj = order.toObject();
-      orderObj.price =0;
+      orderObj.price = 0;
       const firstOrder = order.products[0];
       const firstOdrderImage = await Product.findOne({
-        _id: firstOrder.productId , 
-        deleted: false ,
+        _id: firstOrder.productId,
+        deleted: false,
       });
       orderObj.firstOdrderImage = firstOdrderImage.thumbnail;
 
@@ -339,18 +294,18 @@ module.exports.listOrderCancel = async(req, res)=>{
         }).select(" price discountPercentage");
         const priceNew = ((1 - info.discountPercentage / 100) * info.price).toFixed(0);
         info.priceNew = priceNew;
-        orderObj.price += Number(priceNew * element.quantity);        
-      orderObj.createdAtFormatted = formatDate(order.createdAt);
-    } 
-      listOrderCanel.push(orderObj);  
+        orderObj.price += Number(priceNew * element.quantity);
+        orderObj.createdAtFormatted = formatDate(order.createdAt);
+      }
+      listOrderCanel.push(orderObj);
 
     }
     const user1 = await user.findOne({
       tokenUser: tokenUser,
     });
     res.json({
-      orders: listOrderCanel , 
-     
+      orders: listOrderCanel,
+
     });
 
   } catch (error) {
@@ -360,30 +315,29 @@ module.exports.listOrderCancel = async(req, res)=>{
   }
 }
 
-module.exports.detailOrder = async(req, res)=>{
+module.exports.detailOrder = async (req, res) => {
   const order = await Order.findOne({
-    _id: req.params.orderId, 
+    _id: req.params.orderId,
   }).select("products userInfo");
 
   var totalPrice = 0;
   for (const product of order.products) {
-    const newPrice = product.price -(product.price * product.discountPercentage/100).toFixed(0);
+    const newPrice = product.price - (product.price * product.discountPercentage / 100).toFixed(0);
     totalPrice += Number(newPrice * product.quantity);
 
     // tim anh va title cua tung san pham
     const inforProduct = await Product.findOne({
       _id: product.productId
     }).select("thumbnail title slug");
- 
-product.newPrice = newPrice;
-product.inforProduct = inforProduct;   
+
+    product.newPrice = newPrice;
+    product.inforProduct = inforProduct;
   }
   order.totalPrice = totalPrice;
-  console.log("infor", order);
-  res.render("client/pages/user/detailOrder.pug" , 
-  {
-    order: order
-  }
+  res.render("client/pages/user/detailOrder.pug",
+    {
+      order: order
+    }
   );
 
 
@@ -398,9 +352,9 @@ module.exports.getInfor = async (req, res) => {
     });
 
     res.render("client/pages/user/editInfo.pug", {
-        user: user1 , 
-        message: req.flash() ,
-      }
+      user: user1,
+      message: req.flash(),
+    }
 
     );
   } catch (error) {
@@ -428,7 +382,7 @@ module.exports.editInfor = async (req, res) => {
     res.redirect("back");
 
   } catch (error) {
-    req.flash("error" ,"Cập nhật thông tin không thành công!");
+    req.flash("error", "Cập nhật thông tin không thành công!");
     console.log("Lỗi khi cập nhật thông tin người dùng: ", error);
     return res.status(500).send("Internal Server Error");
 

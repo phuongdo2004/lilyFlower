@@ -27,15 +27,12 @@ function getCookie(name){
 
 // Lấy roomChatId từ URL nếu đường dẫn có "chat"
 if (window.location.pathname.includes("chat")) {
-  console.log("co chat");
-
   const pathParts = window.location.pathname.split("/");
   const roomChatId = pathParts[pathParts.length - 1];
 const tokenSale = getCookie("tokenSale");
 
   // Kết nối socket
   const socket = io();
-console.log("okeee");
   // Khi trang chat được load, join vào room
   socket.emit("JOIN_ROOM_ADMIN", {roomChatId: roomChatId , tokenSale: tokenSale});
 
@@ -46,8 +43,6 @@ if(chatContainer){
 )} 
 if( input){
   input.addEventListener("keyup", () => {
-    console.log("data");
-
       socket.emit("CLIENT_SEND_TYPING" ,{data:"show" });
        clearTimeout(typingTimeOut);
        typingTimeOut = setTimeout(() => {
@@ -59,20 +54,14 @@ if( input){
 
 // SERVER_SEND_TYPING
 socket.on("SERVER_SEND_TYPING" , (data)=>{
-console.log("data" , data.userId);
-console.log("userId" , userId);
-
   const existTyping = typinContainer.querySelector(`[user-id="${data.userId}"]`);
 
 if(data.data=="show"){
-  // console.log("chay vao show");
-  // console.log("exitstTyping" , existTyping);
   if(!existTyping){
 
   const div = document.createElement("div");
   div.className = "box-typing";
   div.setAttribute("user-id", data.userId);
-  // console.log("data.fullName" , data.fullName);
   div.innerHTML = `
   <div class="inner-name">${data.fullName}</div>
   <div class="inner-dots"><span></span><span></span><span></span></div>
@@ -82,8 +71,6 @@ if(data.data=="show"){
 }
 }else{
   if(existTyping){
-    // console.log("phair remove Typing");
-
   typinContainer.removeChild(existTyping);
 }
 }

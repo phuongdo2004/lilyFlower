@@ -1,17 +1,11 @@
 const systemConfig = require("../../config/system.config");
 const createTreeHelper = require("../../helpers/createTree.helpers");
 const Category = require("../../model/products-category.model.");
-// const { Editor } = require("tinymce");
-
-
-
 module.exports.index = async (req, res) => {
   try {
     const productCategory = await Category.find({
       deleted: false
     });
-
-
     res.render("admin/pages/product-category/index.pug", {
       productCategory: productCategory,
       message: req.flash()
@@ -33,10 +27,7 @@ module.exports.create = async (req, res) => {
     const categories = await Category.find({
       deleted: false
     });
-    // console.log(categories);
-
     const newCategories = createTreeHelper.index(categories);
-    // console.log(newCategories);
     res.render("admin/pages/product-category/create.pug", {
       categories: newCategories,
     });
@@ -53,7 +44,6 @@ module.exports.create = async (req, res) => {
 }
 module.exports.createPost = async (req, res) => {
   try {
-    // console.log(req.body.position);
     if (!req.body.position) {
       req.body.position = await Category.countDocuments({}) + 1;
 
@@ -104,8 +94,7 @@ module.exports.changePositon = async (req, res) => {
 // [PATCH] change status
 module.exports.changeStatus = async (req, res) => {
   try {
-    console.log(req.params.status);
-    console.log(req.params.id);
+
     if (req.params.status == "inactive") {
       await Category.updateOne({
         _id: req.params.id,
@@ -143,10 +132,6 @@ module.exports.detail = async (req, res) => {
       _id: id,
       deleted: false
     });
-
-
-
-    console.log(category);
     if (category.parent_id) {
       const pa = await Category.findOne({
         _id: category.parent_id,
@@ -241,9 +226,9 @@ module.exports.editPatch = async (req, res) => {
     console.log(req.body.position);
 
     await Category.updateOne({
-        _id: id,
+      _id: id,
 
-      },
+    },
       req.body
     );
     req.flash("success", "Cập nhật sản phẩm thành công");;

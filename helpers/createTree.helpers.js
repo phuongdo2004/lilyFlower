@@ -1,7 +1,5 @@
 const createTree = (array  , parentId = "")=>{
   const newArr = [];
-  
-
   for (const item of array) {
     if( item.parent_id== parentId){
 
@@ -10,7 +8,6 @@ const createTree = (array  , parentId = "")=>{
         item.children = children;
       
       }
-      // item.children = newArr;
       newArr.push(item);
     }
     

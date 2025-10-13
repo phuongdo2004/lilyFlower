@@ -7,7 +7,6 @@ const axios  = require("axios");
 const crypto = require("crypto");
 
 module.exports.payment =  async (req, res) => {
-  console.log("chay vao payment");
 // xu ly don hang (luu vao DB)
  const phone = req.body.phone;
     const address = req.body.address;
@@ -18,8 +17,7 @@ module.exports.payment =  async (req, res) => {
     const cart = await Cart.findOne({
       _id: cartIdFlower
     });
-    console.log(cartIdFlower);
-    console.log("cart" , cart);
+
     // lay ra danh sach cac san pham co  choosen  = true
     products = cart.products.filter(item => item.choosen == true);
     // lay ra discout  , price cua tung san pham

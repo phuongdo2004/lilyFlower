@@ -1,87 +1,87 @@
 const systemConfig = require("../../config/system.config");
 const Role = require("../../model/role.model");
 
-module.exports.index = async(req , res)=>{
+module.exports.index = async (req, res) => {
   try {
     const roles = await Role.find({
-  deleted: false,
-})
+      deleted: false,
+    })
 
 
-res.render("admin/pages/roles/index.pug" , {
-  roles:roles , 
-  message: req.flash(),
+    res.render("admin/pages/roles/index.pug", {
+      roles: roles,
+      message: req.flash(),
 
-});
+    });
 
   } catch (error) {
     console.log("Error in roles index: ", error);
     res.status(500).send("Internal Server Error");
     return;
-    
+
   }
 
 
 }
-module.exports.create = async(req  , res)=>{
-try {
-  res.render("admin/pages/accounts/create.pug");
-} catch (error) {
-  console.log("Error in create role: ", error);
-  res.status(500).send("Internal Server Error");
-  return;
-  
-}
-  
-}
-module.exports.create = async (req , res)=>{
+module.exports.create = async (req, res) => {
   try {
-     res.render("admin/pages/roles/create.pug");
+    res.render("admin/pages/accounts/create.pug");
+  } catch (error) {
+    console.log("Error in create role: ", error);
+    res.status(500).send("Internal Server Error");
+    return;
+
+  }
+
+}
+module.exports.create = async (req, res) => {
+  try {
+    res.render("admin/pages/roles/create.pug");
   } catch (error) {
     console.log("Error in create role: ", error);
     res.status(500).send("Internal Server Error");
     return;
   }
- 
+
 
 }
-module.exports.createPost = async(req , res)=>{
+module.exports.createPost = async (req, res) => {
   try {
-    const role  = new Role(req.body);
-await role.save();
+    const role = new Role(req.body);
+    await role.save();
 
-req.flash("success"  , "Thêm mới nhóm quyền");
+    req.flash("success", "Thêm mới nhóm quyền");
 
 
-res.redirect(`/${systemConfig.prefixAdmin}/roles`);
+    res.redirect(`/${systemConfig.prefixAdmin}/roles`);
 
   } catch (error) {
     console.log("Error in create role post: ", error);
     res.status(500).send("Internal Server Error");
     return;
-    
+
   }
 
 
 }
 // DETAIL
-module.exports.detail = async( req , res)=>{
-try {
-  const item = await Role.findOne({
-  _id: req.params.id , 
-  deleted: false 
-});
-res.render("admin/pages/roles/detail.pug" , {
-  item : item , 
-  message: req.flash() ,
+module.exports.detail = async (req, res) => {
+  try {
+    const item = await Role.findOne({
+      _id: req.params.id,
+      deleted: false
+    });
+    res.render("admin/pages/roles/detail.pug", {
+      item: item,
+      message: req.flash(),
 
-});
-} catch (error) {
-  console.log("Error in role detail: ", error);
-  res.status(500).send("Internal Server Error");
-  return;
-  
-}
+    });
+  } catch (error) {
+    console.log("Error in role detail: ", error);
+    res.status(500).send("Internal Server Error");
+    return;
+
+  }
 
 
 
@@ -89,39 +89,37 @@ res.render("admin/pages/roles/detail.pug" , {
 }
 // DETAIL
 // [GET] edit 
-module.exports.edit = async(req , res)=>{
+module.exports.edit = async (req, res) => {
   try {
-     console.log(req.params.id);
-  const item= await Role.findOne({
-    _id: req.params.id , 
-    deleted: false 
-  } );
-console.log(item);
-res.render("admin/pages/roles/edit.pug" , {
-  item: item , 
-  message: req.flash(),
-})
+    const item = await Role.findOne({
+      _id: req.params.id,
+      deleted: false
+    });
+    res.render("admin/pages/roles/edit.pug", {
+      item: item,
+      message: req.flash(),
+    })
   } catch (error) {
     console.log("Error in edit role: ", error);
     res.status(500).send("Internal Server Error");
     return;
   }
- 
+
 }
 
 
 // [GET] edit end
 
 // [post] edit start
-module.exports.editPost = async(  req , res)=>{
+module.exports.editPost = async (req, res) => {
   try {
     await Role.updateOne({
-  _id: req.params.id , 
-  deleted: false 
-} , req.body);
-req.flash("success" ,"Chỉnh sửa nhóm quyền thành công!");
+      _id: req.params.id,
+      deleted: false
+    }, req.body);
+    req.flash("success", "Chỉnh sửa nhóm quyền thành công!");
 
-res.redirect("back");
+    res.redirect("back");
   } catch (error) {
     console.log("Error in edit role post: ", error);
     res.status(500).send("Internal Server Error");
@@ -132,33 +130,28 @@ res.redirect("back");
 
 // [post] edit end
 // [PATCH] deleted start
-module.exports.deleted = async( req , res)=>{
-try {
-  await Role.updateOne({
-  _id: req.params.id , 
+module.exports.deleted = async (req, res) => {
+  try {
+    await Role.updateOne({
+      _id: req.params.id,
 
-} , {
-  deleted: true ,
-});
+    }, {
+      deleted: true,
+    });
 
 
-req.flash("deleted" , "Xóa sản phẩm thành công!");
+    req.flash("deleted", "Xóa sản phẩm thành công!");
 
-res.json(
-  {
-    code :200 ,
+    res.json(
+      {
+        code: 200,
+      }
+    )
+  } catch (error) {
+    console.log("Error in role deleted: ", error);
+    res.status(500).send("Internal Server Error");
+    return;
   }
-)
-} catch (error) {
-  console.log("Error in role deleted: ", error);
-  res.status(500).send("Internal Server Error");
-  return;
-  
-}
-
-
-
-
 }
 
 

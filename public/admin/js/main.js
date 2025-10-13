@@ -135,19 +135,17 @@ if (boxAction) {
         ids: ids,
         value: value,
       }
-      //               .log("data" , data);
 
       const link = boxAction.getAttribute("box-action");
-      // console.log(link);
       if (ids.length > 0 && value != "") {
         fetch(link, {
-            method: "PATCH",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data),
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
 
-          }).then(res => res.json())
+        }).then(res => res.json())
           .then(data => {
             if (data.code == 200) {
               window.location.reload();
@@ -168,9 +166,7 @@ if (boxAction) {
 const selectSort = document.querySelector("select[name = 'sort']");
 if (selectSort) {
 
-  console.log(selectSort);
   selectSort.addEventListener("change", () => {
-    console.log(selectSort.value);
     const data = selectSort.value;
     const url = new URL(window.location.href);
 
@@ -218,12 +214,12 @@ if (listButtonStatus) {
     btn.addEventListener("click", () => {
       const link = btn.getAttribute("link");
       fetch(link, {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
 
-          },
-        }).then(res => res.json())
+        },
+      }).then(res => res.json())
         .then(data => {
           if (data.code == 200) {
             window.location.reload();
@@ -266,15 +262,14 @@ if (listActiveElements) {
       listButtons.forEach(button => {
         button.addEventListener("click", () => {
           const link = button.getAttribute("link");
-          console.log(link);
           // Thêm logic xóa sản phẩm tại đây (ví dụ: gửi yêu cầu AJAX)
           fetch(link, {
-              method: "PATCH",
-              headers: {
-                "Content-Type": "application/json",
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
 
-              },
-            }).then(res => res.json())
+            },
+          }).then(res => res.json())
             .then(data => {
               if (data.code == 200) {
                 window.location.reload();
@@ -291,130 +286,118 @@ if (listActiveElements) {
 // change position start
 const listPositionChange = document.querySelectorAll("[changeStatusPosition]");
 if (listPositionChange) {
-  console.log(listPositionChange);
   listPositionChange.forEach(input => {
-        input.addEventListener("change", () => {
-          console.log(input);
-          const position = input.value;
-          var data = {
-            position: position
-          }
-          const link = input.getAttribute("link");
-          console.log(link);
-          console.log(data);
-
-          fetch(link, {
-              body: JSON.stringify(data),
-
-              method: "PATCH",
-              headers: {
-                "Content-Type": "application/json",
-
-              },
-            })
-            .then(res => res.json())
-            .then(data => {
-              if (data.code == 200) {
-                window.location.reload();
-
-              }
-            })
-        })
-})
+    input.addEventListener("change", () => {
+      const position = input.value;
+      var data = {
+        position: position
       }
+      const link = input.getAttribute("link");
 
-      // change position end
+      fetch(link, {
+        body: JSON.stringify(data),
+
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+
+        },
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (data.code == 200) {
+            window.location.reload();
+
+          }
+        })
+    })
+  })
+}
+
+// change position end
 
 
 // permission start
 
 const tablePermission = document.querySelector("[table-permissions]");
-if( tablePermission){
-  const button  = document.querySelector("[buttonPermission]");
-  button.addEventListener("click" , ()=>{
-const link = button.getAttribute("button-submit");
+if (tablePermission) {
+  const button = document.querySelector("[buttonPermission]");
+  button.addEventListener("click", () => {
+    const link = button.getAttribute("button-submit");
 
-const array = [];
+    const array = [];
 
 
     const listInputPermission = document.querySelectorAll("input:checked");
-    if( listInputPermission.length>0){
-    listInputPermission.forEach(input=>{
-    const data = input.getAttribute("data-name");
-    const id  = input.getAttribute("data-id");
-    const role = {
-      data: data , 
-      id: id ,
-    }
-    array.push(role);
+    if (listInputPermission.length > 0) {
+      listInputPermission.forEach(input => {
+        const data = input.getAttribute("data-name");
+        const id = input.getAttribute("data-id");
+        const role = {
+          data: data,
+          id: id,
+        }
+        array.push(role);
 
 
-    })
+      })
     }
-    const listElementRoleId =tablePermission.querySelectorAll("[role-id");
-    console.log(listElementRoleId);
+    const listElementRoleId = tablePermission.querySelectorAll("[role-id");
     const roles = [];
 
     for (const element of listElementRoleId) {
       const roleId = element.getAttribute("role-id");
-      console.log(roleId);
       var role = {
-        id: roleId  ,
-        permission :[] ,
+        id: roleId,
+        permission: [],
       }
-     for (const item of array) {
-      if( item.id == roleId){
+      for (const item of array) {
+        if (item.id == roleId) {
           role.permission.push(item.data);
 
+        }
+
       }
-      
-     }
-    //   trar ve 1 mang du lieu 
-roles.push(role);
-console.log(roles);
-console.log(link);
-
-
+      //   trar ve 1 mang du lieu 
+      roles.push(role);
     }
     //loc cacs phantu theo id 
-fetch(link , {
-  body: JSON.stringify(roles),
+    fetch(link, {
+      body: JSON.stringify(roles),
 
-  method: "PATCH",
-  headers: {
-    "Content-Type": "application/json",
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
 
-  },
+      },
 
-}).then(res=>res.json())
-.then(data=>{
-  if( data.code == 200){
-    window.location.reload();
-  }
-})
+    }).then(res => res.json())
+      .then(data => {
+        if (data.code == 200) {
+          window.location.reload();
+        }
+      })
   })
 }
 
 // permission end
 // role Deleted start
 const butttonDeleted = document.querySelector("[buttonDeleted]");
-if( butttonDeleted){
-  console.log(butttonDeleted);
-  butttonDeleted.addEventListener("click" , ()=>{
+if (butttonDeleted) {
+  butttonDeleted.addEventListener("click", () => {
     const link = butttonDeleted.getAttribute("link");
-    fetch(link ,{
-      
+    fetch(link, {
+
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
-    
-      },
-    }).then(res =>res.json())
-      .then(data=>{
-        if( data.code == 200){
-          console.log("okee");
 
-          // window.location.reload();
+      },
+    }).then(res => res.json())
+      .then(data => {
+        if (data.code == 200) {
+
+          window.location.reload();
 
         }
       })
@@ -428,88 +411,84 @@ if( butttonDeleted){
 // role Deleted end
 
 // Start Choosing lastest message
-async function getLatestChat (){
-const liChat = document.querySelector("[liChat]");
-if( liChat){
+async function getLatestChat() {
+  const liChat = document.querySelector("[liChat]");
+  if (liChat) {
 
-const linkChat = liChat.querySelector("a").getAttribute("href");
-const res = await fetch(linkChat);
-const response = await res.json();
-const messages = response.chats;
+    const linkChat = liChat.querySelector("a").getAttribute("href");
+    const res = await fetch(linkChat);
+    const response = await res.json();
+    const messages = response.chats;
 
 
-const latestMessage = messages.reduce((latest, current) => {
-  // So sánh và trả về object message mới nhất
-  return !latest || new Date(current.createdAt) > new Date(latest.createdAt) ? current : latest;
-}, null);
+    const latestMessage = messages.reduce((latest, current) => {
+      // So sánh và trả về object message mới nhất
+      return !latest || new Date(current.createdAt) > new Date(latest.createdAt) ? current : latest;
+    }, null);
 
-if( latestMessage){
-  const roomChatIdLatest = latestMessage.roomChatId;
-  // lay id khach hang 
-  localStorage.setItem("roomChatIdLatest" ,roomChatIdLatest);
-  liChat.querySelector("a").setAttribute("href" ,`${linkChat}/detail/${roomChatIdLatest}`) ;
-}  
+    if (latestMessage) {
+      const roomChatIdLatest = latestMessage.roomChatId;
+      // lay id khach hang 
+      localStorage.setItem("roomChatIdLatest", roomChatIdLatest);
+      liChat.querySelector("a").setAttribute("href", `${linkChat}/detail/${roomChatIdLatest}`);
+    }
+  }
 }
-}
- getLatestChat();
+getLatestChat();
 // End Choosing lastest message
 
 // chageStatusOrder start
 const buttonChangeStatus = document.querySelector("[updateStatusOrder]");
-if( buttonChangeStatus){
-  buttonChangeStatus.addEventListener("click" ,()=>{
-    const select  = document.getElementById("statusSelect");
-     const status  = select.value;
-     console.log(status);
-     const link = buttonChangeStatus.getAttribute("link");
-console.log(link);
-   fetch(link, {
-  method: "PATCH",
-  headers: {
-    "Content-Type": "application/json",
-  },
-  body: JSON.stringify({status:status}),
-})
-.then(res => res.json())
-.then(data => {
-  if (data.code == 200) {
-    // console.log("okee");
-    window.location.href = `/${systemConfig.prefixAdmin}/orders`;
-  }
-});
+if (buttonChangeStatus) {
+  buttonChangeStatus.addEventListener("click", () => {
+    const select = document.getElementById("statusSelect");
+    const status = select.value;
+    const link = buttonChangeStatus.getAttribute("link");
+    fetch(link, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ status: status }),
     })
-  }
+      .then(res => res.json())
+      .then(data => {
+        if (data.code == 200) {
+          window.location.href = `/${systemConfig.prefixAdmin}/orders`;
+        }
+      });
+  })
+}
 // changeStatusOrder end
 
 // Delete order start
 const butttonDeleteOrder = document.querySelector("[buttonDeleteOrder]");
-if( butttonDeleteOrder){
-  butttonDeleteOrder.addEventListener("click" , ()=>{
+if (butttonDeleteOrder) {
+  butttonDeleteOrder.addEventListener("click", () => {
     const link = butttonDeleteOrder.getAttribute("link");
-    fetch(link , 
-       {
+    fetch(link,
+      {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
         },
-        
+
       }
 
     )
-    .then(res => res.json())
-    .then( data =>{
-      if( data.code ==200){
-            window.location.href = `/admin/orders`
-      }
-    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.code == 200) {
+          window.location.href = `/admin/orders`
+        }
+      })
   })
-} 
+}
 
 // Delete order end
 
 // Load la trang khi  nhấn nút back trên trình duyệt
-window.addEventListener('pageshow', function(event) {
-  console.log(event);
+window.addEventListener('pageshow', function (event) {
   if (event.persisted) {
     window.location.reload();
   }
@@ -517,30 +496,29 @@ window.addEventListener('pageshow', function(event) {
 // Load la trang khi  nhấn nút back trên trình duyệt end
 
 
-window.addEventListener("DOMContentLoaded" ,()=>{
+window.addEventListener("DOMContentLoaded", () => {
 
   // Xử lí sự kiện bôii trăng trong phần siderbar start
-const sidebar = document.querySelector(".container__sider");
-if(sidebar){
-  
-  const listUl = sidebar.querySelectorAll("ul li a");
-    if(listUl.length>0){
-      const pathname =  window.location.href;
-      console.log("patchname",pathname);
-      listUl.forEach(item=>{
-      console.log(item.href);
-      if( pathname.includes(item.href)){
-        item.parentElement.classList.add("active")
+  const sidebar = document.querySelector(".container__sider");
+  if (sidebar) {
 
-      }else{
-        item.parentElement.classList.remove("active");
-      }
+    const listUl = sidebar.querySelectorAll("ul li a");
+    if (listUl.length > 0) {
+      const pathname = window.location.href;
+      listUl.forEach(item => {
+        if (pathname.includes(item.href)) {
+          item.parentElement.classList.add("active")
+
+        } else {
+          item.parentElement.classList.remove("active");
+        }
 
 
 
-    })
-}}
+      })
+    }
+  }
 
-// Xử lí sự kiện bôii trăng trong phần siderbar end 
+  // Xử lí sự kiện bôii trăng trong phần siderbar end 
 
 })
