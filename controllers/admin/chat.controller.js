@@ -33,18 +33,19 @@ module.exports.detail = async( req , res)=>{
     const users = await User.find({
       deleted: false ,
     });
-    // gans cho cacs user co roomChat
+
     for (const user of users) {
       const roomChat = await RoomChat.findOne({
         'user.userId': user._id ,
         deleted: false ,
       }).select("_id");
+      // console.log("room" , roomChat);
       user.roomChat = roomChat._id;
       
     }
 
 
-    const account = await Account.findOne({ token: req.cookies.token });
+    const account = await Account.findOne({ token: req.cookies.tokenSale });
     const roomChat = await RoomChat.findOne({
       deleted: false,
       _id: roomChatId ,
@@ -52,10 +53,10 @@ module.exports.detail = async( req , res)=>{
     });
     const idRoomChat = roomChat._id;
 // lay idd cuar user trong roomChat
-console.log(roomChat.user);
-const id = (roomChat.user[0]).userId;
+// console.log(roomChat.user);
+// const id = (roomChat.user[0]).userId;
 
-socketChat.chatSocket(req, res, id, idRoomChat);
+// socketChat.chatSocket(req, res, id, idRoomChat);
 
   const chats = await Chat.find({
     roomChatId: idRoomChat
@@ -67,15 +68,14 @@ for (const chat of chats) {
   }).select("fullName , avatar");
   chat.infoUser = infoUser;
 
-  
 }
 // console.log("chats" , chats);
-const role_id = account.role_id;
+const sale_id = account._id;
 
 // console.log("account", account.id);
       res.render("admin/pages/chats/detail.pug" , {
         users,
-        role_id,
+        sale_id,
         chats,
         AccountId: account.id,
       });

@@ -16,21 +16,17 @@ header.header
           i.fa-solid.fa-magnifying-glass
   .header__icon
     a(href = "/home") Home
-    .product__sugest
-      a(href = "/products") Product
-      .product__sugest___container.
-    if(user && cartTotal)
-      a(href = `/chat/`) Chat
-
-      a(href = "/cart")
-        i.fa-solid.fa-cart-shopping
-          span.cart__header  #{cartTotal}
-      //- a(href = "/cart")
-      //-   i.fas.fa-comment
-      
-      a(href = "/user/order")
-        i.fa-solid.fa-user
-
-      a(href = "/user/logout") Logout
-    else
-      a(href = "/user/logout") Logout
+    //- .product__sugest
+    a(href = "/products") Product
+    //- .product__sugest___container
+    a(href = `/chat/`) Chat
+    a(href = "/cart")
+      i.fa-solid.fa-cart-shopping
+        span.cart__header  #{cartTotal}
+    //- a(href = "/cart")
+    //-   i.fas.fa-comment
+    
+    a(href = "/user/order")
+      i.fa-solid.fa-user
+    a(href = "/user/login") Login
+    a(href = "/user/logout") Logout

@@ -2,10 +2,8 @@ const Chat = require("../model/chats.model.js");
 const RoomChat = require("../model/rooms-chats.model.js");
 
 module.exports.createRoomChat = async( req , res ,userId , userName  )=>{
-
+console.log("chay vao sai");
 const Sale = res.locals.sale;
-console.log("sale" , Sale);
-
 const idSale = Sale.id;
 
 console.log("saleid", idSale);
@@ -17,20 +15,21 @@ const data = {
     admin:"CSKH" ,
     client: userName ,
   } , 
-  user:[
-    {
+  user:[{
+    
       userId:id ,
-    } , 
-    {
-      saleIds: idSale,
-    }
+    
+      saleId: idSale,
+  }
+   
   ] 
 
 
 }
+// console.log("dataroomChat" , data);
 const roomChat = new RoomChat(data);
   await roomChat.save();
-  console.log(roomChat.user[1]);
+  
   console.log("Room chat created successfully.");
 
 

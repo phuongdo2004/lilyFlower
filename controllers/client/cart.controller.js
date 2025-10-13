@@ -7,15 +7,12 @@ const cartSocket = require("../../socket/client/cart.socket.js");
 module.exports.index = async (req, res, next) => {
   try {
     const cartId = req.cookies.cartIdFlower;
-  
     const cart = await Cart.findOne({
       _id: cartId
     });
-    // cartSocket(req , res, cart);
-  
+    // cartSocket(req , res , cart);
     cart.totalPrice = 0;
-  
-  
+
     if(cart.products.length > 0) {
       // ko dung forEach de tinh toan no se ko an vs totalPrice (==0day)=> phai dung for
       for (const product of cart.products) {
@@ -23,21 +20,13 @@ module.exports.index = async (req, res, next) => {
         const productInfo = await Product.findOne({
           _id:product.productId,
         }).select("thumbnail discountPercentage  price title slug ");
-      
-  
-        productInfo.priceNew = (1-productInfo.discountPercentage/100)*productInfo.price;
-  
+    
+        productInfo.priceNew = Number(((1-productInfo.discountPercentage/100)*productInfo.price).toFixed(0));
         product.productInfor = productInfo;
-   
-        product.totalPrice =productInfo.priceNew  * product.quantity;
-            cart.totalPrice+= product.totalPrice;
+        product.totalPrice =Number((productInfo.priceNew  * product.quantity).toFixed(0))
       }
     }
     message = req.flash();
-  
-  
-  
-  
   
   
     res.render("client/pages/cart/index", {
@@ -77,7 +66,6 @@ try {
         }
       }
     })
-    console.log("da cap nhat thanh cong");
   } else {
     await Cart.updateOne({
       _id: cartId,
@@ -110,10 +98,8 @@ try {
 
   const exitCart = await Cart.findOne({
     _id: cartId
-  })
+  }).select("products")
   if (exitCart) {
-    console.log("co");
-  
 
   const existProductInCart = exitCart.products.find(
     item => item.productId == productId
@@ -131,7 +117,6 @@ try {
         }
       }
     })
-    console.log("da cap nhat thanh cong");
   } else {
     await Cart.updateOne({
       _id: cartId,
@@ -188,7 +173,7 @@ res.redirect('/cart');
 // delete product in cart 
 module.exports.delete = async (req, res) => {
 try {
-   const productId = req.params.productId;
+  const productId = req.params.productId;
   const cartId = req.cookies.cartIdFlower;
 
   await Cart.updateOne({
@@ -229,45 +214,11 @@ await Cart.updateOne({
     "products.$.quantity": quantity ,
   }
 })
-
-
-console.log("cap nhat thanh cong");
-
 } catch (error) {
   console.log("Error in updateQuantity: ", error);
   res.status(500).send("Internal Server Error");
   
 }
-
-// render lai ra trang cart
-  
-  // const cart = await Cart.findOne({
-  //   _id: cartId
-  // });
-  
-
-  // cart.totalPrice = 0;
-
-  // if(cart.products.length > 0) {
-  //   // ko dung forEach de tinh toan no se ko an vs totalPrice (==0day)=> phai dung for
-  //   for (const product of cart.products) {
-  //     const productInfo = await Product.findOne({
-  //       _id:product.productId,
-  //     }).select("thumbnail discountPercentage  price title slug ");
-  //     productInfo.priceNew = (1-productInfo.discountPercentage/100)*productInfo.price;
-
-  //     product.productInfor = productInfo;
- 
-  //     product.totalPrice =productInfo.priceNew  * product.quantity;
-  //         cart.totalPrice+= product.totalPrice;
-  //   }
-  // }
-
-
-  // res.render("client/pages/cart/index", {
-  //   pageTitle: "Giỏ hàng",
-  //   cartDetail: cart
-  // });
 res.redirect("back");
 
 

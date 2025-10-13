@@ -11,11 +11,12 @@ const chatSocket = require("../../socket/client/chat.socket");
 const chatRouter = require("./chat.route");
 const authRouter = require("./auth.router");
 const responeRouter = require("./client.route");
+const controllerPayment  = require("../../controllers/client/payment.controller");
 
 
 
 module.exports.index= (app)=>{
-
+  app.post("/checkout/callback" ,controllerPayment.paymentCallback);
 
   app.use("/home"  , homeRouter );
   app.use("/client" ,responeRouter );

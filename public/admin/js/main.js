@@ -1,3 +1,4 @@
+const systemConfig = window.systemConfig;
 
 var socket = io();
 if (document.querySelector("[upload-image-input]")) {
@@ -473,7 +474,7 @@ console.log(link);
 .then(data => {
   if (data.code == 200) {
     // console.log("okee");
-    window.location.reload();
+    window.location.href = `/${systemConfig.prefixAdmin}/orders`;
   }
 });
     })

@@ -12,8 +12,7 @@ module.exports = async(req , res , cart) => {
       data.forEach(element => {
         cart.totalPrice+= parseInt(element);
       });
-
-      // gui cho FE 
+      console.log("fgg",cart.totalPrice);      // gui cho FE 
       socket.emit("SEVER_SEND_TOTALPRICE" ,{
         totalPrice: cart.totalPrice , 
         cartId: cart.id

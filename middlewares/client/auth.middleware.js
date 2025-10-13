@@ -10,7 +10,6 @@ module.exports.Auth = async (req, res, next) => {
     const path = req.path;
     if (path.startsWith("/products/detail")) {
       if (!req.cookies.cartIdFlower) {
-        console.log("cha vao warning");
         req.flash("warning", "Vui lòng đăng nhập để xem sản phẩm!");
         return res.redirect("/home");
       }
@@ -21,7 +20,6 @@ module.exports.Auth = async (req, res, next) => {
       if (!req.cookies.cartIdFlower) {
         return res.redirect(`/home`);
       } else {
-        console.log("User has cartIdFlower");
       }
     }
     if (req.cookies.tokenUser) {
@@ -33,7 +31,6 @@ module.exports.Auth = async (req, res, next) => {
     } else {
       console.log("ko ti=on tai tokenn user");
     }
-    console.log("sappp chayj vao");
     next();
 
 

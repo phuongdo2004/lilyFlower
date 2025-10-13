@@ -9,6 +9,7 @@ const User = require("../../model/user.model");
 
 module.exports.cartId = async (req, res, next) => {
   try {
+    // console.log("chay vao cart");
     const path = req.path;
     if (path != '/user/login' &&
        path != "/user/logout" && 
@@ -16,15 +17,31 @@ module.exports.cartId = async (req, res, next) => {
        path != '/user/password ') {
       let cart;
       if (!req.cookies.cartIdFlower) {
-        console.log("khong co cart");
       } else { 
+        // console.log("cart ban dau" , req.cookies.cartIdFlower);
         cart = await Cart.findOne({
           _id: req.cookies.cartIdFlower,
         })
-        res.locals.cartTotal = cart.products.length || 0;
+        if(cart){
+          // console.log("cartqq", cart);
+          res.locals.cartTotal = cart.products.length || 0;
+
+        }else{
+          const cart = new Cart();
+          await cart.save();
+          // console.log(cart);
+          // console.log("cartId", cart.id);
+          // console.log("cookies", req.cookies.tokenUser);
+          await User.updateOne({
+            tokenUser: req.cookies.tokenUser,
+          } , {
+            cart_id : cart.id
+          })
+          res.locals.cartTotal = cart.products.length || 0;
+        }
+        
       }
     } else {
-      console.log("chay vao login /signin");
     }
   next();   
   } catch (error) {

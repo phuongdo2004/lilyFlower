@@ -13,64 +13,13 @@ head
       .main__container__admin
         include ../partials/header.pug
         block main
-        //- .call
-        //-   i.fa-solid.fa-message
-        //-   span Li&ecirc;n h&#x1EC7;
 
-        //- .chat-container
-        //-   .chat-header
-        //-     | Chat
-        //-     i.fa-solid.fa-x
-        //-   .chat-messages
-        //-     .messagechat.received
-        //-       .user-info
-        //-         img.avatar(src='https://tse4.mm.bing.net/th?id=OIP.czzBv_kpBDLicK1fTyfPawHaFj&pid=Api&P=0&h=180' alt='User Avatar')
-        //-         span.username Hieu
-        //-       .message-content
-        //-         | tyuuytygy ffffdggggggggggdddddddddddddddd
-        //-     .messagechat.sent
-        //-       .message-content
-        //-         i.far.fa-grin-hearts
-        //-     .messagechat.received
-        //-       .user-info
-        //-         img.avatar(src='https://tse4.mm.bing.net/th?id=OIP.czzBv_kpBDLicK1fTyfPawHaFj&pid=Api&P=0&h=180' alt='User Avatar')
-        //-         span.username Hieu
-        //-       .message-content
-        //-         | padioxypicogyi
-        //-     .messagechat.received
-        //-       .user-info
-        //-         img.avatar(src='https://tse4.mm.bing.net/th?id=OIP.czzBv_kpBDLicK1fTyfPawHaFj&pid=Api&P=0&h=180' alt='User Avatar')
-        //-         span.username Hieu
-        //-       .messagechat-content
-        //-         | padioxypicogyi
-
-        //-     .messagechat.received
-        //-       .user-info
-        //-         img.avatar(src='https://tse4.mm.bing.net/th?id=OIP.czzBv_kpBDLicK1fTyfPawHaFj&pid=Api&P=0&h=180' alt='User Avatar')
-        //-         span.username Hieu
-        //-       .message-content
-        //-         | padioxypicogyi
-        //-     .messagechat.received
-        //-       .user-info
-        //-         img.avatar(src='https://tse4.mm.bing.net/th?id=OIP.czzBv_kpBDLicK1fTyfPawHaFj&pid=Api&P=0&h=180' alt='User Avatar')
-        //-         span.username Hieu
-        //-       .message-content
-        //-         | padioxypicogyi
-        //-     .messagechat.sent
-        //-       .message-content
-        //-         i.far.fa-grin-hearts
-        //-         i.far.fa-grin-hearts
-        //-         i.far.fa-grin-hearts
-        //-         i.far.fa-grin-hearts
-        //-   form(class ="formChat" action = "" my-id  = user.id)
-        //-     .chat-input
-        //-       input(type='text' name = "content" placeholder='Nhập nội dung...' )
-        //-       .input-actions
-        //-         i.far.fa-smile
-        //-         i.fa-solid.fa-image
-        //-         button( type ="submit")
-        //-           i.far.fa-paper-plane
-
+      script.
+        window.systemConfig = {
+          prefixAdmin: "admin",
+          apiUrl: "http://localhost:3000/api",
+          appName: "Flower App"
+        };
       script(src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js")
       script( type="module" src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js") 
       script(src="https://cdn.socket.io/4.7.2/socket.io.min.js")

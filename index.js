@@ -9,12 +9,14 @@ const  session = require('express-session');
 const flash = require('express-flash');
 const routerClient  = require("./routers/client/index.router");
 const routerAdmin = require("./routers/admin/index.router");
-const chatSocket = require("./socket/client/chat.socket");
+const chatSocketClient = require("./socket/client/chat.socket");
+const chatSocketAdmin = require("./socket/admin/chat.socket");
+// payment momo
+const axios  = require("axios");
+const crypto = require("crypto");
+
+
 require('./passport');
-
-
-
-
 const app = express();
 //nhung thu vien dotenv vao
 require('dotenv').config()
@@ -43,15 +45,9 @@ global._io = io;
 // Lắng nghe kết nối từ client
 
 // END Socket.io
-
-
-
 app.use(cookieParser())
 // override with the X-HTTP-Method-Override header in the request
 app.use(methodOverride('X-HTTP-Method-Override'));
-
-
-
 // nhung body parse( phai nhung  trc routerAdmin de no chay tthi no dc tich hop san )
 const bodyParser = require('body-parser');
 // parse application/x-www-form-urlencoded
@@ -63,8 +59,6 @@ app.use(bodyParser.json());
 app.locals.prefixAdmin = systemConfig.prefixAdmin;
 
 app.use(methodOverride('_method'));
-
-
 app.use(express.static(`${__dirname}/public`));
 
 // de ho tro tieeng viet trong pug
@@ -74,7 +68,7 @@ app.use(express.json());
 
 
 app.use(session({
-  secret: process.env.clientSecret,  // Thay bằng secret key của bạn
+  secret: "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",  // Thay bằng secret key của bạn
   resave: false,
   saveUninitialized: true,
   cookie: { maxAge: 60000 }  // Cookie lưu trong 1 phút
@@ -127,6 +121,8 @@ const multer  = require('multer')
 routerAdmin.index(app);
 
 routerClient.index(app);
+chatSocketClient.chatSocket(io);
+chatSocketAdmin.chatSocket(io);
 
 
 const port = 600;

@@ -18,9 +18,9 @@ block main
             h3 #{item.title}
           .detail__container__info__price
             .newPrice. 
-              #{item.priceNew}đ
+              #{item.priceNew.toLocaleString('vi-VN')}đ
             .oldPrice.
-              #{item.price}đ
+              #{item.price.toLocaleString('vi-VN')}đ
             .disCount.
 
               #{item.discountPercentage}%

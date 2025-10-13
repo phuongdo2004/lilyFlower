@@ -10,17 +10,34 @@ const imageBtn = formChat.querySelector('.fa-image');
 const userId = formChat.getAttribute("my-id");
 var typingTimeOut;
 var cnt =0;
+function getCookie(name){
+  const cookieString = document.cookie;
+  if( cookieString === ""){
+    return null
+  }
+  const cookies = cookieString.split(";");
+  for( let i = 0 ; i< cookies.length; i++){
+    let cookie = cookies[i].trim();
+    if( cookie.startsWith(name + "=")){
+      return cookie.substring(name.length +1)
+    }
+  }
+  return null;
+}
 
 // Lấy roomChatId từ URL nếu đường dẫn có "chat"
 if (window.location.pathname.includes("chat")) {
+  console.log("co chat");
+
   const pathParts = window.location.pathname.split("/");
   const roomChatId = pathParts[pathParts.length - 1];
+const tokenSale = getCookie("tokenSale");
 
   // Kết nối socket
   const socket = io();
-
+console.log("okeee");
   // Khi trang chat được load, join vào room
-  socket.emit("JOIN_ROOM", roomChatId);
+  socket.emit("JOIN_ROOM_ADMIN", {roomChatId: roomChatId , tokenSale: tokenSale});
 
 if(chatContainer){
   new Viewer(chatContainer ,{
@@ -29,6 +46,7 @@ if(chatContainer){
 )} 
 if( input){
   input.addEventListener("keyup", () => {
+    console.log("data");
 
       socket.emit("CLIENT_SEND_TYPING" ,{data:"show" });
        clearTimeout(typingTimeOut);
@@ -41,8 +59,8 @@ if( input){
 
 // SERVER_SEND_TYPING
 socket.on("SERVER_SEND_TYPING" , (data)=>{
-// console.log("data" , data.userId);
-// console.log("userId" , userId);
+console.log("data" , data.userId);
+console.log("userId" , userId);
 
   const existTyping = typinContainer.querySelector(`[user-id="${data.userId}"]`);
 
@@ -117,21 +135,13 @@ if( chatContainer){
       // console.log(images);
       const tokenUser = document.cookie.split('; ').find(row =>
          row.startsWith('tokenSale='));
-         
-        //  console.log(tokenUser);
       if (tokenUser) {
-
-
   const value = tokenUser.split('=')[1];
   // console.log(value);
 var message = event.target.content.value;
-if(message == ""){
-  console.log("oooooo");
+if(message == "" && images.length==0){
   message ="👍️"
-  console.log(message);
 }
-
-      // console.log(socket);
       socket.emit("CLIENT_SEND_MESSGAE" ,{
         message: message ,
         tokenSale: value , 
@@ -140,9 +150,6 @@ if(message == ""){
       })
 
 }
-      // console.log(event.target.content.value);
-      
-
      hidePlane(); 
     })
 
@@ -159,27 +166,27 @@ const input = formChat.querySelector("input[name='content']");
 const AccountId  = formChat.getAttribute('my-id');
 // const chatMessageContainer = chatContainer.querySelector(".chat-messages");
 let receivedHtmlContent =``;
-console.log(data);
+console.log("data" , data);
+if(data.saleId ==  " "){
+  div.className  ="messagechat received";
+   receivedHtmlContent = `
+  <div class = "user-info">
+    <img src="${data.avatar}" alt="Avatar" class="avatar">
+    <span class="username">${data.fullName}</span>
+  </div>`;
+}
+else{
   if( data.saleId ==AccountId ){
-    // console.log("trung ten admin");
-
-    div.className = "messagechat sent";
-   
-chatMessageContainer.appendChild (div);
-  }else{
-    // console.log("ben ng nhaanj");
-    div.className  ="messagechat received";
-     receivedHtmlContent = `
-    <div class = "user-info">
-      <img src="${data.avatar}" alt="Avatar" class="avatar">
-      <span class="username">${data.fullName}</span>
-    </div>`;
+          div.className = "messagechat sent";
+        // htmlContent = `<div class = "message-content">${data.content}</div>`
+        // div.innerHTML = htmlContent;
+        // chatMessageContainer.appendChild(div);
+      
+  }
 
     
   }
-if(data.content){
-  console.log("data-coontent" ,  data.content);
-
+if(data.content!=""){
     htmlContent = `
     <div class = "message-content">${data.content}</div>`
     
@@ -197,9 +204,8 @@ if( data.ArrayImages.length > 0){
 div.innerHTML = `${receivedHtmlContent}
 ${htmlContent}
 ${htmlImages}`;
-console.log(`${receivedHtmlContent}
-${htmlContent}
-${htmlImages}`);
+chatMessageContainer.appendChild(div);
+
 
   input.value = "";
 chatMessageContainer.scrollTop  = chatMessageContainer.scrollHeight;

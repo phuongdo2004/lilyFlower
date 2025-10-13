@@ -38,11 +38,11 @@ block main
               td
                 p #{product.productInfor.title}
               td
-                p #{product.productInfor.priceNew}đ
+                p #{product.productInfor.priceNew.toLocaleString('vi-VN')}đ
               td
                 input(type='number', value=product.quantity, min='1', style='width: 50px;'   ,  name = "quantity" , productId =product.productId  )
               td
-                p #{product.totalPrice}
+                p #{product.totalPrice.toLocaleString('vi-VN')}đ
               td
                 a.btn_cart(href =  `/cart/delete/${product.productInfor.id}`) Xóa
       else  
@@ -50,6 +50,6 @@ block main
           h1
             span Không có sản phẩm nào @_@
   .order
-    h2 Tổng đơn hàng: #{cartDetail.totalPrice}đ
+    h2 Tổng đơn hàng: #{cartDetail.totalPrice.toLocaleString('vi-VN')}đ
     a(href = "/checkout/")
       h2 Đặt hàng

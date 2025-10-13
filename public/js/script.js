@@ -1,5 +1,55 @@
 var socket = io();
+const modal = document.querySelector(".modal");
+const carousel = document.getElementById('carousel');
+ const track = document.getElementById('track');
+//xử lí các ảnh lướt ang bên
+function scrollImage(){
+      const slides = Array.from(track.children);
+      const dotsContainer = document.getElementById('dots');
+      let index = 0;
+      let interval = 3000; // ms
+      let timer;
 
+      // create dots
+      slides.forEach((s,i)=>{
+        const d = document.createElement('div');
+        d.className = 'dot' + (i===0? ' active':'');
+        d.dataset.i = i;
+        dotsContainer.appendChild(d);
+      });
+      const dots = Array.from(dotsContainer.children);
+
+      function setActive(i){
+        slides.forEach((s,idx)=> s.classList.toggle('active', idx===i));
+        dots.forEach((d,idx)=> d.classList.toggle('active', idx===i));
+      }
+
+      function moveToNext(){
+        index = (index+1)%slides.length;
+        setActive(index);
+      }
+
+      function start(){ timer = setInterval(moveToNext, interval); }
+      function stop(){ clearInterval(timer); }
+
+      // pause on hover
+      const carousel = document.getElementById('carousel');
+      carousel.addEventListener('mouseenter', stop);
+      carousel.addEventListener('mouseleave', start);
+
+      // click dots
+      dots.forEach(d=> d.addEventListener('click', e=>{
+        index = Number(e.target.dataset.i);
+        setActive(index);
+        stop(); start();
+      }));
+
+      start();
+    };
+if(track){
+    scrollImage();
+
+}
 if (document.querySelector("[upload-image-input]")) {
   document.querySelector("[upload-image-input]").addEventListener("change", (event) => {
 
@@ -20,12 +70,7 @@ if (document.querySelector("[upload-image-input]")) {
 
   })
 }
-
-
-const modal = document.querySelector(".modal");
-
 // toast Message start
-
 function hideToast() {
   let toast = document.querySelector(".toast");
   if (toast) {
@@ -39,25 +84,20 @@ function hideToast() {
 // Thêm sự kiện đóng toast
 setTimeout(() => {
   hideToast();
-}, 3000); // Tự động ẩn sau 3 giây
+}, 3000);
 
 
 //  TOast Message end
 
 const formLogin = document.querySelector(".form");
 const formSignin = document.querySelector(".form1");
-
 const removeLogin = document.querySelectorAll(".butLogin")
 if (removeLogin) {
   removeLogin.forEach(item => {
-
     item.addEventListener("click", () => {
-
       modal.style.display = "none";
       formLogin.style.display = "none";
       formSignin.style.display = "none";
-
-
     })
 
   })
@@ -67,7 +107,6 @@ if (removeLogin) {
 
 //  phan trang start
 const paginationItem = document.querySelectorAll("[button-pagination]");
-
 const url = new URL(window.location.href);
 if (paginationItem.length > 0) {
   paginationItem.forEach(item => {
@@ -84,12 +123,10 @@ if (paginationItem.length > 0) {
 //  phân trang end
 // loginHOme , Signin start
 const loginHome = document.querySelector(".loginHome");
-
 if (loginHome) {
   loginHome.addEventListener("click", () => {
     modal.style.display = "flex";
     formLogin.style.display = "flex";
-
   })
 }
 const SigninHome = document.querySelector(".signinHome");
@@ -97,8 +134,6 @@ if (SigninHome) {
   SigninHome.addEventListener("click", () => {
     modal.style.display = "flex";
     formSignin.style.display = "flex";
-
-
   })
 }
 
@@ -399,71 +434,11 @@ function getData() {
   }
 }
 
-
-// lay ra cac phuong xa 
-
-// https://provinces.open-api.vn/api/d/1?depth=2
-
-
-
-
 getData();
 
-
-// xu li khi clicj vao cac the village ,  provice , distric start 
-// const formAddress = document.querySelector(".formInforAddress");
-// if (formAddress) {
-//   const container = formAddress.querySelector(".proviceContainer");
-//   if (container) {
-//     const provice = container.querySelector(".city");
-//     const distric = container.querySelector(".distric");
-//     const village = container.querySelector(".village");
-//     const labelDistric = distric.querySelector("label");
-//     const labelVillage = village.querySelector("label");
-//     const labelProvice = provice.querySelector("label");
-
-//     if (provice) {
-//       provice.addEventListener("click", () => {
-//         //  add class actiive cho provice 
-
-
-//         labelProvice.classList.add("active");
-//         labelDistric.classList.remove("active");
-//         labelVillage.classList.remove("active");
-//         getData();
-
-
-
-//       });
-
-
-
-//     }
-//   }
-
-
-//   //  return an di formAddress start
-//   const modalAddress = document.querySelector(".modal__Address");
-//   if (modalAddress) {
-
-//     const returnForm = formAddress.querySelector(".return");
-//     if (returnForm) {
-
-//       returnForm.addEventListener("click", () => {
-//         modalAddress.classList.remove("active");
-
-//       })
-//     }
-
-//   }
-//   // return an diii formAddress end
-
-// }
-// xu li khi clicj vao cac the village ,  provice , distric end 
 //  thay doii dia chi start
 const btnAddress = document.querySelector(".change__address");
 if (btnAddress) {
-
   btnAddress.addEventListener("click", () => {
     const modalAddress = document.querySelector(".modal__Address");
     modalAddress.classList.add("active");
@@ -471,119 +446,45 @@ if (btnAddress) {
 }
 
 //  thay doiii diia ch end 
-//  goi fetch khi dat hang start
-const order = document.querySelector(".order");
-if (order) {
+//  checkout/payment start 
 
-  const btnOrder = order.querySelector("button");
-
-
-  if (btnOrder) {
-    btnOrder.addEventListener("click", () => {
-
-      const container = document.querySelector(".address__container__body");
-      if (container) {
-        const fullName = container.querySelector(".infor__name").textContent;
-        //  console.log(fullName.textContent);
-        const phone = container.querySelector(".infor__phone").textContent;
-        const address = container.querySelector(".infor__address").textContent;
-        const data = {
-          fullName: fullName,
-          phone: phone,
-          address: address
-        }
-        // goi ham fetch 
-        fetch('checkout/order', {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data),
-          })
-          .then(res => res.json())
-          .then(data => {
-            console.log(data);
-            if (data.code == 200 && data.products) {
-              // console.log(data.products);
-              for (const element of data.products) {
-                console.log(element.priceNew);
-
-              }
-              const queryParams = new URLSearchParams({
-                products: JSON.stringify(data.products)
-              }).toString();
-              // console.log(queryParams);
-
-
-              window.location.href = `/checkout/order/success`
-            }
-
-
-
-          })
-      }
-    })
+const buttonPayment = document.querySelector(".orderCheckout").querySelector("button");
+const container = document.querySelector(".address__container__body");
+if (container) {
+  const fullName = container.querySelector(".infor__name").textContent.trim();
+  const phone = container.querySelector(".infor__phone").textContent.trim();
+  const address = container.querySelector(".infor__address").textContent.trim();
+  // Lấy giá tiền từ thẻ h2 trong .orderCheckout
+  const totalPriceText = document.querySelector(".orderCheckout h2").textContent;
+  // Cắt lấy số tiền, loại bỏ chữ và ký tự không phải số, dấu chấm
+  const totalPrice = totalPriceText.replace(/[^\d.]/g, '').trim();
+  
+  const data = {
+    fullName: fullName,
+    phone: phone,
+    address: address,
+    totalPrice: totalPrice // gửi lên server
+  };
+if( buttonPayment.addEventListener("click" , ()=>{
+  fetch('/checkout/payment', {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify(data),
+}).then(res=> res.json())
+.then(data=>{
+  if( data.payUrl){
+    window.location.href = data.payUrl;
   }
+})
 
-
+}));
 }
 
-//  goi fetch khi dat hang end
 
 
-// SEARCH SUGGESTION START
-// const searchContainer = document.querySelector(".header__list__search");
-// if (searchContainer) {
-//   const form = searchContainer.querySelector("form");
-//   const inputSearch = searchContainer.querySelector('input');
-//   if (inputSearch) {
-//     inputSearch.addEventListener("keyup", (e) => {
-//       if (form.querySelector(".inner-suggest")) {
-
-//         form.removeChild(form.querySelector(".inner-suggest"));
-//       }
-//       fetch(`/search/suggest?keyword=${e.target.value}`)
-//         .then(res => res.json())
-//         .then(data => {
-//           if (data.code == 200) {
-//             let subDiv2 = "";
-//             const div = document.createElement("div");
-//             div.classList.add("inner-suggest");
-//             div.classList.add("show");
-//             console.log(data.pro);
-//             // (data.pro).forEach(item => {
-//             for( var i = 0 ; i<= 7 ; i++){
-//               let subDiv = `
-
-//       <a class="inner-item" 
-
-//       href="/products/detail/${data.pro[i].slug}">
-//         <div class="inner-image">
-//           <img src= ${data.pro[i].thumbnail}>
-//         </div>
-//         <div class="inner-info">
-//           <div class="inner-title">${data.pro[i].title}</div>
-//           <div class="inner-singer">
-//            <i class="fa-solid fa-money-bill-1"></i>
-//             ${data.pro[i].price} $
-//             ${data.pro[i].description ? data.pro[i].description.substring(0, 60) : ''}...
-//           </div>
-//         </div>
-//         </a>
-//      `
-//      console.log(div);
-//               div.insertAdjacentHTML('beforeend', subDiv);
-//               console.log(subDiv);
-
-//             }
-//             // console.log(div);
-//             form.appendChild(div);
-//           }
-//         })
-//     })
-//   }
-// }
-
+//  checkout payment end
 function escapeHTML(str) {
   const temp = document.createElement("div");
   temp.innerHTML = str;
@@ -596,81 +497,128 @@ function escapeHTML(str) {
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#39;");
 }
+// Hàm escapeHTML để ngăn chặn XSS, đảm bảo an toàn
+function escapeHTML(str) {
+    const div = document.createElement('div');
+    div.appendChild(document.createTextNode(str));
+    return div.innerHTML;
+}
+
 // SEARCH SUGGESTION START
 const searchContainer = document.querySelector(".header__list__search");
 if (searchContainer) {
-  const form = searchContainer.querySelector("form");
-  const inputSearch = searchContainer.querySelector('input');
-  if (inputSearch) {
-    inputSearch.addEventListener("keyup", (e) => {
-      // Xóa gợi ý cũ nếu có
-      const oldSuggest = form.querySelector(".inner-suggest");
-      if (oldSuggest) {
-        form.removeChild(oldSuggest);
-      }
-      fetch(`/search/suggest?keyword=${e.target.value}`)
+    const form = searchContainer.querySelector("form");
+    const inputSearch = searchContainer.querySelector('input[type="text"]'); // Chỉ định type nếu có nhiều input
+    if (inputSearch) {
+        let timeoutId; // Để debounce các yêu cầu fetch
+        inputSearch.addEventListener("keyup", (e) => {
+            const keyword = e.target.value.trim(); // Loại bỏ khoảng trắng thừa
+            // --- Cải thiện: Xóa gợi ý cũ trước khi thêm mới hoặc nếu không có từ khóa ---
+            // Tìm hộp gợi ý hiện có và xóa nó
+            const existingSuggestBox = form.querySelector(".inner-suggest");
+            if (existingSuggestBox) {
+                form.removeChild(existingSuggestBox);
+            }
+
+            if (keyword.length === 0) { // Nếu ô tìm kiếm trống, không làm gì cả
+                return; // Thoát khỏi hàm để không tạo gợi ý mới
+            }
+            // --- Hết phần cải thiện ---
+
+            
+timeoutId = setTimeout(() => {
+    fetch(`/search/suggest?keyword=${encodeURIComponent(keyword)}`) // Encode keyword cho an toàn URL
         .then(res => res.json())
         .then(data => {
-          if (data.code == 200 && Array.isArray(data.pro)) {
-            const div = document.createElement("div");
-            div.classList.add("inner-suggest", "show");
-            // Lặp tối đa 8 phần tử hoặc ít hơn nếu không đủ
-            for (let i = 0; i < data.pro.length; i++) {
-              const item = data.pro[i];
-              if (!item || !item.slug || !item.thumbnail || !item.title) continue;
-              let subDiv = `
-    <a class="inner-item" href="/products/detail/${escapeHTML(item.slug)}">
-      <div class="inner-image">
-        <img src="${escapeHTML(item.thumbnail)}">
-      </div>
-      <div class="inner-info">
-        <div class="inner-title">${escapeHTML(item.title)}</div>
-        <div class="inner-singer">
-          <i class="fa-solid fa-money-bill-1"></i>
-          ${escapeHTML(item.price)} Vnd
-          
-        </div>
-        <div class = "inner-desc">
-        ${item.description ? escapeHTML(item.description.substring(0, 60)) : ''}...
-        </div>
-        </div>
-    </a>
-  `;
-              div.innerHTML += subDiv;
+            // --- Cải thiện: Xóa gợi ý cũ một lần nữa nếu có request mới hoàn thành ---
+            const currentSuggestBox = form.querySelector(".inner-suggest");
+            if (currentSuggestBox) {
+                form.removeChild(currentSuggestBox);
             }
-            form.appendChild(div);
-          }
+            // --- Hết phần cải thiện ---
+
+            if (data.code === 200 && Array.isArray(data.pro) && data.pro.length > 0) {
+                const div = document.createElement("div");
+                div.classList.add("inner-suggest", "show"); // Thêm class show để hiển thị
+                
+                // Lặp tối đa 8 phần tử hoặc ít hơn nếu không đủ
+                for (let i = 0; i < data.pro.length && i < 8; i++) { // Giới hạn 8 phần tử
+                    const item = data.pro[i];
+                    // Đảm bảo item và các thuộc tính quan trọng tồn tại
+                    if (!item || !item.slug || !item.thumbnail || !item.title || item.price === undefined) continue;
+                    
+                    // Kiểm tra và cung cấp giá trị mặc định cho description nếu nó null/undefined
+                    const description = item.description ? escapeHTML(item.description.substring(0, 60)) : 'Không có mô tả';
+
+                    let itemHTML = `
+                        <a class="inner-item" href="/products/detail/${escapeHTML(item.slug)}">
+                            <div class="inner-image">
+                                <img src="${escapeHTML(item.thumbnail)}" alt="${escapeHTML(item.title)}">
+                            </div>
+                            <div class="inner-info">
+                                <div class="inner-title">${escapeHTML(item.title)}</div>
+                                <div class="inner-singer">
+                                    <i class="fa-solid fa-money-bill-1"></i>
+                                    ${escapeHTML(item.price.toLocaleString('vi-VN'))} VNĐ
+                                </div>
+                                <div class="inner-desc">
+                                    ${description}...
+                                </div>
+                            </div>
+                        </a>
+                    `;
+                    div.innerHTML += itemHTML;
+                }
+                
+                form.appendChild(div); // Thêm hộp gợi ý mới vào form
+            } else {
+                // Nếu không có kết quả hoặc lỗi, đảm bảo hộp gợi ý bị xóa (đã xử lý ở trên)
+                // hoặc ẩn đi nếu bạn muốn giữ DOM nhưng chỉ ẩn bằng CSS
+                // const currentSuggestBox = form.querySelector(".inner-suggest");
+                // if (currentSuggestBox) {
+                //     currentSuggestBox.classList.remove("show"); // Nếu bạn muốn ẩn thay vì xóa
+                // }
+            }
+        })
+        .catch(error => {
+            console.error('Lỗi khi lấy gợi ý tìm kiếm:', error);
+            const currentSuggestBox = form.querySelector(".inner-suggest");
+            if (currentSuggestBox) {
+                form.removeChild(currentSuggestBox); // Xóa gợi ý khi có lỗi
+            }
         });
-    });
-  }
-}
-
-
-// SEARCH SUGGESTION END
-window.addEventListener("DOMContentLoaded", function () {
-  // Kiểm tra nếu URL có "/category/" và có id phía sau
-  const match = window.location.pathname.includes("order");
-  if (match) {
-    const orderIcon = this.document.querySelector(".containerInfor__user .container .buy");
-    if (orderIcon) {
-
-      orderIcon.classList.add("active");
-      console.log(orderIcon);
-    }
-  }
-  // check xem ao trang user đe them mau 
-  const user = window.location.pathname.includes("user/edit");
-  if (user) {
-    const userIcon = this.document.querySelector(".containerInfor__user .container .account");
-    console.log(userIcon);
-    if (userIcon) {
-
-      userIcon.classList.add("active");
-      console.log(userIcon);
-    }
-  }
+}, 300); // Debounce 300ms
 });
 
+        // Lắng nghe sự kiện blur (rời khỏi) ô input để ẩn gợi ý
+inputSearch.addEventListener("blur", () => {
+    // console.log("oooi"); // Có thể bỏ dòng này
+
+    // Sử dụng setTimeout để tạo độ trễ nhỏ
+    // Điều này cho phép sự kiện click trên các liên kết bên trong
+    // ô gợi ý được xử lý trước khi hộp gợi ý bị ẩn.
+    setTimeout(() => {
+        const suggestBox = form.querySelector(".inner-suggest.show");
+        // console.log(suggestBox); // Có thể bỏ dòng này
+        if (suggestBox) {
+            // Thay vì removeChild, chúng ta chỉ xóa class "show" để ẩn bằng CSS
+            suggestBox.classList.remove("show"); 
+        }
+    }, 200); // 200ms là độ trễ hợp lý
+});
+
+// Lắng nghe sự kiện focus (khi click vào ô input) để hiển thị lại gợi ý nếu có dữ liệu
+inputSearch.addEventListener("focus", () => {
+    const keyword = inputSearch.value.trim();
+    const suggestBox = form.querySelector(".inner-suggest"); // Lấy hộp gợi ý (có thể đang ẩn)
+
+    // Nếu có từ khóa và hộp gợi ý đã tồn tại (dù đang ẩn), hiển thị lại
+    if (keyword.length > 0 && suggestBox) {
+        suggestBox.classList.add("show");
+    }
+});
+}
+}
 //  user/order start
 
 const containerOrder = document.querySelector(".containerInfor__order");

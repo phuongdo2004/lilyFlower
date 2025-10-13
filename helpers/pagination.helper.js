@@ -4,7 +4,7 @@ const Products  = require("../model/products.model");
 module.exports = async(req , find , type , lengthProCate= 0)=>{
 var pagination = {
   currentPage: 1 , 
-  limitItem: 12
+  limitItem: 24
 } ; 
 
 

@@ -16,7 +16,7 @@ passport.serializeUser((user , done) => {
 passport.deserializeUser(function(user, done) {
     done(null, user);
 });
-console.log(process.env.MONGO_URL);
+console.log(process.env.clientID);
 passport.use(new GoogleStrategy({
     clientID:process.env.clientID, // Your Credentials here.
     clientSecret:process.env.clientSecret, // Your Credentials here.

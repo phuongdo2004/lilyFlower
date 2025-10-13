@@ -20,6 +20,13 @@ block main
                         a.dropdown__link(href=`/products/category/${subItem._id}`) #{subItem.title}
     +alert(3000)
     //- div hello
+    //- #carousel.carousel
+    //-   #track.track
+    //-     // Thay src bằng ảnh của bạn
+    //-     img(src='https://picsum.photos/id/1015/1200/800' alt='slide-1')
+    //-     img(src='https://picsum.photos/id/1016/1200/800' alt='slide-2')
+    //-     img(src='https://picsum.photos/id/1025/1200/800' alt='slide-3')
+    //-   #dots.dots
     .product_items
       if ( products.length>0)
         each item in products

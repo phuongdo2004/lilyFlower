@@ -20,7 +20,7 @@ module.exports.index = async (req, res) => {
    totalOrders = (await Order.find({})).length;
     // Lay ra tong so binh luan
     totalComments = (await Comment.find({})).length;
-//  lay ra nhưng don hang ga nhat
+//  lay ra nhưng don hang gan nhat
     const ordersLatest = await Order.find({
 
     }).sort({createdAt : "desc"})
@@ -65,7 +65,6 @@ for (const id of listUserId) {
       'user.userId': id ,
         deleted: false ,
     }).select("id");    
-
 listOrderRecent.push({
   IdRoomChat : roomChat._id,
   avatar:inforClient.avatar , 
@@ -73,8 +72,6 @@ listOrderRecent.push({
   fullName: inforClient.fullName 
 })
 }
-
-
     res.render("admin/pages/index.pug", {
       ordersLatest: ordersLatest,
       totalOrders:totalOrders , 

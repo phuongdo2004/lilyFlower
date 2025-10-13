@@ -954,3 +954,40 @@ Khi bạn viết:
     nội dung bên trong, bao gồm cả dấu backtick (`) và cú pháp template literal ${...} của JavaScript,
     như một chuỗi văn bản tĩnh vào HTML.
     Kết quả là trình duyệt sẽ nhận được một chuỗi JavaScript không hợp lệ, không thể thực thi được.
+
+=========================================================================================================
+router.get("/",roomChatMiddle.findRoomChat , 
+  chatController.index
+);
+      Minh họa luồng hoạt động
+      Lần đầu client request /chat:
+      Middleware findRoomChat tìm thấy room → set cookie "roomChat".
+      Nhưng cookie này chưa có trên req.cookies của lần request này.
+      Vào controller index → req.cookies.roomChat vẫn undefined.
+      Response trả về cho client đã kèm cookie.
+      Client gửi request tiếp theo → cookie "roomChat" sẽ được gửi kèm theo request đó.
+      → Lúc này req.cookies.roomChat mới có giá trị.
+
+      ✅ Cách xử lý
+
+Có vài hướng:
+
+Dùng res.locals thay vì đợi cookie
+
+// Trong middleware
+res.locals.roomChatId = roomChat.id;
+
+// Trong controller
+const roomChatId = req.cookies.roomChat || res.locals.roomChatId;
+
+
+→ Như vậy lần đầu cũng có thể lấy được roomChatId.
+
+Redirect sau khi set cookie
+Trong middleware, nếu chưa có cookie roomChat, bạn set xong thì redirect lại:
+
+res.cookie("roomChat", roomChat.id);
+return res.redirect(req.originalUrl);
+
+
+→ Request lần 2 sẽ có cookie đầy đủ.

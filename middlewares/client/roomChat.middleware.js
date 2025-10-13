@@ -1,25 +1,9 @@
 const RoomChat = require("../../model/rooms-chats.model");
 const User = require("../../model/user.model");
+const chatSocket = require("../../socket/client/chat.socket");
 module.exports.findRoomChat = async (req, res ,next) => {
-// kiem sale
-  // const roleSale = await Role.findOne({
-  //   title: "sale",
-  //   deleted: false,
-  // }).select("_id -password");
-
-  // const sale = await Account.findOne({
-  //   role_id: roleSale.id,
-  //   deleted: false,
-  //   status: "active",
-  // }).select("-password");
-  // if (!sale) {
-  //   console.log("chua co sale")
-  // } else {
-  //   res.locals.sale = sale;
-  // }
-
-
-  if (req.cookies.tokenUser) {
+console.log("chay vao mid")
+  if (req.cookies.tokenUser) {  
     const user = await User.findOne({
       deleted: false,
       tokenUser: req.cookies.tokenUser
@@ -32,6 +16,7 @@ module.exports.findRoomChat = async (req, res ,next) => {
       });
       if (roomChat) {
         res.locals.roomChatId = roomChat.id;
+        console.log("xet cookies" ,roomChat.id);
         res.cookie("roomChat" , roomChat.id);
         console.log("tim dcc phong chat", roomChat.id);
       } else {
@@ -40,7 +25,9 @@ module.exports.findRoomChat = async (req, res ,next) => {
     } else {
       console.log("ko tim thay user de tim phong chat");
     }
-    next();
+    
 
   }
+  next();
+  
 }

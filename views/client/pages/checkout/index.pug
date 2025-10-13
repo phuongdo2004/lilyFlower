@@ -47,30 +47,30 @@ block main
                 td
                   p #{product.productInfor.title}
                 td
-                  p #{product.productInfor.priceNew}đ
+                  p #{product.productInfor.priceNew.toLocaleString('vi-VN')} đ
                 td
                   input(type='number', value=product.quantity, min='1', style='width: 50px;'   ,  name = "quantity" , productId =product.productId  )
                 td
-                  p #{product.totalPrice}đ
-  .paymethod 
-    .paymethod__label Phương thức thanh toán      
-    .method__pay__container 
-      .method__pay__container__item 
-        input(type="checkbox")
-        img(src="/image/zalopay-logo-png_seeklogo-391409.png", alt="") 
-        lable ksklkhlerleklrkhlkekhkrlehlhlkk 
-      .method__pay__container__item 
-        input(type="checkbox")
-        img(src="/image/vnpay-logo-vinadesign-25-12-57-55.jpg", alt="") 
-        lable ksklkhlerleklrkhlkekhkrlehlhlkk 
-      .method__pay__container__item 
-        input(type="checkbox")
-        img(src="/image/icon-delivery-silhouette-illustration-free-vector.jpg", alt="") 
-        lable Thanh toán khi nhận hàng   .
-  .order
-    h2 Tổng đơn hàng: #{cart.totalPrice}đ
+                  p #{product.totalPrice.toLocaleString('vi-VN')} đ
+  //- .paymethod 
+  //-   .paymethod__label Phương thức thanh toán      
+  //-   .method__pay__container 
+  //-     .method__pay__container__item 
+  //-       input(type="checkbox")
+  //-       img(src="/image/zalopay-logo-png_seeklogo-391409.png", alt="") 
+  //-       lable ksklkhlerleklrkhlkekhkrlehlhlkk 
+  //-     .method__pay__container__item 
+  //-       input(type="checkbox")
+  //-       img(src="/image/vnpay-logo-vinadesign-25-12-57-55.jpg", alt="") 
+  //-       lable ksklkhlerleklrkhlkekhkrlehlhlkk 
+  //-     .method__pay__container__item 
+  //-       input(type="checkbox")
+  //-       img(src="/image/icon-delivery-silhouette-illustration-free-vector.jpg", alt="") 
+  //-       lable Thanh toán khi nhận hàng   .
+  .orderCheckout
+    h2 Tổng đơn hàng: #{cart.totalPrice.toLocaleString('vi-VN')} đ
     button
-      h2 Đặt hàng
+      h2 Thanh toán
   .modal__Address
     .modal__layout__Address
     form(
@@ -107,4 +107,4 @@ block main
       .btnAddress
         .item
           .return Trở lại
-          button Hoàn thành
+          button(type = submit) Hoàn thành

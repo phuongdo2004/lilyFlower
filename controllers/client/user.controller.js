@@ -1,5 +1,4 @@
 const RoomChat = require("../../model/rooms-chats.model");
-
 const User = require("../../model/user.model");
 const generateHelper = require("../../helpers/generate.helper");
 var md5 = require('md5');
@@ -63,8 +62,6 @@ module.exports.signin = async (req, res) => {
       deleted: false,
     });
     if (existUser) {
-      console.log(existUser);
-      console.log("ton tai");
       return res.redirect("/home");
     } else {
       const cart = new Cart();
@@ -111,18 +108,14 @@ module.exports.signin = async (req, res) => {
 // POST login start
 module.exports.login = async (req, res) => {
   try {
-    console.log("login");
     const existUser = await User.findOne({
       fullName: req.body.fullName,
       password: md5(req.body.password)
     });
-    console.log("exit" , existUser);
     if (!existUser) {
       req.flash("error", "Tài khoản không tồn tại!"); // Use 'error' flash message
       return res.redirect("/login"); //  Redirect on failure AND RETURN
     } else {
-      console.log("exitUser", existUser.cart_id);
-
       const cart = await Cart.findOne({
         _id: existUser.cart_id,
       })
@@ -146,13 +139,9 @@ module.exports.login = async (req, res) => {
 // GET logout
 
 module.exports.logout = async (req, res) => {
-  // xoa token User
   res.clearCookie("tokenUser");
   res.clearCookie("cartIdFlower");
   res.redirect("/home");
-
-
-
 }
 
 // Listorder   GET /user/order
@@ -165,9 +154,8 @@ function formatDate(date) {
   return `${day}/${month}/${year}`;
 }
 module.exports.ListOrder = async (req, res) => {
-  console.log("chay vao index");
-
   try {
+  
    var listOrder = [];
     // lay ra danh sach don hang cua ng dung 
     const tokenUser = req.cookies.tokenUser;
@@ -176,15 +164,13 @@ module.exports.ListOrder = async (req, res) => {
       tokenUser: tokenUser  ,
     })
     const orders = await Order.find({
-      'userInfo.userId': userId.id , 
-
+      'userInfo.userId': userId.id ,   
     });
-
-
     for (const order of orders) {
       let orderObj = order.toObject();
       orderObj.price =0;
       const firstOrder = order.products[0];
+      console.log("first" ,firstOrder);
       const firstOdrderImage = await Product.findOne({
         _id: firstOrder.productId , 
         deleted: false ,
@@ -279,7 +265,7 @@ module.exports.listOrderComplete = async(req, res)=>{
     const userId = await User.findOne({
       deleted: false , 
       tokenUser: tokenUser  ,
-    })
+    }).select("_id")
     const orders = await Order.find({
       'userInfo.userId': userId.id , 
       status:"Đã giao"
@@ -377,13 +363,11 @@ module.exports.listOrderCancel = async(req, res)=>{
 module.exports.detailOrder = async(req, res)=>{
   const order = await Order.findOne({
     _id: req.params.orderId, 
-  });
-  console.log(order);
+  }).select("products userInfo");
+
   var totalPrice = 0;
   for (const product of order.products) {
-    console.log("price", product.price);
     const newPrice = product.price -(product.price * product.discountPercentage/100).toFixed(0);
-   console.log("new Price",newPrice); 
     totalPrice += Number(newPrice * product.quantity);
 
     // tim anh va title cua tung san pham
@@ -392,12 +376,10 @@ module.exports.detailOrder = async(req, res)=>{
     }).select("thumbnail title slug");
  
 product.newPrice = newPrice;
-product.inforProduct = inforProduct; 
-console.log("infor" , product.inforProduct);
-  
+product.inforProduct = inforProduct;   
   }
   order.totalPrice = totalPrice;
-  console.log(totalPrice);
+  console.log("infor", order);
   res.render("client/pages/user/detailOrder.pug" , 
   {
     order: order
@@ -477,7 +459,6 @@ module.exports.forgotPassword = async (req, res) => {
 module.exports.forgotPasswordPost = async (req, res) => {
   try {
     const email = req.body.email;
-
     const otp = generateHelper.generateRandomNumber(4);
     const User = await user.findOne({
       email: email,

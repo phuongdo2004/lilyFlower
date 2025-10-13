@@ -12,11 +12,10 @@ module.exports.cartId = async (req, res, next) => {
    
       let cart;
       if (!req.cookies.cartIdFlower) {
-        console.log("khong co cart");
       } else { 
         cart = await Cart.findOne({
           _id: req.cookies.cartIdFlower,
-        })
+        }).select("products");
         res.locals.cartTotal = cart.products.length || 0;
         
        

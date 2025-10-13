@@ -63,7 +63,7 @@ module.exports.detail = async (req, res) => {
         slug: slug,
         status: "active",
       });
-      product.priceNew = ((1 - product.discountPercentage / 100) * product.price).toFixed(0);
+      product.priceNew = Number(((1 - product.discountPercentage / 100) * product.price).toFixed(0));
 
       if (product) {
         product.category = (await Category.findOne({

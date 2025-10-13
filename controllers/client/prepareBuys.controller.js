@@ -9,14 +9,10 @@ const user = require("../../model/user.model");
 
 module.exports.index = async (req, res) => {
   try {
-
-    // lay ra danh sach cac san phan co choosen bang true
     const cartId = req.cookies.cartIdFlower;
-    // const message = req.flash("danger");  
-
     const cart = await Cart.findOne({
       _id: cartId
-    })
+    }).select("products")
 
 
     cart.totalPrice = 0;
@@ -33,23 +29,22 @@ module.exports.index = async (req, res) => {
 
           item.productInfor = productInfo;
 
-          item.totalPrice = productInfo.priceNew * item.quantity;
+          item.totalPrice = Number((productInfo.priceNew * item.quantity).toFixed(0));
           cart.totalPrice += item.totalPrice;
         }
       }
 
     }
+    cart.totalPrice = Number(cart.totalPrice.toFixed(0));
     const fullName = req.query.fullName || "";
     const phone = req.query.phone || "";
     const address = req.query.address || "";
-
-
+// console.log("cart" , cart);
     res.render("client/pages/checkout/index.pug", {
       cart,
       fullName,
       phone,
       address,
-      // message: message.length > 0 ? message[0] :"hello",  // Đảm bảo không bị undefined
       message: req.flash()
 
     });
@@ -82,46 +77,34 @@ module.exports.changeAddress = async (req, res) => {
 //  POST /checkout/order start
 module.exports.order = async (req, res) => {
   try {
- const phone = req.body.phone;
+    const phone = req.body.phone;
     const address = req.body.address;
     const userId = req.cookies.tokenUser;
     const fullName = req.body.fullName;
     var products = [];
     const cartIdFlower = req.cookies.cartIdFlower;
-    console.log(address);
-
     const cart = await Cart.findOne({
       _id: cartIdFlower
     });
     // lay ra danh sach cac san pham co  choosen  = true
     products = cart.products.filter(item => item.choosen == true);
-
-
     // lay ra discout  , price cua tung san pham
     var productOrder = []
-
     for (const item of products) {
       const productInfor = await Product.findOne({
         _id: item.productId,
       }).select("discountPercentage price")
-
-
       productOrder.push({
         productId: item.productId,
         quantity: item.quantity,
         discountPercentage: productInfor.discountPercentage,
         price: productInfor.price
       })
-
     }
-
-
-    const userOrder = await user.findOne({
+    if( productOrder.length >0 ){
+       const userOrder = await user.findOne({
       tokenUser: req.cookies.tokenUser,
     });
-
-
-
     const infor = {
       fullName: fullName,
       phone: phone,
@@ -135,18 +118,18 @@ module.exports.order = async (req, res) => {
     const newOrder = new Order(dataOrder);
     await newOrder.save();
     // xoa cac san pham nay trong gio hang
-    for (const product of products) {
-      await Cart.updateOne({
-        _id: cartIdFlower,
-        'products.productId': product.productId
-      }, {
-        $set: {
-          'products.$.choosen': false,
-        }
-      }
-      )
+    // for (const product of products) {
+    //   await Cart.updateOne({
+    //     _id: cartIdFlower,
+    //     'products.productId': product.productId
+    //   }, {
+    //     $set: {
+    //       'products.$.choosen': false,
+    //     }
+    //   }
+    //   )
 
-    }
+    // }
 
     const productsList = await Product.find({
       deleted: false,
@@ -163,6 +146,11 @@ module.exports.order = async (req, res) => {
 
 
     });
+    }else{
+      console.log("luu don hang that bai");
+
+    }
+   
   } catch (error) {
     console.log("Error in order: ", error);
     res.status(500).send("Internal Server Error");
@@ -187,9 +175,6 @@ module.exports.success = async (req, res) => {
         console.log("Loi parse Json: ", error)
       }
     }
-
-
-
     res.render("client/pages/checkout/success", {
       products: listProducts
     })
@@ -202,3 +187,47 @@ module.exports.success = async (req, res) => {
   }
 }
 //  GET /checkout/order/success end
+
+//POST saveChoose start
+module.exports.saveChoosen = async(req, res)=>{
+  const data = req.body;
+  const cartId = req.cookies.cartIdFlower;
+  const cart = await Cart.findOne({
+    _id: cartId, 
+  })
+
+
+const a  = data.arrId
+a.forEach(async(id)=>{
+  // cap nhat choose cua san pham co id la true
+  await Cart.updateOne({
+      _id:cart._id,
+      'products.productId': id
+  } , {
+    $set: {
+      'products.$.choosen': true
+    }
+
+  })
+
+})
+const b = data.arrFalse;
+b.forEach(async(id)=>{
+  await Cart.updateOne({
+    _id: cart._id ,
+    'products.productId': id
+  } , {
+   $set:{
+    'products.$.choosen': false
+   }
+  })
+
+})
+res.json({
+  code: 200,
+
+})
+   
+}
+
+// POST saveChoose end
