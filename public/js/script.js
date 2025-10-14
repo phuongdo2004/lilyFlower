@@ -1,4 +1,5 @@
 var socket = io();
+console.log("chay vao script");
 const modal = document.querySelector(".modal");
 const carousel = document.getElementById('carousel');
  const track = document.getElementById('track');
@@ -532,6 +533,7 @@ timeoutId = setTimeout(() => {
     fetch(`/search/suggest?keyword=${encodeURIComponent(keyword)}`) // Encode keyword cho an toàn URL
         .then(res => res.json())
         .then(data => {
+          console.log(data);
             // --- Cải thiện: Xóa gợi ý cũ một lần nữa nếu có request mới hoàn thành ---
             const currentSuggestBox = form.querySelector(".inner-suggest");
             if (currentSuggestBox) {
@@ -573,6 +575,7 @@ timeoutId = setTimeout(() => {
                 }
                 
                 form.appendChild(div); // Thêm hộp gợi ý mới vào form
+                console.log(form);
             } else {
                 // Nếu không có kết quả hoặc lỗi, đảm bảo hộp gợi ý bị xóa (đã xử lý ở trên)
                 // hoặc ẩn đi nếu bạn muốn giữ DOM nhưng chỉ ẩn bằng CSS

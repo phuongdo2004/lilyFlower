@@ -57,14 +57,17 @@ module.exports.index = async (req, res) => {
       item.totalPrice = totalPrice;
 
     }
+    console.log(listUserId);
     for (const id of listUserId) {
+      console.log("id" , id);
       const inforClient = await User.findOne({
         _id: id,
       }).select("avatar fullName email");
       const roomChat = await RoomChat.findOne({
         'user.userId': id,
         deleted: false,
-      }).select("id");
+      }).select("id");  
+      console.log("roomChat" , roomChat);
       listOrderRecent.push({
         IdRoomChat: roomChat._id,
         avatar: inforClient.avatar,

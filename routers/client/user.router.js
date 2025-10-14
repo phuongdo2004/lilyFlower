@@ -7,7 +7,10 @@ const Auth = require("../../middlewares/client/auth.middleware");
 const  controller = require("../../controllers/client/user.controller");
 
 const router = express.Router();
-router.post("/signin" ,  controller.signin);
+router.post("/signin" ,(req , res , next)=>{
+  console.log("chay vao sigin");
+  next();
+} , controller.signin);
 router.post("/login" ,controller.login );
 router.get("/logout" ,controller.logout );
 router.get("/password/forgot" , controller.forgotPassword);

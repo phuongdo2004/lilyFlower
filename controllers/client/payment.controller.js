@@ -67,14 +67,18 @@ module.exports.payment =  async (req, res) => {
     secretKey,
     orderInfo,
     partnerCode,
-    redirectUrl,
-    ipnUrl,
+    // redirectUrl,
+    // ipnUrl,
     requestType,
     extraData,
     orderGroupId,
     autoCapture,
     lang,
   } = config;
+  const ipnUrl = process.env.ipnUrl;
+  const redirectUrl = process.env.redirectUrl;
+  console.log(ipnUrl);
+  console.log(redirectUrl);
   var amount = (req.body.totalPrice + '').replace(/\./g, '');
   var orderId = newOrder._id.toString();
   console.log(amount);
@@ -112,23 +116,28 @@ module.exports.payment =  async (req, res) => {
     .digest('hex');
 
   //json object send to MoMo endpoint
-  const requestBody = JSON.stringify({
-    partnerCode: partnerCode,
-    partnerName: 'Test',
-    storeId: 'MomoTestStore',
-    requestId: requestId,
-    amount: amount,
-    orderId: orderId,
-    orderInfo: orderInfo,
-    redirectUrl: redirectUrl,
-    ipnUrl: ipnUrl,
-    lang: lang,
-    requestType: requestType,
-    autoCapture: autoCapture,
-    extraData: extraData,
-    orderGroupId: orderGroupId,
-    signature: signature,
-  });
+
+ const requestBodyObject = { // Đổi tên biến để rõ ràng hơn
+    partnerCode: partnerCode,
+    partnerName: 'Test',
+    storeId: 'MomoTestStore',
+    requestId: requestId,
+    amount: amount,
+    orderId: orderId,
+    orderInfo: orderInfo,
+    lang: lang,
+    requestType: requestType,
+    autoCapture: autoCapture,
+    extraData: extraData,
+    orderGroupId: orderGroupId,
+    signature: signature,
+    
+    // THÊM HAI THUỘC TÍNH NÀY VÀO ĐỐI TƯỢNG GỐC
+    ipnUrl: process.env.ipnUrl, 
+    redirectUrl: process.env.redirectUrl,
+  };
+
+  const requestBody = JSON.stringify(requestBodyObject); // Chuyển đổi đối tượng sang JSON
 
   // options for axios
   const options = {

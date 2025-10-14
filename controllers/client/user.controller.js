@@ -14,6 +14,7 @@ const MailMessage = require("nodemailer/lib/mailer/mail-message");
 
 module.exports.signin = async (req, res) => {
   try {
+    console.log("bat dau chay vao ham ");
     const existUser = await User.findOne({
       fullName: req.body.fullName,
       email: req.body.email,
@@ -99,6 +100,7 @@ module.exports.login = async (req, res) => {
 module.exports.logout = async (req, res) => {
   res.clearCookie("tokenUser");
   res.clearCookie("cartIdFlower");
+  res.clearCookie("roomChat");
   res.redirect("/home");
 }
 

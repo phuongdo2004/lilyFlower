@@ -38,6 +38,7 @@ module.exports.detail = async (req, res) => {
         'user.userId': user._id,
         deleted: false,
       }).select("_id");
+      console.log(roomChat);
       user.roomChat = roomChat._id;
 
     }
