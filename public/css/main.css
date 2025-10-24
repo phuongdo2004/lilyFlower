@@ -3413,7 +3413,31 @@ main {
   padding: 10px 0;
 }
 
+.btnCancelOrder{
+  cursor: pointer ;
+  border-radius: 10px;
+  height: 30px;
+  margin-top: 12px;
+  background: #c24c44;
+  color: white;
+}
 
+/* hover/active (khi không inactive) */
+.btnCancelOrder:not(.inactive):hover {
+  background: #e04345;
+  transform: translateY(-1px);
+}
+
+/* disabled / inactive state */
+.btnCancelOrder.inactive {
+  background: #f2f2f2;
+  color: #9b9b9b;
+  border: 1px solid #e0e0e0;
+  box-shadow: none;
+  cursor: not-allowed;    /* hiển thị vòng cấm */
+  pointer-events: none;   /* ngăn click */
+  opacity: .92;
+}
 
 /* Detail order end */
 /* Order end */

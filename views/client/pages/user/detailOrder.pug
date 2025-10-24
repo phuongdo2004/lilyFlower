@@ -48,5 +48,10 @@ block main
         // Order Summary
         .inforOrder__order__price
           p Tổng tiền hàng
-          p #{order.totalPrice.toLocaleString('vi-VN')}&#x20AB;
-
+            p #{order.totalPrice.toLocaleString('vi-VN')}&#x20AB;
+            p Phí vận chuyển
+            p 0&#x20AB;
+            if ( order.status != 'Đã hủy' && order.status != 'Đang vận chuyển' && order.status != 'Trả lại' && order.status != 'Đã giao')
+              button.btnCancelOrder(id = order.id)  Hủy đơn hàng
+            else
+              button.btnCancelOrder.inactive(id = order.id)  Hủy đơn hàng

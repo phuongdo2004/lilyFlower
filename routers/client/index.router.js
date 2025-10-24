@@ -16,7 +16,9 @@ const controllerPayment  = require("../../controllers/client/payment.controller"
 
 
 module.exports.index= (app)=>{
-  app.post("/checkout/callback" ,controllerPayment.paymentCallback);
+  app.post("/checkout/callback", (req , res , next)=>{console.log("chayj vao middle"); next();
+    
+  } ,controllerPayment.paymentCallback);
 
   app.use("/home"  , homeRouter );
   app.use("/client" ,responeRouter );

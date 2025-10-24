@@ -320,7 +320,7 @@ module.exports.listOrderCancel = async (req, res) => {
 module.exports.detailOrder = async (req, res) => {
   const order = await Order.findOne({
     _id: req.params.orderId,
-  }).select("products userInfo");
+  }).select("products userInfo status");
 
   var totalPrice = 0;
   for (const product of order.products) {
@@ -338,7 +338,9 @@ module.exports.detailOrder = async (req, res) => {
   order.totalPrice = totalPrice;
   res.render("client/pages/user/detailOrder.pug",
     {
-      order: order
+      order: order,
+      message: req.flash() , 
+
     }
   );
 
@@ -400,7 +402,9 @@ module.exports.editInfor = async (req, res) => {
 //GET  forgotPassword start 
 module.exports.forgotPassword = async (req, res) => {
   try {
-    res.render("client/pages/user/forgot-password.pug");
+    res.render("client/pages/user/forgot-password.pug"  , {
+      message: req.flash(),
+    });
 
   } catch (error) {
     console.log("Lỗi khi truy cập trang quên mật khẩu: ", error);
@@ -421,12 +425,8 @@ module.exports.forgotPasswordPost = async (req, res) => {
       deleted: false,
     });
     if (!User) {
-      console.log("ko to tai user");
-
-      // req.flash("error", "Tai khoan khong ton tai");
+      req.flash("error" , "Email không tồn tại!")
       return res.redirect("back");
-
-
     }
     // tao ra forgotPass
     const forgotPass = new forgotPassword({
@@ -438,10 +438,10 @@ module.exports.forgotPasswordPost = async (req, res) => {
 
     // gui mail
     const subject = "Mã OTP lấy lại mật khẩu";
-    const htmlSendMail = `Mã OTP xác thực của bạn là <b style="color: pink;">${otp}</b>. Mã OTP có hiệu lực trong 3 phút. Vui lòng không cung cấp mã OTP cho người khác.`;
+    const htmlSendMail = `Mã OTP xác thực của bạn là <b style="color: blue;">${otp}</b>. Mã OTP có hiệu lực trong 3 phút. Vui lòng không cung cấp mã OTP cho người khác.`;
     // Gui ma otp qua email cua user
     sendEmailHelper.sendMail(email, subject, htmlSendMail);
-
+    req.flash("success" , "Đã gửi email cho bạn!");
     res.redirect("/user/password/otp?email=" + email);
 
   } catch (error) {
@@ -458,10 +458,12 @@ module.exports.forgotPasswordPost = async (req, res) => {
 module.exports.otpPassword = async (req, res) => {
   try {
     res.render("client/pages/user/otp-password.pug", {
-      email: req.query.email
+      email: req.query.email , 
+      message: req.flash(),
     });
   } catch (error) {
     console.log("Lỗi khi truy cập trang OTP: ", error);
+  
     return res.status(500).send("Internal Server Error");
 
   }
@@ -481,20 +483,24 @@ module.exports.otpPasswordPost = async (req, res) => {
       email: email,
       otp: otp,
     });
+
     if (!forgotPass) {
       console.log("ma otp khong chinh xac");
-      //   req.flash("error", "Mã OTP không chính xác");
-      res.redirect("back");
+      req.flash("error", "Mã OTP không chính xác");
+      return res.redirect(req.get('Referrer') || '/'); // RETURN để không tiếp tục thực thi
     }
-    res.redirect("/user/password/reset?email=" + email);
 
+    // optional: check expire
+    if (forgotPass.expireAt && Date.now() > forgotPass.expireAt) {
+      req.flash("error", "Mã OTP đã hết hạn");
+      return res.redirect(req.get('Referrer') || '/');
+    }
 
+    return res.redirect("/user/password/reset?email=" + encodeURIComponent(email));
   } catch (error) {
     console.log("Lỗi khi xử lý yêu cầu OTP: ", error);
     return res.status(500).send("Internal Server Error");
-
   }
-
 }
 
 // POST otpPassword end
@@ -506,6 +512,7 @@ module.exports.resetPassword = async (req, res) => {
 
     res.render("client/pages/user/new-password.pug", {
       email: email,
+      message: req.flash(),
     });
   } catch (error) {
     console.log("Lỗi khi truy cập trang đặt lại mật khẩu: ", error);
@@ -546,3 +553,18 @@ module.exports.resetPasswordPost = async (req, res) => {
 }
 
 // POST resetPasswordPost end
+
+// cancel order start
+module.exports.cancelOrder = async( req , res)=>{
+  console.log(req.params.orderId);
+  await Order.updateOne(
+    {_id : req.params.orderId},
+    {status:"Đã hủy"}
+  )
+  req.flash("success" , "Đã hủy đơn hàng thành công");
+  res.json({
+    code: 200
+  })
+}
+
+// cancel order end 

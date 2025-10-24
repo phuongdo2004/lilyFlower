@@ -33,6 +33,8 @@ module.exports.index = async (req, res) => {
   res.render("admin/pages/orders/index.pug", {
     orders: orders,
     pagination: paginationOrder,
+    message: req.flash(),
+
 
   });
 
@@ -63,7 +65,9 @@ module.exports.detail = async (req, res) => {
   res.render("admin/pages/orders/detail.pug", {
     order: order,
     products: products,
-    totalPriceOrder: totalPriceOrder.toFixed(0)
+    totalPriceOrder: totalPriceOrder.toFixed(0) , 
+    message: req.flash(),
+
   });
 
 }
@@ -75,10 +79,15 @@ module.exports.changeStatus = async (req, res) => {
   }, {
     status: status
   })
-  res.json({
-    code: 200,
-    message: "Cập nhật đơn hàng thành công!"
-  })
+ // server
+req.flash('success', 'Đặt hàng thành công');
+// const flashes = {
+//   success: req.flash('success'), // lấy mảng và sẽ xóa khỏi session
+//   error: req.flash('error')
+// };
+// res.json({ code: 200, flashes});
+res.redirect("/admin/orders");
+
 }
 module.exports.deletedOrder = async (req, res) => {
   const orderId = req.params.orderId;

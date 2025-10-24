@@ -179,28 +179,28 @@ div(class = "contact"  id="contact-section")
   //  <div class="main"> 
   form.form#form-1(action  = "/user/login", enctype="application/x-www-form-urlencoded", method='POST')
     .butLogin
-      i.fa-solid.fa-x
+      i.fa-solid.fa-x(data-cy="close-login-modal-btn")
     h1.heading Đăng nhập
     .spacer
     .form-group
       label.form__label(for='fullname') Tên đầy đủ
-      input#fullname.form-control(name='fullName', type='text', placeholder='VD: Sơn Đặng'  required)
-      span.form-message
+      input#fullname_login.form-control(name='fullName', type='text', placeholder='VD: Sơn Đặng'  required data-cy="login-username-input")
+      span.form-message(data-cy="login-username-error")
     .form-group
       label.form__label(for='password') Mật khẩu
-      input#password.form-control(name='password', type='password', placeholder='Nhập mật khẩu' required)
-      span.form-message
+      input#password_login.form-control(name='password', type='password', placeholder='Nhập mật khẩu' required data-cy="login-password-input")
+      span.form-message(data-cy="login-password-error")
     .loginOut 
       button
-        a(href="") 
-          img(src="/image/facebook", alt="" style = "height:25px")
-          | Facebook 
+        a(href="")
+          img(src="/image/facebook", alt="" style="height:25px")
+          | Facebook
       button
         a(href="/auth") 
-          img(src="/image/google-logo.png", alt="" style = "height:30px")
+          img(src="/image/google-logo.png", alt="" style="height:30px")
           | Google  
-    a(href="/user/password/forgot" style ="padding-top: 5px") Quên mật khẩu?
-    button.form-submit Đăng nhập
+    a(href="/user/password/forgot" style ="padding-top: 5px" data-cy="forgot-password-link" ) Quên mật khẩu?
+    button#loginHomeBtn.form-submit(type="submit" data-cy="login-submit-btn") Đăng nhập
   form.form1#form-1(action  = "/user/signin",  enctype="application/x-www-form-urlencoded", method='POST')
     .butLogin
       i.fa-solid.fa-x
@@ -208,19 +208,19 @@ div(class = "contact"  id="contact-section")
     .spacer
     .form-group
       label.form-label(for='fullname') Tên đầy đủ
-      input#fullname.form-control(name='fullName', type='text', placeholder='VD: Sơn Đặng'   required)
+      input#fullname_signup.form-control(name='fullName', type='text', placeholder='VD: Sơn Đặng'   required)
       span.form-message
     .form-group
       label.form-label(for='email') Email
-      input#email.form-control(name='email', type='email', placeholder='VD: email@domain.com'  required)
+      input#email_signup.form-control(name='email', type='email', placeholder='VD: email@domain.com'  required)
       span.form-message
     .form-group
       label.form-label(for='phone') Phone
-      input#email.form-control(name='phone' ,  type='text',  required)
+      input#phone_signup.form-control(name='phone' ,  type='text',  required)
       span.form-message
     .form-group
       label.form-label(for='password') Mật khẩu
-      input#password.form-control(name='password', type='password', placeholder='Nhập mật khẩu'  required)
+      input#password_signup.form-control(name='password', type='password', placeholder='Nhập mật khẩu'  required)
       span.form-message
     .form-group
       label.form-label(for='password_confirmation') Nhập lại mật khẩu
@@ -235,7 +235,7 @@ div(class = "contact"  id="contact-section")
         a(href="/auth") 
           img(src="/image/google-logo.png", alt="" style = "height:30px")
           | Google  
-    button.form-submit Đăng ký
+    button#signup.form-submit Đăng ký
 
 
 

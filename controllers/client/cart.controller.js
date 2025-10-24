@@ -48,14 +48,24 @@ module.exports.addPost = async (req, res) => {
     const quantity = parseInt(req.body.quantity);
     const productId = req.params.productId;
     const cartId = req.cookies.cartIdFlower
-    const exitCart = await Cart.findOne({
+    if( quantity ==0){
+      req.flash("error" , "Số lượng không hợp lệ");
+
+    }else{
+      const exitCart = await Cart.findOne({
       _id: cartId
     })
     if (exitCart) {
       const existProductInCart = exitCart.products.find(
         item => item.productId == productId
       );
+      // var quantityUpdate  =0;
+      // if(quantity > 10){
+      //   quantityUpdate = 10;
+      //   req.flash("warning" , "Số lượng tối đa cho sản phẩm là 10 ")
+      // }
       if (!existProductInCart) {
+        
         await Cart.updateOne({
           _id: cartId,
         }, {
@@ -67,19 +77,28 @@ module.exports.addPost = async (req, res) => {
           }
         })
       } else {
+        //  quantityUpdate = quantity + existProductInCart.quantity;
+        // if( quantityUpdate >10){
+        //   req.flash("warning" , "Số lượng tối đa cho sản phẩm là 10 ");
+        //   quantityUpdate = 10;
+        // }
         await Cart.updateOne({
           _id: cartId,
           'products.productId': productId,
 
         }, {
           $set: {
-            "products.$.quantity": quantity + existProductInCart.quantity
+            "products.$.quantity": quantity + existProductInCart.quantity,
           }
         })
       }
       req.flash("success", "Đã thêm vào giỏ hàng")
-      res.redirect("back");
+    
     }
+    
+      
+      
+    }res.redirect("back");
 
 
   } catch (error) {

@@ -626,7 +626,8 @@ inputSearch.addEventListener("focus", () => {
 const containerOrder = document.querySelector(".containerInfor__order");
 if (containerOrder) {
   const containerOrder__header = containerOrder.querySelector(".containerInfor__order__header")
-  const listButton = containerOrder__header.querySelectorAll("div");
+  if(containerOrder__header){
+    const listButton = containerOrder__header.querySelectorAll("div");
   const containerTable = containerOrder.querySelector(".container");
 
   listButton.forEach(item => {
@@ -682,7 +683,32 @@ if (containerOrder) {
       })
     })
   })
+  }
+  
 }
 
 
 // user//order/end
+// cancel Order start
+const btnCancelOrder = document.querySelector(".btnCancelOrder");
+if( btnCancelOrder){
+  btnCancelOrder.addEventListener("click" , ()=>{
+   const orderId  = btnCancelOrder.getAttribute("id");
+   console.log(orderId);
+   fetch(`/user/order/cancel/${orderId}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  
+}).then(res=> res.json())
+.then(data=>{
+ if( data.code ==200){
+  btnCancelOrder.classList.add("inactive");
+  // window.location.reload();
+ }
+})
+  })
+}
+
+// cancel Order end

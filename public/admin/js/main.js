@@ -448,6 +448,7 @@ if (buttonChangeStatus) {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
+          credentials: 'same-origin', // giữ cookie/session nếu cần
       },
       body: JSON.stringify({ status: status }),
     })
@@ -455,6 +456,9 @@ if (buttonChangeStatus) {
       .then(data => {
         if (data.code == 200) {
           window.location.href = `/${systemConfig.prefixAdmin}/orders`;
+          if (data.flashes && data.flashes.success && data.flashes.success.length) {
+    showToast(data.flashes.success[0]); // hiển thị message ngay
+  }
         }
       });
   })

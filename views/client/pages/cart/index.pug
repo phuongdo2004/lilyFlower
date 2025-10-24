@@ -28,7 +28,7 @@ block main
             p Thao tác
         tbody
           each product, index in reversedProducts
-            tr
+            tr.cart-item(productId = product.productId)
               td
                 p #{index+1}
               td
@@ -40,7 +40,7 @@ block main
               td
                 p #{product.productInfor.priceNew.toLocaleString('vi-VN')}đ
               td
-                input(type='number', value=product.quantity, min='1', style='width: 50px;'   ,  name = "quantity" , productId =product.productId  )
+                input(type='number', value=product.quantity, min='1', style='width: 50px;', name='quantity', productId=product.productId)
               td
                 p #{product.totalPrice.toLocaleString('vi-VN')}đ
               td

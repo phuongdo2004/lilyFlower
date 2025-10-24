@@ -20,7 +20,7 @@ router.post("/password/otp" , controller.otpPasswordPost);
 router.get("/password/reset" , controller.resetPassword);
 router.post("/password/reset" , controller.resetPasswordPost);
 
-
+router.post("/order/cancel/:orderId" , controller.cancelOrder);
 router.get("/order/all",(req , res , next)=>{console.log("okee"); next();}  , controller.ListOrder2);
 router.get("/order/detail/:orderId" , controller.detailOrder);
 router.get("/order" , controller.ListOrder);
